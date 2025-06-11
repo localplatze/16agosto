@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obrigado! - Casamento Elian & Keytiane</title>
+    <link rel="icon" href="icon.png" type="image/x-icon">
+    <!-- Importando as mesmas fontes do site principal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --cover-color: #192a56;
+            --gold-color: #D4AF37;
+            --white-color: #FFFFFF;
+            --paper-color: #f8f8f8;
+            --font-title: 'Playfair Display', serif;
+            --font-body: 'Montserrat', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--paper-color);
+            font-family: var(--font-body);
+            color: var(--cover-color);
+        }
+
+        .container {
+            text-align: center;
+            background-color: var(--white-color);
+            padding: 50px 60px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        h1 {
+            font-family: var(--font-title);
+            color: var(--gold-color);
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .countdown {
+            font-size: 0.9rem;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Muito Obrigado!</h1>
+        <p>Seu carinho e sua presença, mesmo que em forma de presente, significam o mundo para nós. Agradecemos de coração por fazer parte da nossa história!</p>
+        <p class="countdown">
+            Você será redirecionado para a página inicial em <span id="timer">5</span> segundos...
+        </p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const timerElement = document.getElementById('timer');
+            let secondsLeft = 5;
+
+            // Atualiza o contador na tela a cada segundo
+            const countdownInterval = setInterval(() => {
+                secondsLeft--;
+                timerElement.textContent = secondsLeft;
+
+                if (secondsLeft <= 0) {
+                    clearInterval(countdownInterval);
+                }
+            }, 1000);
+
+            // Redireciona após 5 segundos
+            setTimeout(() => {
+                // window.location.replace() remove a página atual do histórico do navegador,
+                // para que o usuário não volte para a página de "obrigado" ao clicar no botão "Voltar".
+                window.location.replace('index.html');
+            }, 5000);
+        });
+    </script>
+
+</body>
+</html>
