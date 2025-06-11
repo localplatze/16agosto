@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Convidados do Casamento</title>
+    <style>
+        :root {
+            --cover-color: #192a56;
+            --gold-color: #D4AF37;
+            --white-color: #FFFFFF;
+            --paper-color: #f8f8f8;
+            --danger-color: #c0392b;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #ecf0f1; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; background-color: var(--white-color); padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: var(--cover-color); text-align: center; margin-bottom: 10px; }
+        h2 { color: var(--cover-color); border-bottom: 2px solid var(--gold-color); padding-bottom: 10px; margin-top: 40px; }
+        p.subtitle { text-align: center; margin-top: 0; margin-bottom: 30px; color: #777; }
+        
+        /* Formulário */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { display: flex; flex-direction: column; }
+        .full-width { grid-column: 1 / -1; }
+        label { margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+        input, select, textarea {
+            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; box-sizing: border-box;
+        }
+        textarea { resize: vertical; min-height: 100px; }
+        .form-actions { display: flex; gap: 15px; margin-top: 20px; justify-content: flex-end; }
+        .btn { padding: 12px 25px; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 600; transition: all 0.2s ease; }
+        .btn-primary { background-color: var(--gold-color); color: var(--cover-color); }
+        .btn-primary:hover { background-color: #c5a030; }
+        .btn-secondary { background-color: #7f8c8d; color: var(--white-color); }
+        .btn-secondary:hover { background-color: #6c7a7b; }
+        .btn-danger { background-color: var(--danger-color); color: var(--white-color); }
+
+        /* Tabela de Convidados */
+        .table-wrapper { overflow-x: auto; margin-top: 30px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f2f2f2; color: var(--cover-color); font-size: 0.9rem; text-transform: uppercase; }
+        tr:hover { background-color: #f9f9f9; }
+        .actions-cell button { margin-right: 5px; }
+
+        @media (max-width: 768px) {
+            .form-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Painel de Administração</h1>
+        <p class="subtitle">Gerenciamento de Convidados do Casamento</p>
+
+        <!-- Formulário para Adicionar/Editar Convidado -->
+        <section id="form-section">
+            <h2>Adicionar / Editar Convidado</h2>
+            <form id="guest-form">
+                <input type="hidden" id="guest-id">
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="guest-name">Nome(s) do Convidado</label>
+                        <input type="text" id="guest-name" placeholder="Ex: João Silva e Maria Silva; Joãozinho (Criança)" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="guest-table">Mesa</label>
+                        <input type="number" id="guest-table" placeholder="Nº da mesa">
+                    </div>
+                    <div class="form-group">
+                        <label for="guest-rsvp">Confirmou Presença (RSVP)?</label>
+                        <select id="guest-rsvp" required>
+                            <option value="false">Não</option>
+                            <option value="true">Sim</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="guest-responsible">Responsável pelo Check-in (se aplicável)</label>
+                        <select id="guest-responsible">
+                            <option value="">Nenhum (Convidado Principal)</option>
+                            <!-- Populado via JS -->
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="guest-travel">Detalhes da Viagem</label>
+                        <textarea id="guest-travel" placeholder="Voo, localizador, horários, transporte..."></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="guest-accommodation">Detalhes da Hospedagem</label>
+                        <textarea id="guest-accommodation" placeholder="Hotel/Pousada, endereço, check-in/out..."></textarea>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-edit-btn" style="display: none;">Cancelar Edição</button>
+                    <button type="submit" class="btn btn-primary">Salvar Convidado</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Lista de Convidados -->
+        <section>
+            <h2>Lista de Convidados</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Mesa</th>
+                            <th>RSVP</th>
+                            <th>Responsável</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guest-list-body">
+                        <!-- Linhas da tabela populadas via JS -->
+                        <tr><td colspan="5" style="text-align:center;">Carregando convidados...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        // =================================================================
+        // PASSO 1: COLE A CONFIGURAÇÃO DO SEU FIREBASE AQUI
+        // =================================================================
+        const firebaseConfig = {
+        apiKey: "AIzaSyAQ3txJQ09muNi5xaBhOPwFztT1fCR1qmE",
+        authDomain: "formagest-a7591.firebaseapp.com",
+        databaseURL: "https://formagest-a7591-default-rtdb.firebaseio.com",
+        projectId: "formagest-a7591",
+        storageBucket: "formagest-a7591.firebasestorage.app",
+        messagingSenderId: "27539451532",
+        appId: "1:27539451532:web:76f7eed9eafc3ca1c115a9",
+        measurementId: "G-VXKWZPC8LZ"
+        };
+        // =================================================================
+
+        // Inicializa o Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const guestsRef = database.ref('convidados');
+
+        // Seletores de Elementos do DOM
+        const guestForm = document.getElementById('guest-form');
+        const guestIdInput = document.getElementById('guest-id');
+        const guestNameInput = document.getElementById('guest-name');
+        const guestTableInput = document.getElementById('guest-table');
+        const guestRsvpSelect = document.getElementById('guest-rsvp');
+        const guestResponsibleSelect = document.getElementById('guest-responsible');
+        const guestTravelTextarea = document.getElementById('guest-travel');
+        const guestAccommodationTextarea = document.getElementById('guest-accommodation');
+        const guestListBody = document.getElementById('guest-list-body');
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
+        
+        let allGuestsData = {}; // Armazena todos os convidados para consulta
+
+        // Função para resetar o formulário
+        const resetForm = () => {
+            guestForm.reset();
+            guestIdInput.value = '';
+            cancelEditBtn.style.display = 'none';
+            document.querySelector('#form-section h2').textContent = 'Adicionar Convidado';
+        };
+
+        // Função para carregar os convidados na tabela e no select de responsáveis
+        const loadGuests = () => {
+            guestsRef.on('value', (snapshot) => {
+                guestListBody.innerHTML = '';
+                guestResponsibleSelect.innerHTML = '<option value="">Nenhum (Convidado Principal)</option>';
+                allGuestsData = snapshot.val() || {};
+
+                if (Object.keys(allGuestsData).length === 0) {
+                    guestListBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Nenhum convidado cadastrado.</td></tr>';
+                    return;
+                }
+
+                // Primeiro, popular o dropdown de responsáveis
+                for (const guestId in allGuestsData) {
+                    const guest = allGuestsData[guestId];
+                    const option = document.createElement('option');
+                    option.value = guestId;
+                    option.textContent = guest.nome;
+                    guestResponsibleSelect.appendChild(option);
+                }
+
+                // Segundo, popular a tabela
+                for (const guestId in allGuestsData) {
+                    const guest = allGuestsData[guestId];
+                    const tr = document.createElement('tr');
+                    
+                    const responsibleName = guest.responsavel && allGuestsData[guest.responsavel] 
+                        ? allGuestsData[guest.responsavel].nome 
+                        : 'N/A';
+                    
+                    tr.innerHTML = `
+                        <td>${guest.nome}</td>
+                        <td>${guest.mesa || '-'}</td>
+                        <td>${guest.rsvp ? 'Sim' : 'Não'}</td>
+                        <td>${responsibleName}</td>
+                        <td class="actions-cell">
+                            <button class="btn btn-secondary" onclick="editGuest('${guestId}')">Editar</button>
+                            <button class="btn btn-danger" onclick="deleteGuest('${guestId}')">Excluir</button>
+                        </td>
+                    `;
+                    guestListBody.appendChild(tr);
+                }
+            });
+        };
+
+        // Função para popular o formulário para edição
+        window.editGuest = (id) => {
+            const guest = allGuestsData[id];
+            if (!guest) return;
+
+            guestIdInput.value = id;
+            guestNameInput.value = guest.nome;
+            guestTableInput.value = guest.mesa || '';
+            guestRsvpSelect.value = guest.rsvp;
+            guestResponsibleSelect.value = guest.responsavel || '';
+            guestTravelTextarea.value = guest.viagem || '';
+            guestAccommodationTextarea.value = guest.hospedagem || '';
+
+            document.querySelector('#form-section h2').textContent = 'Editar Convidado';
+            cancelEditBtn.style.display = 'inline-block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        
+        // Função para deletar um convidado
+        window.deleteGuest = (id) => {
+            if (confirm('Tem certeza que deseja excluir este convidado? Esta ação não pode ser desfeita.')) {
+                guestsRef.child(id).remove()
+                    .then(() => {
+                        console.log('Convidado removido com sucesso!');
+                        resetForm(); // Limpa o formulário caso o convidado deletado estivesse em edição
+                    })
+                    .catch(error => console.error('Erro ao remover convidado: ', error));
+            }
+        };
+
+        // Event listener para salvar (criar ou atualizar)
+        guestForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const guestData = {
+                nome: guestNameInput.value,
+                mesa: parseInt(guestTableInput.value) || null,
+                rsvp: guestRsvpSelect.value === 'true',
+                responsavel: guestResponsibleSelect.value,
+                viagem: guestTravelTextarea.value,
+                hospedagem: guestAccommodationTextarea.value,
+            };
+
+            const id = guestIdInput.value;
+            if (id) {
+                // Atualizar convidado existente
+                guestsRef.child(id).update(guestData)
+                    .then(() => console.log('Convidado atualizado!'))
+                    .catch(error => console.error('Erro ao atualizar: ', error));
+            } else {
+                // Criar novo convidado
+                guestsRef.push(guestData)
+                    .then(() => console.log('Convidado salvo!'))
+                    .catch(error => console.error('Erro ao salvar: ', error));
+            }
+
+            resetForm();
+        });
+
+        // Event listener para o botão de cancelar edição
+        cancelEditBtn.addEventListener('click', resetForm);
+
+        // Iniciar o carregamento dos dados quando a página carregar
+        document.addEventListener('DOMContentLoaded', loadGuests);
+    </script>
+</body>
+</html>

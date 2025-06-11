@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seu Convite - Elian & Keytiane</title>
+<link rel="icon" href="icon.png" type="image/x-icon">
+<!-- Fontes (as mesmas do site principal para consistência) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;400;500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --cover-color: #192a56;
+        --gold-color: #D4AF37;
+        --white-color: #FFFFFF;
+        --paper-color: #f8f8f8;
+        --font-title: 'Playfair Display', serif;
+        --font-body: 'Montserrat', sans-serif;
+        --font-cursive: 'Dancing Script', cursive;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: var(--font-body);
+        background-color: #2c3e50;
+        background-image: url('bg_splash.png');
+        backdrop-filter: blur(5px);
+        color: var(--cover-color);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .ticket-container {
+        width: 100%;
+        max-width: 800px;
+        margin-bottom: 40px;
+    }
+
+    .ticket-card {
+        background-color: var(--paper-color);
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        display: flex;
+        overflow: hidden;
+    }
+
+    .ticket-main {
+        padding: 30px 40px;
+        flex-grow: 1;
+        text-align: center;
+    }
+
+    .ticket-header {
+        font-family: var(--font-title);
+        font-size: 1.2rem;
+        color: var(--gold-color);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .ticket-couple {
+        font-family: var(--font-cursive);
+        font-size: 3rem;
+        color: var(--cover-color);
+        line-height: 1.2;
+    }
+    
+    .ticket-info {
+        margin-top: 20px;
+        border-top: 1px solid #ddd;
+        padding-top: 20px;
+    }
+    
+    .ticket-info p {
+        margin-bottom: 5px;
+        font-size: 1rem;
+    }
+    .ticket-info strong {
+        font-weight: 500;
+    }
+
+    .ticket-stub {
+        background-color: #f0f0f0;
+        min-width: 200px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        border-left: 2px dashed #ccc;
+        position: relative;
+    }
+    
+    .qr-code {
+        width: 140px;
+        height: 140px;
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .qr-code img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+    .qr-code-label {
+        margin-top: 15px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Accordion para informações adicionais */
+    .info-accordion {
+        width: 100%;
+        max-width: 800px;
+        background: var(--white-color);
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        padding: 20px;
+    }
+
+    .accordion-item {
+        border-bottom: 1px solid #e0e0e0;
+    }
+    .accordion-item:last-child {
+        border-bottom: none;
+    }
+
+    .accordion-header {
+        padding: 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: var(--cover-color);
+        transition: background-color 0.3s;
+    }
+    .accordion-header:hover {
+        background-color: #f9f9f9;
+    }
+    .accordion-header::after {
+        content: '+';
+        font-size: 1.8rem;
+        font-weight: 300;
+        color: var(--gold-color);
+        transition: transform 0.3s ease;
+    }
+    .accordion-item.active .accordion-header::after {
+        transform: rotate(45deg);
+    }
+
+    .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s cubic-bezier(0, 1, 0, 1), padding 0.5s ease;
+        padding: 0 20px;
+    }
+    .accordion-item.active .accordion-content {
+        max-height: 500px; /* Altura suficiente para o conteúdo */
+        transition: max-height 1s cubic-bezier(1, 0, 1, 0);
+        padding: 0 20px 20px 20px;
+    }
+    .accordion-content p {
+        line-height: 1.7;
+        margin-bottom: 15px;
+    }
+    .accordion-content a {
+        color: var(--gold-color);
+        font-weight: 500;
+        text-decoration: none;
+    }
+    .accordion-content a:hover {
+        text-decoration: underline;
+    }
+
+    /* Link de volta */
+    .back-link {
+        margin-top: 40px;
+        color: var(--white-color);
+        text-decoration: none;
+        padding: 10px 20px;
+        border: 1px solid var(--gold-color);
+        border-radius: 8px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    .back-link:hover {
+        background-color: var(--gold-color);
+        color: var(--cover-color);
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+        .ticket-card {
+            flex-direction: column;
+        }
+        .ticket-stub {
+            border-left: none;
+            border-top: 2px dashed #ccc;
+        }
+        .ticket-main {
+            padding: 20px;
+        }
+        .ticket-couple {
+            font-size: 2.5rem;
+        }
+    }
+</style>
+</head>
+<body>
+
+    <div class="ticket-container">
+        <div class="ticket-card">
+            <div class="ticket-main">
+                <p class="ticket-header">Você está convidado para celebrar</p>
+                <h1 class="ticket-couple">Elian<br>&<br>Keytiane</h1>
+                <div class="ticket-info">
+                    <p><strong>Data:</strong> 16 de Agosto de 2025</p>
+                    <p><strong>Convidado:</strong> [Nome do Convidado]</p>
+                    <p>Apresente o QR Code na entrada do evento.</p>
+                </div>
+            </div>
+            <div class="ticket-stub">
+                <div class="qr-code">
+                    <!-- IMPORTANTE: Substitua o 'src' por um link do QR Code real para seu convidado -->
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Confirme_sua_presenca_aqui" alt="QR Code do Convite">
+                </div>
+                <p class="qr-code-label">Acesso ao evento</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="info-accordion">
+        <div class="accordion-item">
+            <div class="accordion-header"><span>⛪</span> Informações da Cerimônia</div>
+            <div class="accordion-content">
+                <p>
+                    <strong>Local:</strong> Igreja do Sagrado Coração de Jesus<br>
+                    <strong>Endereço:</strong> R. Silva Campos - Centro, Parintins - AM<br>
+                    <strong>Horário:</strong> 18:30
+                </p>
+                <p><a href="https://maps.app.goo.gl/ZXFqEyJoepWR39HV7" target="_blank">Ver no mapa</a></p>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <div class="accordion-header"><span>🎉</span> Informações da Festa</div>
+            <div class="accordion-content">
+                <p>
+                    <strong>Local:</strong> Kwati Villa<br>
+                    <strong>Endereço:</strong> Av. Paulo Teixeira - Sta. Rita de Cassia, Parintins - AM<br>
+                    <strong>Horário:</strong> Logo após a cerimônia.
+                </p>
+                <p>Contamos com sua presença para celebrar conosco até o amanhecer!</p>
+                <p><a href="https://maps.app.goo.gl/ZXFqEyJoepWR39HV7" target="_blank">Ver no mapa</a></p>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <div class="accordion-header"><span>👗</span> Vestimenta (Dress Code)</div>
+            <div class="accordion-content">
+                <p>O traje recomendado é <strong>Esporte Fino</strong>.</p>
+                <p>🤵‍♂️ O noivo usará um terno azul marinho.</p>
+                <p>👗 As madrinhas usarão vestidos na cor verde oliva.</p>
+                <p>🕴️ Os padrinhos estarão de terno cinza.</p>
+                <p>✨ Por isso, pedimos com carinho que os convidados evitem roupas nessas cores (azul marinho, verde oliva e cinza), para preservar o destaque especial dos nossos padrinhos e madrinhas.</p>
+                <p>🔹 Traje dos convidados: Social</p>
+                <p>Agradecemos desde já pela compreensão e por fazerem parte desse dia tão especial para nós!</p>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <div class="accordion-header"><span>✈️</span> Viagem e Hospedagem</div>
+            <div class="accordion-content">
+                <p>Em breve apresentaremos opções referentes à sua estadia e viagem</p>
+            </div>
+        </div>
+    </div>
+
+    <a href="index.html" class="back-link">
+        ← Voltar para o site principal
+    </a>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const accordionItems = document.querySelectorAll('.accordion-item');
+
+        accordionItems.forEach(item => {
+            const header = item.querySelector('.accordion-header');
+            header.addEventListener('click', () => {
+                // Fecha todos os outros itens abertos
+                const openItem = document.querySelector('.accordion-item.active');
+                if(openItem && openItem !== item) {
+                    openItem.classList.remove('active');
+                }
+
+                // Abre ou fecha o item clicado
+                item.classList.toggle('active');
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
