@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nosso Casamento - Elian & Keytiane</title>
-<link rel="icon" href="icon.png" type="image/x-icon">
-<!-- Fontes modernas -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;400;500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-<!-- [ETAPA 1] SDK do Mercado Pago -->
-<script src="https://sdk.mercadopago.com/js/v2"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosso Casamento - Elian & Keytiane</title>
+    <link rel="icon" href="icon.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;400;500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
 <style>
     :root {
         --cover-color: #192a56;
@@ -25,8 +22,6 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body { font-family: var(--font-body); overflow-x: hidden; background-color: #2c3e50; }
-    
-    /* ... [SEUS ESTILOS ANTERIORES COMPLETOS AQUI] ... */
     #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('bg_splash.png'); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 1000; transition: visibility 0s 1.5s, opacity 1.5s ease-in-out; }
     .book-container { perspective: 2500px; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
     .open-instruction { margin-top: 25px; color: var(--cover-color); font-family: var(--font-body); font-size: 1rem; text-align: center; opacity: 0.8; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); font-weight: 300; }
@@ -123,8 +118,9 @@
     .gift-button { display: inline-block; width: 100%; padding: 12px 20px; background-color: var(--gold-color); color: var(--cover-color); border: none; border-radius: 8px; font-weight: 500; text-align: center; cursor: pointer; text-decoration: none; transition: background-color 0.3s ease; }
     .gift-button:hover { background-color: #c5a030; }
     .gift-button.symbolic { background-color: #b0b0b0; color: #fff; }
-    .custom-gift-box { width: 100%; max-width: 600px; margin-top: 80px; padding: 40px; background-color: #fff; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
+    .custom-gift-box { width: 100%; max-width: 600px; margin-top: 80px; padding: 40px; background-color: #fff; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.08); text-align: center; }
     .custom-gift-box h3 { font-family: var(--font-title); font-size: 1.8rem; color: var(--cover-color); margin-bottom: 15px; }
+    .custom-gift-box input[type="number"] { width: 100%; max-width: 200px; margin: 15px auto; display: block; padding: 10px; border-radius: 6px; border: 1px solid #ccc; text-align: center; font-size: 1.2rem; }
     #mensagens { width: 100%; }
     .message-form-container { width: 100%; max-width: 700px; background-color: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.08); margin-bottom: 60px; }
     .message-form-container input, .message-form-container textarea { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ddd; font-family: var(--font-body); font-size: 1rem; }
@@ -135,16 +131,14 @@
     .message-card { background-color: #fff; padding: 25px; border-radius: 12px; text-align: left; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 5px solid var(--gold-color); }
     .message-text { font-size: 1rem; line-height: 1.7; color: #333; margin-bottom: 15px; }
     .message-author { font-weight: 500; font-style: italic; color: var(--cover-color); }
+    #pre-payment-dialog { padding: 30px; border-radius: 12px; border: none; box-shadow: 0 5px 25px rgba(0,0,0,0.2); text-align: center; max-width: 450px; margin: auto; }
+    #pre-payment-dialog h3 { color: var(--cover-color); font-family: var(--font-title); margin-top: 0; margin-bottom: 20px; }
+    #pre-payment-dialog p { font-size: 1rem; margin-bottom: 10px; }
+    #pre-payment-dialog input[type="text"], #pre-payment-dialog textarea { display: block; width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
+    #pre-payment-dialog button { width: 100%; padding: 15px; font-size: 1.1rem; background-color: var(--gold-color); color: var(--cover-color); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 10px; }
+    #pre-payment-dialog label { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; font-size: 0.9rem; cursor: pointer; }
+    #cancel-payment { background-color: #bdc3c7 !important; color: #2c3e50 !important; }
     
-    /* [NOVO] Estilos para o Dialog de Pagamento */
-    #payment-dialog { border: none; border-radius: 12px; box-shadow: 0 0 2em rgba(0, 0, 0, 0.2); padding: 0; max-width: 500px; width: 90%; overflow: hidden; }
-    #payment-dialog::backdrop { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); }
-    .dialog-header { background-color: var(--cover-color); color: var(--white-color); padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; }
-    .dialog-header h3 { font-family: var(--font-title); font-size: 1.5rem; margin: 0; }
-    #close-dialog-btn { background: none; border: none; color: white; font-size: 2rem; cursor: pointer; line-height: 1; }
-    .dialog-body { padding: 25px; }
-    #dialog-loader { text-align: center; padding: 50px; }
-
     @media (max-width: 1024px) { .person-card { flex-basis: 40%; } }
     @media (max-width: 768px) { .main-layout { flex-direction: column; width: 95%; } .center-content { order: 1; margin: 40px 0; } .nav-links { order: 2; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 20px; } .nav-links.nav-left, .nav-links.nav-right { width: 100%; } .content-section, .noivos-intro-text, .noivos-profiles, .our-story-text { padding-left: 5%; padding-right: 5%; } .story-banner h1 { font-size: 2.5rem; } .noivos-profiles { gap: 3rem; } }
     @media (max-width: 600px) { .person-card { flex-basis: 80%; max-width: none; } .person-photo { width: 180px; height: 180px; } .person-name { font-size: 2.5rem; } }
@@ -152,150 +146,197 @@
 </head>
 <body>
 
-<!-- ... (O HTML do body de <audio> até o final de <section id="mensagens"> continua o mesmo) ... -->
-<audio id="background-music" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg"></audio>
-<audio id="page-turn-sound"><source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_29388b7cfd.mp3?filename=page-turn-47209.mp3" type="audio/mpeg"></audio>
-<button id="music-toggle-btn" class="paused"> <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg> <svg class="icon-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg> </button>
-<div id="splash-screen"><div class="book-container"><div class="book"><div class="spine"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="first-page"><div class="preview-container"><h1>Vamos nos casar!</h1><p>A contagem regressiva começa...</p></div></div><div class="cover-flipper"><div class="cover-face cover-face-front"><div class="cover-content"><div class="couple-monogram"><img src="icon.png" alt="Monograma E&K" class="monogram-image"></div><div class="floral-divider"></div><div class="cover-title">Elian<br>&<br>Keytiane</div><div class="cover-subtitle">O início do nosso para sempre</div><div class="floral-divider"></div><div class="couple-photo"></div></div></div><div class="cover-face cover-face-back"></div></div></div><p class="open-instruction">Toque no Livro para Abrir</p></div></div>
-<div id="main-content"><div class="main-layout"><nav class="nav-links nav-left"><a href="#noivos">Os Noivos</a><a href="#padrinhos">Padrinhos e Homenagens</a></nav><div class="center-content"><h1>Elian & Keytiane</h1><div id="countdown"><div class="timer-unit"><span id="days">00</span><label>Dias</label></div><div class="timer-unit"><span id="hours">00</span><label>Horas</label></div><div class="timer-unit"><span id="minutes">00</span><label>Minutos</label></div><div class="timer-unit"><span id="seconds">00</span><label>Segundos</label></div></div><div class="wedding-date">16 de Agosto de 2025</div></div><nav class="nav-links nav-right"><a href="#presentes">Lista de Presentes</a><a href="#mensagens">Mensagens</a></nav></div><div class="bottom-container"><a href="convidado.html" id="inviteButton" class="invite-button">Ver Meu Convite</a><a href="#noivos" class="scroll-down-arrow"></a></div></div>
-<section id="noivos" class="content-section"><div class="story-banner" style="background-image: url('kart.jpg');"><h1>Nossa História</h1></div><div class="noivos-intro-text"><h2>ERA UMA VEZ</h2><p>Os Noivos</p></div><div class="noivos-profiles"><div class="profile-card"><img src="noivo.jpg" alt="Foto do Noivo" class="profile-photo"><p class="profile-name">Elian</p><p class="profile-description">Aquele que encontrou seu grande amor onde menos esperava. O sonhador, o parceiro, pronto para construir uma vida inteira ao lado dela.</p></div><div class="profile-card"><img src="noiva2.jpg" alt="Foto da Noiva" class="profile-photo"><p class="profile-name">Keytiane</p><p class="profile-description">Aquela que viu nele o porto seguro e a promessa de um futuro feliz. A companheira, a inspiração, pronta para dizer "sim" para a eternidade.</p></div></div><div class="story-banner" style="background-image: url('home_bg.jpg');"><h1>Nossa Jornada</h1></div><div class="our-story-text"> <h2>Uma História Escrita com Fé e Amor</h2> <p> Duas pessoas se conheceram durante uma Mariápolis — um daqueles encontros que parecem simples à primeira vista, mas que o tempo mostra ter sido guiado por algo maior. Foi ali, em meio a momentos de partilha, reflexão e alegria, que nasceu uma amizade sincera, recheada de conversas sobre futebol, sorrisos espontâneos e a convivência no grupo de jovens JMV. <br><br> Com o passar dos meses, o que era amizade ganhou novos contornos. As afinidades se tornaram mais profundas, o carinho mais evidente, e o vínculo mais forte. Entre encontros, trocas de mensagens e partilhas de vida, foi florescendo um amor verdadeiro, daqueles que enfrentam distâncias, diferenças e desafios com coragem e perseverança. <br><br> Hoje, no ano de 2025, celebramos não apenas um casamento, mas a união de duas histórias que se entrelaçaram de maneira única. Selamos este compromisso com fé, com gratidão e com o coração cheio de esperança no futuro que estamos construindo juntos. Que este amor continue sendo luz, abrigo e inspiração, não só para nós, mas para todos que fazem parte da nossa caminhada. </p> </div> </section>
-<section id="padrinhos" class="content-section"><h2>Padrinhos e Homenagens</h2><p class="placeholder-text" style="max-width: 800px; margin-bottom: 80px;">Pessoas que amamos, que nos inspiram e que sempre estiveram ao nosso lado. É uma honra ter vocês participando tão de perto do nosso sonho. Conheçam os nomes que tornarão nosso grande dia ainda mais especial.</p><div class="sub-section"><h3 class="sub-section-title">Nossos Pais</h3><p class="sub-section-description">Nossa base, nosso exemplo, nosso porto seguro. A vocês, nossa eterna gratidão.</p><div class="people-grid"><div class="person-card"><img src="painoivo.jpg" alt="Pai do Noivo" class="person-photo"><p class="person-name">Eliseu Souza</p><p class="person-role">Pai do Noivo</p></div><div class="person-card"><img src="maenoivo.jpg" alt="Mãe do Noivo" class="person-photo"><p class="person-name">Maria das Dores</p><p class="person-role">Mãe do Noivo</p></div></div><div class="people-grid"><div class="person-card"><img src="painoiva.png" alt="Pai da Noiva" class="person-photo"><p class="person-name">Ennio Carlos</p><p class="person-role">Pai da Noiva</p></div><div class="person-card"><img src="maenoiva.jpg" alt="Mãe da Noiva" class="person-photo"><p class="person-name">Sílvia Cristina</p><p class="person-role">Mãe da Noiva</p></div></div></div><div class="sub-section"><h3 class="sub-section-title">Padrinhos e Madrinhas</h3><p class="sub-section-description">Escolhidos a dedo para testemunhar nossa união e nos guiar nesta nova jornada.</p><div class="people-grid"><div class="person-card"><img src="p3.jpg" alt="Padrinho" class="person-photo"><p class="person-name">Amilton Braga</p></div><div class="person-card"><img src="m2.jpg" alt="Madrinha" class="person-photo"><p class="person-name">Anna Clara</p></div><div class="person-card"><img src="https://placehold.co/180x180/2c3e50/FFFFFF?text=Padrinho" alt="Padrinho" class="person-photo"><p class="person-name">Emerson Michel</p></div><div class="person-card"><img src="m4.jpg" alt="Madrinha" class="person-photo"><p class="person-name">Bárbara Brenda</p></div><div class="person-card"><img src="p4.jpg" alt="Padrinho" class="person-photo"><p class="person-name">Joanildo Souza</p></div><div class="person-card"><img src="m5.png" alt="Madrinha" class="person-photo"><p class="person-name">Edilaine Rocha</p></div><div class="person-card"><img src="p2.jpg" alt="Padrinho" class="person-photo"><p class="person-name">Patrick Nascimento</p></div><div class="person-card"><img src="m3.jpg" alt="Madrinha" class="person-photo"><p class="person-name">Hilary Rodrigues</p></div><div class="person-card"><img src="https://placehold.co/180x180/2c3e50/FFFFFF?text=Padrinho" alt="Padrinho" class="person-photo"><p class="person-name">Rommel Cardoso</p></div><div class="person-card"><img src="m6.png" alt="Madrinha" class="person-photo"><p class="person-name">Jeana Samara</p></div><div class="person-card"><img src="p1.png" alt="Padrinho" class="person-photo"><p class="person-name">Tarcísio Alves</p></div><div class="person-card"><img src="m1.1.jpg" alt="Madrinha" class="person-photo"><p class="person-name">Maria Vitória</p></div></div></div><div class="sub-section"><h3 class="sub-section-title">Daminhas e Pajens</h3><p class="sub-section-description">A alegria e a doçura que encantarão nosso cortejo.</p><div class="people-grid"><div class="person-card"><img src="dp3.png" alt="Daminha" class="person-photo"><p class="person-name">Alice</p></div><div class="person-card"><img src="dp4.png" alt="Pajem" class="person-photo"><p class="person-name">Bernardo</p></div><div class="person-card"><img src="dp2.jpg" alt="Daminha" class="person-photo"><p class="person-name">Eloá</p></div><div class="person-card"><img src="dp1.png" alt="Pajem" class="person-photo"><p class="person-name">Luís Miguel</p></div><div class="person-card"><img src="dp6.png" alt="Daminha" class="person-photo"><p class="person-name">Lara</p></div><div class="person-card"><img src="https://placehold.co/180x180/778beb/FFFFFF?text=Pajem" alt="Pajem" class="person-photo"><p class="person-name">Miguel</p></div><div class="person-card"><img src="https://placehold.co/180x180/f7d794/FFFFFF?text=Daminha" alt="Daminha" class="person-photo"><p class="person-name">Lívia</p></div><div class="person-card"><img src="dp5.png" alt="Daminha" class="person-photo"><p class="person-name">Louíse</p></div></div></div><div class="sub-section"><h3 class="sub-section-title">Homenagens Especiais</h3><p class="sub-section-description">Há pessoas que, mesmo distantes, estarão para sempre em nossos corações e memórias. Sua luz e seu amor nos acompanham hoje e sempre.</p><div class="tribute-grid"><div class="tribute-card"><img src="h1.png" alt="Avós do Noivo" class="tribute-photo"><p class="person-name">Joaquim e Latife</p><p class="person-role">Avós do Noivo</p></div><div class="tribute-card"><img src="h2.jpg" alt="Avô do Noivo" class="tribute-photo"><p class="person-name">Miguel Souza</p><p class="person-role">Avô do Noivo</p></div><div class="tribute-card"><img src="h3.jpg" alt="Primo do Noivo" class="tribute-photo"><p class="person-name">Lucas Adril</p><p class="person-role">Primo do Noivo</p></div></div></div><p class="final-thanks">A cada um de vocês, nosso muito obrigado por fazerem parte da nossa história!</p></section>
-<section id="presentes" class="content-section"><h2>Lista de Presentes</h2><p class="placeholder-text" style="margin-bottom: 20px;"> Queridos amigos e familiares, a presença de vocês é o nosso maior presente! Mas, se também quiserem nos presentear, ficaremos muito felizes. Criamos esta lista com itens que nos ajudarão a montar nosso cantinho e também com algumas cotas divertidas para nos ajudar a realizar alguns sonhos. Sintam-se à vontade! </p><div id="gift-list-container" class="gift-grid"></div><div class="custom-gift-box"><h3>Quer nos presentear com outro valor?</h3><p>Fique à vontade para nos enviar um PIX com o valor que desejar. Agradecemos imensamente seu carinho!</p></div></section>
-<section id="mensagens" class="content-section"><h2>Deixe sua Mensagem</h2><p class="placeholder-text" style="margin-bottom: 60px;"> Vamos amar ler o seu recado! Deixe aqui suas palavras de carinho, uma boa lembrança ou um conselho divertido para nossa nova vida juntos. </p><div class="message-form-container"><form id="message-form"><input type="text" id="guest-name" placeholder="Seu nome" required><textarea id="guest-message" placeholder="Escreva sua mensagem de carinho aqui..." required></textarea><button type="submit">Enviar Mensagem</button></form></div><div id="message-board"><div class="message-card"><p class="message-text">"Elian e Keyti, que a jornada de vocês seja repleta de cumplicidade, amor e muitas risadas. Estamos muito felizes em celebrar este momento com vocês. Parabéns!"</p><p class="message-author">- Família Silva</p></div><div class="message-card"><p class="message-text">"Afilhados queridos, que a felicidade a dois continue sendo o objetivo principal de suas vidas. Que a caminhada seja longa, repleta de amor e compreensão. Contem sempre conosco!"</p><p class="message-author">- Padrinho João e Madrinha Maria</p></div><div class="message-card"><p class="message-text">"Finalmente o grande dia! Desejo toda a felicidade do mundo pra vocês. E Elian, vê se aprende a cozinhar com aquele curso que a gente vai dar de presente! hahaha Brincadeira. Amo vocês!"</p><p class="message-author">- Um Amigo Sincero</p></div></div></section>
+    <audio id="background-music" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg"></audio>
+    <audio id="page-turn-sound"><source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_29388b7cfd.mp3?filename=page-turn-47209.mp3" type="audio/mpeg"></audio>
+    <button id="music-toggle-btn" class="paused"> <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg> <svg class="icon-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg> </button>
+    <div id="splash-screen"><div class="book-container"><div class="book"><div class="spine"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="first-page"><div class="preview-container"><h1>Vamos nos casar!</h1><p>A contagem regressiva começa...</p></div></div><div class="cover-flipper"><div class="cover-face cover-face-front"><div class="cover-content"><div class="couple-monogram"><img src="icon.png" alt="Monograma E&K" class="monogram-image"></div><div class="floral-divider"></div><div class="cover-title">Elian<br>&<br>Keytiane</div><div class="cover-subtitle">O início do nosso para sempre</div><div class="floral-divider"></div><div class="couple-photo"></div></div></div><div class="cover-face cover-face-back"></div></div></div><p class="open-instruction">Toque no Livro para Abrir</p></div></div>
+    <div id="main-content"><div class="main-layout"><nav class="nav-links nav-left"><a href="#noivos">Os Noivos</a><a href="#padrinhos">Padrinhos e Homenagens</a></nav><div class="center-content"><h1>Elian & Keytiane</h1><div id="countdown"><div class="timer-unit"><span id="days">00</span><label>Dias</label></div><div class="timer-unit"><span id="hours">00</span><label>Horas</label></div><div class="timer-unit"><span id="minutes">00</span><label>Minutos</label></div><div class="timer-unit"><span id="seconds">00</span><label>Segundos</label></div></div><div class="wedding-date">16 de Agosto de 2025</div></div><nav class="nav-links nav-right"><a href="#presentes">Lista de Presentes</a><a href="#mensagens">Mensagens</a></nav></div><div class="bottom-container"><a href="convidado.html" id="inviteButton" class="invite-button">Ver Meu Convite</a><a href="#noivos" class="scroll-down-arrow"></a></div></div>
+    <section id="noivos" class="content-section"><div class="story-banner" style="background-image: url('kart.jpg');"><h1>Nossa História</h1></div><div class="noivos-intro-text"><h2>ERA UMA VEZ</h2><p>Os Noivos</p></div><div class="noivos-profiles"><div class="profile-card"><img src="noivo.jpg" alt="Foto do Noivo" class="profile-photo"><p class="profile-name">Elian</p><p class="profile-description">Aquele que encontrou seu grande amor onde menos esperava. O sonhador, o parceiro, pronto para construir uma vida inteira ao lado dela.</p></div><div class="profile-card"><img src="noiva2.jpg" alt="Foto da Noiva" class="profile-photo"><p class="profile-name">Keytiane</p><p class="profile-description">Aquela que viu nele o porto seguro e a promessa de um futuro feliz. A companheira, a inspiração, pronta para dizer "sim" para a eternidade.</p></div></div><div class="story-banner" style="background-image: url('home_bg.jpg');"><h1>Nossa Jornada</h1></div><div class="our-story-text"> <h2>Uma História Escrita com Fé e Amor</h2> <p> Duas pessoas se conheceram durante uma Mariápolis — um daqueles encontros que parecem simples à primeira vista, mas que o tempo mostra ter sido guiado por algo maior. Foi ali, em meio a momentos de partilha, reflexão e alegria, que nasceu uma amizade sincera, recheada de conversas sobre futebol, sorrisos espontâneos e a convivência no grupo de jovens JMV. <br><br> Com o passar dos meses, o que era amizade ganhou novos contornos. As afinidades se tornaram mais profundas, o carinho mais evidente, e o vínculo mais forte. Entre encontros, trocas de mensagens e partilhas de vida, foi florescendo um amor verdadeiro, daqueles que enfrentam distâncias, diferenças e desafios com coragem e perseverança. <br><br> Hoje, no ano de 2025, celebramos não apenas um casamento, mas a união de duas histórias que se entrelaçaram de maneira única. Selamos este compromisso com fé, com gratidão e com o coração cheio de esperança no futuro que estamos construindo juntos. Que este amor continue sendo luz, abrigo e inspiração, não só para nós, mas para todos que fazem parte da nossa caminhada. </p> </div> </section>
+    <section id="padrinhos" class="content-section"><h2>Padrinhos e Homenagens</h2><p class="placeholder-text" style="max-width: 800px; margin-bottom: 80px;">Pessoas que amamos, que nos inspiram e que sempre estiveram ao nosso lado. É uma honra ter vocês participando tão de perto do nosso sonho. Conheçam os nomes que tornarão nosso grande dia ainda mais especial.</p><div class="sub-section"><h3 class="sub-section-title">Nossos Pais</h3><p class="sub-section-description">Nossa base, nosso exemplo, nosso porto seguro. A vocês, nossa eterna gratidão.</p><div class="people-grid"><div class="person-card"><img src="painoivo.jpg" alt="Pai do Noivo" class="person-photo"><p class="person-name">Eliseu Souza</p><p class="person-role">Pai do Noivo</p></div><div class="person-card"><img src="maenoivo.jpg" alt="Mãe do Noivo" class="person-photo"><p class="person-name">Maria das Dores</p><p class="person-role">Mãe do Noivo</p></div></div><div class="people-grid"><div class="person-card"><img src="painoiva.png" alt="Pai da Noiva" class="person-photo"><p class="person-name">Ennio Carlos</p><p class="person-role">Pai da Noiva</p></div><div class="person-card"><img src="maenoiva.jpg" alt="Mãe da Noiva" class="person-photo"><p class="person-name">Sílvia Cristina</p><p class="person-role">Mãe da Noiva</p></div></div></div><div class="sub-section"><h3 class="sub-section-title">Padrinhos e Madrinhas</h3><p class="sub-section-description">Escolhidos a dedo para testemunhar nossa união e nos guiar nesta nova jornada.</p><div class="people-grid"><div class="person-card"><img src="p3.jpg" alt="Padrinho" class="person-photo"><p class="person-name">Amilton Braga</p></div><div class="person-card"><img src="m2.jpg" alt="Madrinha" class="person-photo"><p class="person-name">Anna Clara</p></div><div class="person-card"><img src="https://placehold.co/180x180/2c3e50/FFFFFF?text=Padrinho" alt="Padrinho" class="person-photo"><p class="person-name">Emerson Michel</p></div><div class="person-card"><img src="m4.jpg" alt="Madrinha" class="person-photo"><p class="person-name">Bárbara Brenda</p></div><div class="person-card"><img src="p4.jpg" alt="Padrinho" class="person-photo"><p class="person-name">Joanildo Souza</p></div><div class="person-card"><img src="m5.png" alt="Madrinha" class="person-photo"><p class="person-name">Edilaine Rocha</p></div><div class="person-card"><img src="p2.jpg" alt="Padrinho" class="person-photo"><p class="person-name">Patrick Nascimento</p></div><div class="person-card"><img src="m3.jpg" alt="Madrinha" class="person-photo"><p class="person-name">Hilary Rodrigues</p></div><div class="person-card"><img src="https://placehold.co/180x180/2c3e50/FFFFFF?text=Padrinho" alt="Padrinho" class="person-photo"><p class="person-name">Rommel Cardoso</p></div><div class="person-card"><img src="m6.png" alt="Madrinha" class="person-photo"><p class="person-name">Jeana Samara</p></div><div class="person-card"><img src="p1.png" alt="Padrinho" class="person-photo"><p class="person-name">Tarcísio Alves</p></div><div class="person-card"><img src="m1.1.jpg" alt="Madrinha" class="person-photo"><p class="person-name">Maria Vitória</p></div></div></div><div class="sub-section"><h3 class="sub-section-title">Daminhas e Pajens</h3><p class="sub-section-description">A alegria e a doçura que encantarão nosso cortejo.</p><div class="people-grid"><div class="person-card"><img src="dp3.png" alt="Daminha" class="person-photo"><p class="person-name">Alice</p></div><div class="person-card"><img src="dp4.png" alt="Pajem" class="person-photo"><p class="person-name">Bernardo</p></div><div class="person-card"><img src="dp2.jpg" alt="Daminha" class="person-photo"><p class="person-name">Eloá</p></div><div class="person-card"><img src="dp1.png" alt="Pajem" class="person-photo"><p class="person-name">Luís Miguel</p></div><div class="person-card"><img src="dp6.png" alt="Daminha" class="person-photo"><p class="person-name">Lara</p></div><div class="person-card"><img src="https://placehold.co/180x180/778beb/FFFFFF?text=Pajem" alt="Pajem" class="person-photo"><p class="person-name">Miguel</p></div><div class="person-card"><img src="https://placehold.co/180x180/f7d794/FFFFFF?text=Daminha" alt="Daminha" class="person-photo"><p class="person-name">Lívia</p></div><div class="person-card"><img src="dp5.png" alt="Daminha" class="person-photo"><p class="person-name">Louíse</p></div></div></div><div class="sub-section"><h3 class="sub-section-title">Homenagens Especiais</h3><p class="sub-section-description">Há pessoas que, mesmo distantes, estarão para sempre em nossos corações e memórias. Sua luz e seu amor nos acompanham hoje e sempre.</p><div class="tribute-grid"><div class="tribute-card"><img src="h1.png" alt="Avós do Noivo" class="tribute-photo"><p class="person-name">Joaquim e Latife</p><p class="person-role">Avós do Noivo</p></div><div class="tribute-card"><img src="h2.jpg" alt="Avô do Noivo" class="tribute-photo"><p class="person-name">Miguel Souza</p><p class="person-role">Avô do Noivo</p></div><div class="tribute-card"><img src="h3.jpg" alt="Primo do Noivo" class="tribute-photo"><p class="person-name">Lucas Adril</p><p class="person-role">Primo do Noivo</p></div></div></div><p class="final-thanks">A cada um de vocês, nosso muito obrigado por fazerem parte da nossa história!</p></section>
+    <section id="presentes" class="content-section"><h2>Lista de Presentes</h2><p class="placeholder-text" style="margin-bottom: 20px;"> Queridos amigos e familiares, a presença de vocês é o nosso maior presente! Mas, se também quiserem nos presentear, ficaremos muito felizes. Criamos esta lista com itens que nos ajudarão a montar nosso cantinho e também com algumas cotas divertidas para nos ajudar a realizar alguns sonhos. Sintam-se à vontade! </p><div id="gift-list-container" class="gift-grid"></div><div class="custom-gift-box"><h3>Quer nos presentear com outro valor?</h3><p>Fique à vontade para escolher um valor que faça sentido para você. Agradecemos imensamente seu carinho!</p><input type="number" id="custom-gift-value" placeholder="R$ 0,00" min="1"><button class="gift-button" id="custom-gift-btn">Presentear com este valor</button></div></section>
+    <section id="mensagens" class="content-section"><h2>Deixe sua Mensagem</h2><p class="placeholder-text" style="margin-bottom: 60px;"> Vamos amar ler o seu recado! Deixe aqui suas palavras de carinho, uma boa lembrança ou um conselho divertido para nossa nova vida juntos. </p><div class="message-form-container"><form id="message-form"><input type="text" id="form-guest-name" placeholder="Seu nome" required><textarea id="form-guest-message" placeholder="Escreva sua mensagem de carinho aqui..." required></textarea><button type="submit">Enviar Mensagem</button></form></div><div id="message-board"></div></section>
 
-<!-- [ETAPA 2] HTML do Dialog de Pagamento -->
-<dialog id="payment-dialog">
-    <div class="dialog-header">
-        <h3 id="dialog-title">Finalizar Pagamento</h3>
-        <button id="close-dialog-btn">×</button>
-    </div>
-    <div class="dialog-body">
-        <div id="dialog-loader">Carregando checkout...</div>
-        <div id="payment-brick-container"></div>
-    </div>
-</dialog>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
+    // =================================================================
+    // COLE A CONFIGURAÇÃO DO SEU FIREBASE AQUI
+    // =================================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyAQ3txJQ09muNi5xaBhOPwFztT1fCR1qmE",
+        authDomain: "formagest-a7591.firebaseapp.com",
+        databaseURL: "https://formagest-a7591-default-rtdb.firebaseio.com",
+        projectId: "formagest-a7591",
+        storageBucket: "formagest-a7591.appspot.com",
+        messagingSenderId: "27539451532",
+        appId: "1:27539451532:web:76f7eed9eafc3ca1c115a9",
+        measurementId: "G-VXKWZPC8LZ"
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
-        // ... (Toda a lógica inicial do seu site continua aqui: book, countdown, etc.) ...
-        const usuarioTemConvite = true;
-        const bookContainer = document.querySelector('.book-container');
-        const splashScreen = document.getElementById('splash-screen');
-        const mainContent = document.getElementById('main-content');
-        const backgroundMusic = document.getElementById('background-music');
-        const pageTurnSound = document.getElementById('page-turn-sound');
-        const inviteButton = document.getElementById('inviteButton');
-        const musicToggleButton = document.getElementById('music-toggle-btn');
-        const messageForm = document.getElementById('message-form');
-        bookContainer.addEventListener('click', () => { if (splashScreen.classList.contains('open')) return; pageTurnSound.play(); backgroundMusic.volume = 0.3; backgroundMusic.play(); splashScreen.classList.add('open'); musicToggleButton.style.display = 'flex'; musicToggleButton.classList.remove('paused'); musicToggleButton.classList.add('playing'); setTimeout(() => { splashScreen.classList.add('zooming'); mainContent.classList.add('visible'); setTimeout(() => { splashScreen.classList.add('hidden'); document.body.style.overflowY = 'auto'; startCountdown(); if (usuarioTemConvite) { inviteButton.style.display = 'block'; } }, 1500); }, 2500); });
-        musicToggleButton.addEventListener('click', () => { if (backgroundMusic.paused) { backgroundMusic.play(); musicToggleButton.classList.remove('paused'); musicToggleButton.classList.add('playing'); } else { backgroundMusic.pause(); musicToggleButton.classList.remove('playing'); musicToggleButton.classList.add('paused'); } });
-        function startCountdown() { const daysEl = document.getElementById('days'), hoursEl = document.getElementById('hours'), minutesEl = document.getElementById('minutes'), secondsEl = document.getElementById('seconds'); const countdownContainer = document.getElementById('countdown'); const weddingDate = new Date('August 16, 2025 19:00:00').getTime(); const formatTime = (time) => (time < 10 ? `0${time}` : time); const interval = setInterval(() => { const now = new Date().getTime(); const distance = weddingDate - now; if (distance < 0) { clearInterval(interval); countdownContainer.innerHTML = "<div class='wedding-date' style='font-size: 2rem;'>O grande dia chegou!</div>"; return; } daysEl.textContent = formatTime(Math.floor(distance / (1000 * 60 * 60 * 24))); hoursEl.textContent = formatTime(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))); minutesEl.textContent = formatTime(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))); secondsEl.textContent = formatTime(Math.floor((distance % (1000 * 60)) / 1000)); }, 1000); }
-        messageForm.addEventListener('submit', (event) => { event.preventDefault(); const guestName = document.getElementById('guest-name').value; const guestMessage = document.getElementById('guest-message').value; const messageBoard = document.getElementById('message-board'); const newMessageCard = document.createElement('div'); newMessageCard.className = 'message-card'; newMessageCard.innerHTML = `<p class="message-text">"${guestMessage}"</p><p class="message-author">- ${guestName}</p>`; messageBoard.prepend(newMessageCard); alert(`Obrigado pela sua mensagem, ${guestName}!`); messageForm.reset(); });
+        // Inicialização do Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const giftsRef = database.ref('presentes');
+        const messagesRef = database.ref('mensagens');
+        const guestsRef = database.ref('convidados');
+        
+        // URL do seu servidor na Render
+        const backendUrl = 'https://casamento-elian-key-api.onrender.com';
 
-        // --- LÓGICA DE CARREGAMENTO DOS PRESENTES ---
+        // Lógica da UI (minimizada para clareza)
+        window.scrollTo(0, 0);
+        const inviteButton=document.getElementById("inviteButton");const bookContainer=document.querySelector(".book-container"),splashScreen=document.getElementById("splash-screen"),mainContent=document.getElementById("main-content"),backgroundMusic=document.getElementById("background-music"),pageTurnSound=document.getElementById("page-turn-sound"),musicToggleButton=document.getElementById("music-toggle-btn");bookContainer.addEventListener("click",()=>{if(splashScreen.classList.contains("open"))return;pageTurnSound.play();backgroundMusic.volume=.3;backgroundMusic.play();splashScreen.classList.add("open");musicToggleButton.style.display="flex";musicToggleButton.classList.remove("paused");musicToggleButton.classList.add("playing");setTimeout(()=>{splashScreen.classList.add("zooming");mainContent.classList.add("visible");setTimeout(()=>{splashScreen.classList.add("hidden");document.body.style.overflowY="auto";startCountdown();checkInvite()},1500)},2500)}),musicToggleButton.addEventListener("click",()=>{backgroundMusic.paused?(backgroundMusic.play(),musicToggleButton.classList.remove("paused"),musicToggleButton.classList.add("playing")):(backgroundMusic.pause(),musicToggleButton.classList.remove("playing"),musicToggleButton.classList.add("paused"))});function startCountdown(){const e=document.getElementById("days"),t=document.getElementById("hours"),n=document.getElementById("minutes"),o=document.getElementById("seconds"),a=document.getElementById("countdown"),s=new Date("August 16, 2025 19:00:00").getTime(),d=e=>10>e?`0${e}`:e;const i=setInterval(()=>{const l=(new Date).getTime(),c=s-l;if(0>c)return clearInterval(i),void(a.innerHTML="<div class='wedding-date' style='font-size: 2rem;'>O grande dia chegou!</div>");e.textContent=d(Math.floor(c/864e5)),t.textContent=d(Math.floor(c%864e5/36e5)),n.textContent=d(Math.floor(c%36e5/6e4)),o.textContent=d(Math.floor(c%6e4/1e3))},1e3)}
+
+        // VERIFICA SE EXISTE UM CONVITE VÁLIDO NA URL
+        function checkInvite() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const inviteId = urlParams.get('invite');
+            if (inviteId) {
+                guestsRef.child(inviteId).once('value', (snapshot) => {
+                    if (snapshot.exists()) {
+                        inviteButton.style.display = 'block';
+                        inviteButton.href = `convidado.html?invite=${inviteId}`;
+                    } else {
+                        inviteButton.style.display = 'none';
+                    }
+                });
+            } else {
+                inviteButton.style.display = 'none';
+            }
+        }
+        
+        // CARREGAR PRESENTES
         function loadGifts() {
-            const gifts = [
-              { "imagem": "https://presentesrodriguez.vtexassets.com/arquivos/ids/167217/PANELA-DE-PRESSAO-ELETRICA-6-LITROS-COM-15-RECEITAS-PRe-PROGRAMADAS-PCC20-PRETO-E-ACO-INOX-110V-ELECTROLUX-4.jpg?v=635996230900400000", "titulo": "Panela de Pressão Elétrica", "valor": 400 },
-              { "imagem": "https://www.vadin.com.br/img/galeria_paginas/6329b605b45cc.jpg", "titulo": "Guitarra Nova para Coleção", "valor": 500 },
-              { "imagem": "https://www.destakferramentas.com.br/cdn/shop/files/MaletaDeFerramentasProfissionalCompletaCom254Pcstitanium_600x600_crop_center.jpg?v=1691784172", "titulo": "Caixa de Ferramentas", "valor": 230 },
-              { "imagem": "https://cdn.borainvestir.b3.com.br/borainvestir/2022/08/19135055/bitcoin-_michael_wensch_-_dominio_publico.jpg.webp", "titulo": "Investimento em Bitcoin", "valor": 600 },
-              { "imagem": "https://t62533.vteximg.com.br/arquivos/ids/280620-1000-1000/cafeteira-mondial-pratic-cn01-20-xicaras-1.jpg?v=638277264847300000", "titulo": "Cafeteira", "valor": 180 },
-              { "imagem": "https://lumienergy.vtexassets.com/arquivos/ids/167152/churrasqueira-eletrica-fischer-grill-2.jpg?v=638091490798600000", "titulo": "Churrasqueira Elétrica", "valor": 170 },
-              { "imagem": "https://cdn.awsli.com.br/600x1000/53/53761/produto/128693568/b9e92275ff.jpg", "titulo": "Volante para Jogos de Corrida", "valor": 500 },
-              { "imagem": "https://www.agrotama.com.br//upload/novo_produtos/cadeirapresidentedeescritorioemtelameshbasegiratoria_102046890.jpg", "titulo": "Cadeira de Escritório", "valor": 500 },
-              { "imagem": "https://cdn.folhape.com.br/upload/dn_arquivo/2022/05/imagens-divulagacao-cref12pe-11_2.png", "titulo": "Cota pra Academia", "valor": 200 },
-              { "imagem": "https://a-static.mlcdn.com.br/1500x1500/mini-mesa-de-ping-pong-infantil-com-raquete-rede-e-bolinha-completa-de-brinquedo-dutetoys/elianaaparecidaleitealmeida/74641/633f15b434dc795cf8afffd0397721ca.jpeg", "titulo": "Mini Mesa de Ping Pong", "valor": 410 },
-              { "imagem": "https://img.band.uol.com.br/image/2025/01/24/miniaturas-hot-wheels-da-formula-1-125929_300x300.jpg", "titulo": "Coleção F1 da Hot Wheels", "valor": 250 },
-              { "imagem": "https://cdn.awsli.com.br/2500x2500/2549/2549769/produto/236100238/53-f2rl13s813.jpg", "titulo": "JBL dos Sonhos da Noiva", "valor": 1800 },
-              { "imagem": "https://a-static.mlcdn.com.br/1500x1500/bateria-eletronica-6-drums-5-metal-silicone-portatil-c-pedal-exbom/megatumii/kh-w562/f037cd4049dcc1dac2d1fbc4d08ad9f8.jpeg", "titulo": "Bateria Eletrônica", "valor": 300 },
-              { "imagem": "https://a-static.mlcdn.com.br/1500x1500/teclado-piano-musical-61-teclas-sensiveis-usb-p2-e-musicas-mxt/optisom2/54-6-3/dbc1befddf9db18107d907d4b3280055.jpeg", "titulo": "Teclado Musical", "valor": 400 },
-              { "imagem": "https://upload.wikimedia.org/wikipedia/commons/6/66/Pedalboard_%28995939579%29.jpg", "titulo": "Novo Pedal de Guitarra", "valor": 150 },
-              { "imagem": "https://images.tcdn.com.br/img/img_prod/1018177/cortina_fiolinho_suave_c_blackout_separado_8_00m_x_altura_649_1_27e938637b85af3fcc4587819f8698a3.jpg", "titulo": "Cortina Nova", "valor": 220 },
-              { "imagem": "https://movimentoeconomico.com.br/wp-content/uploads/2024/07/Jogo-on-line-tigrinho-1024x1024.jpg", "titulo": "Saldo pra Noiva Gastar no Tigrinho", "valor": 200 },
-              { "imagem": "https://i0.wp.com/ovicio.com.br/wp-content/uploads/2025/06/20250605-ovicio-xbox-game-pass.jpg?resize=730%2C365&ssl=1", "titulo": "Assinatura de 1 ano no Xbox Game Pass", "valor": 420 },
-              { "imagem": "https://m.media-amazon.com/images/I/71MXuXeNZvL._UF1000,1000_QL80_.jpg", "titulo": "Disco de Vinil", "valor": 200 },
-              { "imagem": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Largada_Stock125_Foto_Claudio_Reis.jpg", "titulo": "Bateria de Kart com os Amigos", "valor": 350 },
-              { "imagem": "https://www.lelabrandao.co/cdn/shop/files/CapturadeTela2023-10-19as23.28.54.png?v=1697768949", "titulo": "Lenço para a noiva não borrar a maquiagem", "valor": 170 },
-              { "imagem": "https://muvin.com.br/cdn/shop/products/protetor-de-ouvido-em-silicone-para-natacao-uso.jpg?v=1642792523", "titulo": "Tampão de ouvido para noiva enquanto noivo ronca", "valor": 150 },
-              { "imagem": "https://www.amazonasemais.com.br/wp-content/uploads/2023/06/triciclo-parintins.jpg", "titulo": "Ajudinha para o triciclo um pouquinho mais longe", "valor": 160 },
-              { "imagem": "https://www.brides.com/thmb/c1DdMUGp-xnCDF0BFHFYG-mOW-8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/bold-1c1c6ebbb4fe4404b09d38af601cba8b.jpg", "titulo": "Taxa pra noiva não jogar o buquê pra sua namorada", "valor": 250 },
-              { "imagem": "https://m.media-amazon.com/images/I/713BjtJOPzL.jpg", "titulo": "Um ano de creche para o bebê reborn", "valor": 1000 },
-              { "imagem": "https://www.previdencia.guaira.sp.gov.br/admin/globalarq/noticia/noticia/651_366/e3dab6e15d06bfc8cfcb22052a306251.jpeg", "titulo": "Ajuda para a aposentadoria dos noivos", "valor": 500 },
-              { "imagem": "https://media.istockphoto.com/id/845889702/pt/foto/man-showing-his-empty-pocket.jpg?s=612x612&w=0&k=20&c=hSU0bJcKgqlSccgmNyaUiyIq_iAYqPvMChPW6geX17A=", "titulo": "Amo vocês, mas gastei toda a grana no look e salão", "valor": 150 },
-              { "imagem": "https://fly.metroimg.com/upload/q_85,w_700/https://uploads.metroimg.com/wp-content/uploads/2021/12/13162749/Henrique-Fogaca-credito-Chris-Castanho.jpg", "titulo": "Curso de culinária para o noivo", "valor": 250 },
-              { "imagem": "https://www.einerd.com/wp-content/uploads/2019/06/Walter-White-morreu-Breaking-Bad-capa-890x606.jpg", "titulo": "6 meses de Netflix", "valor": 350 },
-              { "imagem": "https://www.estadao.com.br/resizer/v2/D2O7HVMIZRL53CNMEN4Y5IWPEY.jpg?quality=80&auth=45f55444a9a29c7c36a45b4485c01c9e2a3e36c8871fbd76cea88b3664a21865&width=1200&height=1200&focal=0,0", "titulo": "Toma aqui aquele pix que to te devendo", "valor": 200 },
-              { "imagem": "https://www.cinegoiania.com.br/wp-content/uploads/2018/11/todo_poderoso.jpg", "titulo": "Se por uma intervenção divina você se sentir tocado", "valor": 5000 },
-              { "imagem": "https://media.istockphoto.com/id/1433285570/photo/smiling-businessman-showing-thumbs-up-in-his-office.jpg?s=612x612&w=0&k=20&c=IG7E_cku1gG68ifG7ux7-KtxA0AEvflb_uZLzeiwkac=", "titulo": "Teste de Desenvolvimento", "valor": 1 }
-            ];
-
+            const gifts = [{imagem:"https://presentesrodriguez.vtexassets.com/arquivos/ids/167217/PANELA-DE-PRESSAO-ELETRICA-6-LITROS-COM-15-RECEITAS-PRe-PROGRAMADAS-PCC20-PRETO-E-ACO-INOX-110V-ELECTROLUX-4.jpg?v=635996230900400000",titulo:"Panela de Pressão Elétrica",valor:400},{imagem:"https://www.vadin.com.br/img/galeria_paginas/6329b605b45cc.jpg",titulo:"Guitarra Nova para Coleção",valor:500},{imagem:"https://www.destakferramentas.com.br/cdn/shop/files/MaletaDeFerramentasProfissionalCompletaCom254Pcstitanium_600x600_crop_center.jpg?v=1691784172",titulo:"Caixa de Ferramentas",valor:230},{imagem:"https://cdn.borainvestir.b3.com.br/borainvestir/2022/08/19135055/bitcoin-_michael_wensch_-_dominio_publico.jpg.webp",titulo:"Investimento em Bitcoin",valor:600},{imagem:"https://t62533.vteximg.com.br/arquivos/ids/280620-1000-1000/cafeteira-mondial-pratic-cn01-20-xicaras-1.jpg?v=638277264847300000",titulo:"Cafeteira",valor:180},{imagem:"https://lumienergy.vtexassets.com/arquivos/ids/167152/churrasqueira-eletrica-fischer-grill-2.jpg?v=638091490798600000",titulo:"Churrasqueira Elétrica",valor:170},{imagem:"https://cdn.awsli.com.br/600x1000/53/53761/produto/128693568/b9e92275ff.jpg",titulo:"Volante para Jogos de Corrida",valor:500},{imagem:"https://www.agrotama.com.br//upload/novo_produtos/cadeirapresidentedeescritorioemtelameshbasegiratoria_102046890.jpg",titulo:"Cadeira de Escritório",valor:500},{imagem:"https://cdn.folhape.com.br/upload/dn_arquivo/2022/05/imagens-divulagacao-cref12pe-11_2.png",titulo:"Cota pra Academia",valor:200},{imagem:"https://a-static.mlcdn.com.br/1500x1500/mini-mesa-de-ping-pong-infantil-com-raquete-rede-e-bolinha-completa-de-brinquedo-dutetoys/elianaaparecidaleitealmeida/74641/633f15b434dc795cf8afffd0397721ca.jpeg",titulo:"Mini Mesa de Ping Pong",valor:410},{imagem:"https://img.band.uol.com.br/image/2025/01/24/miniaturas-hot-wheels-da-formula-1-125929_300x300.jpg",titulo:"Coleção F1 da Hot Wheels",valor:250},{imagem:"https://cdn.awsli.com.br/2500x2500/2549/2549769/produto/236100238/53-f2rl13s813.jpg",titulo:"JBL dos Sonhos da Noiva",valor:1800},{imagem:"https://a-static.mlcdn.com.br/1500x1500/bateria-eletronica-6-drums-5-metal-silicone-portatil-c-pedal-exbom/megatumii/kh-w562/f037cd4049dcc1dac2d1fbc4d08ad9f8.jpeg",titulo:"Bateria Eletrônica",valor:300},{imagem:"https://a-static.mlcdn.com.br/1500x1500/teclado-piano-musical-61-teclas-sensiveis-usb-p2-e-musicas-mxt/optisom2/54-6-3/dbc1befddf9db18107d907d4b3280055.jpeg",titulo:"Teclado Musical",valor:400},{imagem:"https://upload.wikimedia.org/wikipedia/commons/6/66/Pedalboard_%28995939579%29.jpg",titulo:"Novo Pedal de Guitarra",valor:150},{imagem:"https://images.tcdn.com.br/img/img_prod/1018177/cortina_fiolinho_suave_c_blackout_separado_8_00m_x_altura_649_1_27e938637b85af3fcc4587819f8698a3.jpg",titulo:"Cortina Nova",valor:220},{imagem:"https://movimentoeconomico.com.br/wp-content/uploads/2024/07/Jogo-on-line-tigrinho-1024x1024.jpg",titulo:"Saldo pra Noiva Gastar no Tigrinho",valor:200},{imagem:"https://i0.wp.com/ovicio.com.br/wp-content/uploads/2025/06/20250605-ovicio-xbox-game-pass.jpg?resize=730%2C365&ssl=1",titulo:"Assinatura de 1 ano no Xbox Game Pass",valor:420},{imagem:"https://m.media-amazon.com/images/I/71MXuXeNZvL._UF1000,1000_QL80_.jpg",titulo:"Disco de Vinil",valor:200},{imagem:"https://upload.wikimedia.org/wikipedia/commons/8/8d/Largada_Stock125_Foto_Claudio_Reis.jpg",titulo:"Bateria de Kart com os Amigos",valor:350},{imagem:"https://www.lelabrandao.co/cdn/shop/files/CapturadeTela2023-10-19as23.28.54.png?v=1697768949",titulo:"Lenço para a noiva não borrar a maquiagem",valor:170},{imagem:"https://muvin.com.br/cdn/shop/products/protetor-de-ouvido-em-silicone-para-natacao-uso.jpg?v=1642792523",titulo:"Tampão de ouvido para noiva enquanto noivo ronca",valor:150},{imagem:"https://www.amazonasemais.com.br/wp-content/uploads/2023/06/triciclo-parintins.jpg",titulo:"Ajudinha para o triciclo um pouquinho mais longe",valor:160},{imagem:"https://www.brides.com/thmb/c1DdMUGp-xnCDF0BFHFYG-mOW-8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/bold-1c1c6ebbb4fe4404b09d38af601cba8b.jpg",titulo:"Taxa pra noiva não jogar o buquê pra sua namorada",valor:250},{imagem:"https://m.media-amazon.com/images/I/713BjtJOPzL.jpg",titulo:"Um ano de creche para o bebê reborn",valor:1e3},{imagem:"https://www.previdencia.guaira.sp.gov.br/admin/globalarq/noticia/noticia/651_366/e3dab6e15d06bfc8cfcb22052a306251.jpeg",titulo:"Ajuda para a aposentadoria dos noivos",valor:500},{imagem:"https://media.istockphoto.com/id/845889702/pt/foto/man-showing-his-empty-pocket.jpg?s=612x612&w=0&k=20&c=hSU0bJcKgqlSccgmNyaUiyIq_iAYqPvMChPW6geX17A=",titulo:"Amo vocês, mas gastei toda a grana no look e salão",valor:150},{imagem:"https://fly.metroimg.com/upload/q_85,w_700/https://uploads.metroimg.com/wp-content/uploads/2021/12/13162749/Henrique-Fogaca-credito-Chris-Castanho.jpg",titulo:"Curso de culinária para o noivo",valor:250},{imagem:"https://www.einerd.com.br/wp-content/uploads/2019/06/Walter-White-morreu-Breaking-Bad-capa-890x606.jpg",titulo:"6 meses de Netflix",valor:350},{imagem:"https://www.estadao.com.br/resizer/v2/D2O7HVMIZRL53CNMEN4Y5IWPEY.jpg?quality=80&auth=45f55444a9a29c7c36a45b4485c01c9e2a3e36c8871fbd76cea88b3664a21865&width=1200&height=1200&focal=0,0",titulo:"Toma aqui aquele pix que to te devendo",valor:200},{imagem:"https://www.cinegoiania.com.br/wp-content/uploads/2018/11/todo_poderoso.jpg",titulo:"Se por uma intervenção divina você se sentir tocado",valor:5e3},{imagem:"https://media.istockphoto.com/id/1433285570/photo/smiling-businessman-showing-thumbs-up-in-his-office.jpg?s=612x612&w=0&k=20&c=IG7E_cku1gG68ifG7ux7-KtxA0AEvflb_uZLzeiwkac=",titulo:"Teste de Desenvolvimento",valor:1}];
             const container = document.getElementById('gift-list-container');
             container.innerHTML = ''; 
-
             gifts.forEach(gift => {
                 const priceFormatted = gift.valor ? `R$ ${gift.valor.toFixed(2).replace('.', ',')}` : '';
-                // [ETAPA 3] Adicionando data-attributes aos botões
-                const buttonHTML = gift.valor 
-                    ? `<a href="#" class="gift-button" data-title="${gift.titulo}" data-price="${gift.valor}">Presentear</a>` 
-                    : `<a href="#" class="gift-button symbolic">Presente Simbólico</a>`;
-
-                const giftCardHTML = `<div class="gift-card"><img src="${gift.imagem}" alt="${gift.titulo}" class="gift-image"><div class="gift-info"><p class="gift-title">${gift.titulo}</p><p class="gift-price">${priceFormatted}</p>${buttonHTML}</div></div>`;
-                container.innerHTML += giftCardHTML;
+                const buttonHTML = gift.valor ? `<a href="#" class="gift-button" data-title="${gift.titulo}" data-price="${gift.valor}">Presentear</a>` : `<a href="#" class="gift-button symbolic">Presente Simbólico</a>`;
+                container.innerHTML += `<div class="gift-card"><img src="${gift.imagem}" alt="${gift.titulo}" class="gift-image"><div class="gift-info"><p class="gift-title">${gift.titulo}</p><p class="gift-price">${priceFormatted}</p>${buttonHTML}</div></div>`;
             });
         }
-        
         loadGifts();
 
-        // =======================================================
-        // [ETAPA 4] LÓGICA DE PAGAMENTO COM MERCADO PAGO
-        // =======================================================
-        const backendUrl = 'https://casamento-elian-key-api.onrender.com'; 
-        
-        // Função que inicia o processo de pagamento
-        async function initiatePayment(title, price, buttonElement) {
-            // Feedback visual para o usuário
-            const originalText = buttonElement.textContent;
-            buttonElement.textContent = 'Aguarde...';
-            buttonElement.style.pointerEvents = 'none'; // Desabilita o botão
-
-            try {
-                // 1. Chama seu servidor para criar a preferência
-                const response = await fetch(`${backendUrl}/create-preference`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ title: title, unit_price: price }),
+        // CARREGAR MENSAGENS APROVADAS
+        const messageBoard = document.getElementById('message-board');
+        messagesRef.orderByChild('aprovado').equalTo(true).on('value', (snapshot) => {
+            messageBoard.innerHTML = '';
+            const messages = snapshot.val() || {};
+            const messagesArray = Object.values(messages).reverse(); // Mais recentes primeiro
+            if (messagesArray.length === 0) {
+                messageBoard.innerHTML = '<p>Seja o primeiro a deixar uma mensagem para os noivos!</p>';
+            } else {
+                messagesArray.forEach(msg => {
+                    messageBoard.innerHTML += `<div class="message-card"><p class="message-text">"${msg.mensagem}"</p><p class="message-author">- ${msg.nome || 'Anônimo'}</p></div>`;
                 });
-
-                if (!response.ok) throw new Error('Falha ao criar preferência de pagamento.');
-
-                const preference = await response.json();
-                
-                // 2. Redireciona o usuário para a página de pagamento do Mercado Pago
-                window.location.href = preference.init_point;
-
-            } catch (error) {
-                console.error("Erro ao iniciar pagamento:", error);
-                alert('Ops! Ocorreu um erro ao tentar iniciar o pagamento. Por favor, tente novamente.');
-                // Restaura o botão em caso de erro
-                buttonElement.textContent = originalText;
-                buttonElement.style.pointerEvents = 'auto';
             }
+        });
+
+        // ENVIAR MENSAGEM DO FORMULÁRIO PRINCIPAL
+        document.getElementById('message-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nome = document.getElementById('form-guest-name').value;
+            const mensagem = document.getElementById('form-guest-message').value;
+            messagesRef.push({ nome, mensagem, aprovado: false, timestamp: Date.now() })
+                .then(() => {
+                    alert('Obrigado pela sua mensagem! Ela será apresentada aos noivos e exibida no mural de mensagens abaixo.');
+                    e.target.reset();
+                });
+        });
+
+        // LÓGICA DE PAGAMENTO COM POP-UP
+        function openPrePaymentDialog(title, price, buttonElement) {
+            const oldDialog = document.getElementById('pre-payment-dialog');
+            if (oldDialog) oldDialog.remove();
+
+            const dialogHTML = `
+                <dialog id="pre-payment-dialog">
+                    <h3>Deixe uma mensagem com seu presente!</h3>
+                    <p><strong>Presente:</strong> ${title} - R$ ${price.toFixed(2).replace('.',',')}</p>
+                    <input type="text" id="gift-giver-name" placeholder="Seu nome (opcional)">
+                    <textarea id="gift-message" placeholder="Sua mensagem (opcional)"></textarea>
+                    <label><input type="checkbox" id="gift-anonymous"> Quero que o presente seja anônimo</label>
+                    <button id="continue-to-payment">Continuar para o Pagamento</button>
+                    <button id="cancel-payment" type="button">Cancelar</button>
+                </dialog>`;
+            document.body.insertAdjacentHTML('beforeend', dialogHTML);
+            
+            const dialog = document.getElementById('pre-payment-dialog');
+            dialog.showModal();
+
+            dialog.querySelector('#continue-to-payment').addEventListener('click', async () => {
+                const nome = document.getElementById('gift-giver-name').value;
+                const mensagem = document.getElementById('gift-message').value;
+                const anonimo = document.getElementById('gift-anonymous').checked;
+                
+                dialog.close();
+                dialog.remove();
+
+                const giftData = { 
+                    nome: anonimo ? "Anônimo" : (nome || "Anônimo"), 
+                    mensagem: mensagem || "", 
+                    item: title, 
+                    valor: price,
+                    timestamp: Date.now()
+                };
+                
+                const originalText = buttonElement.textContent;
+                buttonElement.textContent = 'Aguarde...';
+                buttonElement.style.pointerEvents = 'none';
+
+                try {
+                    const response = await fetch(`${backendUrl}/create-preference`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ 
+                            title: title, 
+                            unit_price: price,
+                            metadata: giftData
+                        })
+                    });
+                    if (!response.ok) throw new Error('Falha ao criar preferência');
+                    const preference = await response.json();
+                    
+                    giftsRef.push(giftData);
+                    
+                    window.location.href = preference.init_point;
+                } catch (error) {
+                    alert('Erro ao iniciar pagamento. Tente novamente.');
+                    buttonElement.textContent = originalText;
+                    buttonElement.style.pointerEvents = 'auto';
+                }
+            });
+
+            dialog.querySelector('#cancel-payment').addEventListener('click', () => {
+                dialog.close();
+                dialog.remove();
+            });
         }
 
-        // Event listener global para capturar cliques nos botões de "Presentear"
+        // EVENT LISTENERS PARA OS BOTÕES DE PRESENTE
         document.addEventListener('click', (event) => {
-            // Verifica se o clique foi em um botão de presentear que não seja simbólico
-            if (event.target.matches('.gift-button') && !event.target.matches('.symbolic')) {
-                event.preventDefault(); // Impede a navegação padrão do link '#'
-                
+            if (event.target.matches('a.gift-button') && !event.target.matches('.symbolic')) {
+                event.preventDefault();
                 const title = event.target.dataset.title;
                 const price = parseFloat(event.target.dataset.price);
-                const buttonElement = event.target; // Pega o próprio botão que foi clicado
-
-                initiatePayment(title, price, buttonElement);
+                openPrePaymentDialog(title, price, event.target);
             }
+        });
+
+        document.getElementById('custom-gift-btn').addEventListener('click', (event) => {
+            const valueInput = document.getElementById('custom-gift-value');
+            const price = parseFloat(valueInput.value);
+            if (!price || price <= 0) {
+                alert('Por favor, insira um valor válido.');
+                return;
+            }
+            openPrePaymentDialog('Presente especial (valor aberto)', price, event.target);
         });
     });
 </script>
+
 </body>
 </html>

@@ -2,85 +2,76 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Convidados do Casamento</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Admin - Casamento Elian & Keytiane</title>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <style>
-        :root {
-            --cover-color: #192a56;
-            --gold-color: #D4AF37;
-            --white-color: #FFFFFF;
-            --paper-color: #f8f8f8;
-            --danger-color: #c0392b;
-        }
+        :root { --cover-color: #192a56; --gold-color: #D4AF37; --white-color: #FFFFFF; --paper-color: #f8f8f8; --danger-color: #c0392b; --success-color: #27ae60; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #ecf0f1; margin: 0; padding: 20px; color: #333; }
         .container { max-width: 1200px; margin: 0 auto; background-color: var(--white-color); padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { color: var(--cover-color); text-align: center; margin-bottom: 10px; }
-        h2 { color: var(--cover-color); border-bottom: 2px solid var(--gold-color); padding-bottom: 10px; margin-top: 40px; }
+        h1, h2 { color: var(--cover-color); }
+        h1 { text-align: center; margin-bottom: 10px; }
+        h2 { border-bottom: 2px solid var(--gold-color); padding-bottom: 10px; margin-top: 40px; }
         p.subtitle { text-align: center; margin-top: 0; margin-bottom: 30px; color: #777; }
-        
-        /* Formulário */
+        .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.2s ease; margin-left: 5px; }
+        .btn-primary { background-color: var(--gold-color); color: var(--cover-color); }
+        .btn-primary:hover { background-color: #c5a030; }
+        .btn-secondary { background-color: #7f8c8d; color: var(--white-color); }
+        .btn-success { background-color: var(--success-color); color: var(--white-color); }
+        .btn-danger { background-color: var(--danger-color); color: var(--white-color); }
+        .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 2000; }
+        .login-box { background: white; padding: 40px; border-radius: 8px; text-align: center; box-shadow: 0 5px 25px rgba(0,0,0,0.3); }
+        .login-box h3 { margin-top: 0; margin-bottom: 20px; color: var(--cover-color); }
+        .login-box input { display: block; width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .form-group { display: flex; flex-direction: column; }
         .full-width { grid-column: 1 / -1; }
         label { margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
-        input, select, textarea {
-            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; box-sizing: border-box;
-        }
-        textarea { resize: vertical; min-height: 100px; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; box-sizing: border-box; }
+        textarea { resize: vertical; min-height: 80px; }
         .form-actions { display: flex; gap: 15px; margin-top: 20px; justify-content: flex-end; }
-        .btn { padding: 12px 25px; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 600; transition: all 0.2s ease; }
-        .btn-primary { background-color: var(--gold-color); color: var(--cover-color); }
-        .btn-primary:hover { background-color: #c5a030; }
-        .btn-secondary { background-color: #7f8c8d; color: var(--white-color); }
-        .btn-secondary:hover { background-color: #6c7a7b; }
-        .btn-danger { background-color: var(--danger-color); color: var(--white-color); }
-
-        /* Tabela de Convidados */
-        .table-wrapper { overflow-x: auto; margin-top: 30px; }
+        .table-wrapper { overflow-x: auto; margin-top: 20px; }
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #f2f2f2; color: var(--cover-color); font-size: 0.9rem; text-transform: uppercase; }
-        tr:hover { background-color: #f9f9f9; }
-        .actions-cell button { margin-right: 5px; }
-
-        @media (max-width: 768px) {
-            .form-grid { grid-template-columns: 1fr; }
-        }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; white-space: nowrap; }
+        th { background-color: #f2f2f2; }
+        .actions-cell button { white-space: nowrap; }
+        .checkin-button-container { text-align: center; margin-bottom: 20px; }
+        #qr-reader { width: 100%; max-width: 500px; margin: 20px auto; border: 2px solid var(--gold-color); border-radius: 8px; display: none; }
+        #qr-reader-results { margin-top: 10px; text-align: center; font-weight: bold; }
+        @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Painel de Administração</h1>
-        <p class="subtitle">Gerenciamento de Convidados do Casamento</p>
+    <div id="login-overlay" class="login-overlay">
+        <div class="login-box">
+            <h3>Acesso ao Painel</h3>
+            <input type="password" id="admin-password" placeholder="Senha">
+            <button id="login-btn" class="btn btn-primary">Entrar</button>
+        </div>
+    </div>
 
-        <!-- Formulário para Adicionar/Editar Convidado -->
+    <div id="admin-panel" class="container" style="display: none;">
+        <h1>Painel de Administração</h1>
+        <p class="subtitle">Gerenciamento de Convidados, Mensagens e Presentes</p>
+
+        <!-- [REINTEGRADO] Formulário para Adicionar/Editar Convidado -->
         <section id="form-section">
             <h2>Adicionar / Editar Convidado</h2>
             <form id="guest-form">
                 <input type="hidden" id="guest-id">
                 <div class="form-grid">
                     <div class="form-group full-width">
-                        <label for="guest-name">Nome(s) do Convidado</label>
-                        <input type="text" id="guest-name" placeholder="Ex: João Silva e Maria Silva; Joãozinho (Criança)" required>
+                        <label for="guest-name">Nome(s) do Convidado (separar com ";")</label>
+                        <input type="text" id="guest-name" placeholder="Ex: João Silva; Maria Silva" required>
                     </div>
                     <div class="form-group">
                         <label for="guest-table">Mesa</label>
                         <input type="number" id="guest-table" placeholder="Nº da mesa">
                     </div>
-                    <div class="form-group">
-                        <label for="guest-rsvp">Confirmou Presença (RSVP)?</label>
-                        <select id="guest-rsvp" required>
-                            <option value="false">Não</option>
-                            <option value="true">Sim</option>
-                        </select>
-                    </div>
-                    <div class="form-group full-width">
-                        <label for="guest-responsible">Responsável pelo Check-in (se aplicável)</label>
-                        <select id="guest-responsible">
-                            <option value="">Nenhum (Convidado Principal)</option>
-                            <!-- Populado via JS -->
-                        </select>
+                     <div class="form-group">
+                        <label for="guest-responsible">Responsável pelo Check-in</label>
+                        <select id="guest-responsible"><option value="">Nenhum (Convidado Principal)</option></select>
                     </div>
                     <div class="form-group full-width">
                         <label for="guest-travel">Detalhes da Viagem</label>
@@ -98,69 +89,90 @@
             </form>
         </section>
 
-        <!-- Lista de Convidados -->
+        <div class="checkin-button-container">
+            <button id="start-checkin-btn" class="btn btn-success">Fazer Check-in de Convidado (QR Code)</button>
+        </div>
+        <div id="qr-reader"></div>
+        <p id="qr-reader-results"></p>
+
         <section>
-            <h2>Lista de Convidados</h2>
+            <h2>Gerenciar Convidados</h2>
             <div class="table-wrapper">
                 <table>
                     <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Mesa</th>
-                            <th>RSVP</th>
-                            <th>Responsável</th>
-                            <th>Ações</th>
-                        </tr>
+                        <tr><th>Nome</th><th>RSVP</th><th>Check-in</th><th>Ações</th></tr>
                     </thead>
-                    <tbody id="guest-list-body">
-                        <!-- Linhas da tabela populadas via JS -->
-                        <tr><td colspan="5" style="text-align:center;">Carregando convidados...</td></tr>
-                    </tbody>
+                    <tbody id="guest-list-body"></tbody>
                 </table>
             </div>
         </section>
+
+        <section>
+            <h2>Moderar Mensagens</h2>
+            <div class="table-wrapper">
+                <table>
+                     <thead>
+                        <tr><th>Nome</th><th>Mensagem</th><th>Status</th><th>Ações</th></tr>
+                    </thead>
+                    <tbody id="messages-list-body"></tbody>
+                </table>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Presentes Recebidos</h2>
+            <div class="table-wrapper">
+                 <thead>
+                        <tr><th>Nome</th><th>Presente</th><th>Valor</th><th>Mensagem</th></tr>
+                    </thead>
+                <tbody id="gifts-list-body"></tbody>
+            </div>
+        </section>
+
     </div>
 
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <script>
-        // =================================================================
-        // PASSO 1: COLE A CONFIGURAÇÃO DO SEU FIREBASE AQUI
-        // =================================================================
         const firebaseConfig = {
-        apiKey: "AIzaSyAQ3txJQ09muNi5xaBhOPwFztT1fCR1qmE",
-        authDomain: "formagest-a7591.firebaseapp.com",
-        databaseURL: "https://formagest-a7591-default-rtdb.firebaseio.com",
-        projectId: "formagest-a7591",
-        storageBucket: "formagest-a7591.firebasestorage.app",
-        messagingSenderId: "27539451532",
-        appId: "1:27539451532:web:76f7eed9eafc3ca1c115a9",
-        measurementId: "G-VXKWZPC8LZ"
+            apiKey: "AIzaSyAQ3txJQ09muNi5xaBhOPwFztT1fCR1qmE",
+            authDomain: "formagest-a7591.firebaseapp.com",
+            databaseURL: "https://formagest-a7591-default-rtdb.firebaseio.com",
+            projectId: "formagest-a7591",
+            storageBucket: "formagest-a7591.appspot.com",
+            messagingSenderId: "27539451532",
+            appId: "1:27539451532:web:76f7eed9eafc3ca1c115a9",
+            measurementId: "G-VXKWZPC8LZ"
         };
-        // =================================================================
-
-        // Inicializa o Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+        
         const guestsRef = database.ref('convidados');
+        const messagesRef = database.ref('mensagens');
+        const giftsRef = database.ref('presentes');
+        
+        document.getElementById('login-btn').addEventListener('click', () => {
+            if (document.getElementById('admin-password').value === '9272') { // MUDE A SENHA
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+            } else {
+                alert('Senha incorreta!');
+            }
+        });
 
-        // Seletores de Elementos do DOM
+        // ================== GERENCIAMENTO DE CONVIDADOS (COM EDIÇÃO) ==================
         const guestForm = document.getElementById('guest-form');
         const guestIdInput = document.getElementById('guest-id');
         const guestNameInput = document.getElementById('guest-name');
         const guestTableInput = document.getElementById('guest-table');
-        const guestRsvpSelect = document.getElementById('guest-rsvp');
         const guestResponsibleSelect = document.getElementById('guest-responsible');
         const guestTravelTextarea = document.getElementById('guest-travel');
         const guestAccommodationTextarea = document.getElementById('guest-accommodation');
         const guestListBody = document.getElementById('guest-list-body');
         const cancelEditBtn = document.getElementById('cancel-edit-btn');
-        
-        let allGuestsData = {}; // Armazena todos os convidados para consulta
+        let allGuestsData = {};
 
-        // Função para resetar o formulário
         const resetForm = () => {
             guestForm.reset();
             guestIdInput.value = '';
@@ -168,115 +180,97 @@
             document.querySelector('#form-section h2').textContent = 'Adicionar Convidado';
         };
 
-        // Função para carregar os convidados na tabela e no select de responsáveis
-        const loadGuests = () => {
-            guestsRef.on('value', (snapshot) => {
-                guestListBody.innerHTML = '';
-                guestResponsibleSelect.innerHTML = '<option value="">Nenhum (Convidado Principal)</option>';
-                allGuestsData = snapshot.val() || {};
+        guestsRef.on('value', (snapshot) => {
+            guestListBody.innerHTML = '';
+            guestResponsibleSelect.innerHTML = '<option value="">Nenhum (Convidado Principal)</option>';
+            allGuestsData = snapshot.val() || {};
 
-                if (Object.keys(allGuestsData).length === 0) {
-                    guestListBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Nenhum convidado cadastrado.</td></tr>';
-                    return;
-                }
+            if (Object.keys(allGuestsData).length === 0) {
+                guestListBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Nenhum convidado cadastrado.</td></tr>';
+                return;
+            }
 
-                // Primeiro, popular o dropdown de responsáveis
-                for (const guestId in allGuestsData) {
-                    const guest = allGuestsData[guestId];
-                    const option = document.createElement('option');
-                    option.value = guestId;
-                    option.textContent = guest.nome;
-                    guestResponsibleSelect.appendChild(option);
-                }
+            for (const uuid in allGuestsData) {
+                const guest = allGuestsData[uuid];
+                const option = document.createElement('option');
+                option.value = uuid;
+                option.textContent = guest.nome;
+                guestResponsibleSelect.appendChild(option);
+            }
 
-                // Segundo, popular a tabela
-                for (const guestId in allGuestsData) {
-                    const guest = allGuestsData[guestId];
-                    const tr = document.createElement('tr');
-                    
-                    const responsibleName = guest.responsavel && allGuestsData[guest.responsavel] 
-                        ? allGuestsData[guest.responsavel].nome 
-                        : 'N/A';
-                    
-                    tr.innerHTML = `
-                        <td>${guest.nome}</td>
-                        <td>${guest.mesa || '-'}</td>
-                        <td>${guest.rsvp ? 'Sim' : 'Não'}</td>
-                        <td>${responsibleName}</td>
-                        <td class="actions-cell">
-                            <button class="btn btn-secondary" onclick="editGuest('${guestId}')">Editar</button>
-                            <button class="btn btn-danger" onclick="deleteGuest('${guestId}')">Excluir</button>
-                        </td>
-                    `;
-                    guestListBody.appendChild(tr);
-                }
-            });
-        };
+            for (const uuid in allGuestsData) {
+                const guest = allGuestsData[uuid];
+                const tr = document.createElement('tr');
+                
+                let rsvpStatus = '❓ Pendente';
+                if (guest.rsvp === true) rsvpStatus = '✅ Sim';
+                if (guest.rsvp === false) rsvpStatus = '❌ Não';
 
-        // Função para popular o formulário para edição
+                tr.innerHTML = `
+                    <td>${guest.nome}</td>
+                    <td>${rsvpStatus}</td>
+                    <td>${guest.checkin ? '✅ Sim' : '❌ Não'}</td>
+                    <td class="actions-cell">
+                        <button class="btn btn-secondary" onclick="editGuest('${uuid}')">Editar</button>
+                        <button class="btn btn-primary" onclick="generateInvite('${uuid}')">Gerar Convite</button>
+                        <button class="btn btn-danger" onclick="deleteGuest('${uuid}')">Excluir</button>
+                    </td>
+                `;
+                guestListBody.appendChild(tr);
+            }
+        });
+
         window.editGuest = (id) => {
             const guest = allGuestsData[id];
             if (!guest) return;
-
             guestIdInput.value = id;
             guestNameInput.value = guest.nome;
             guestTableInput.value = guest.mesa || '';
-            guestRsvpSelect.value = guest.rsvp;
             guestResponsibleSelect.value = guest.responsavel || '';
             guestTravelTextarea.value = guest.viagem || '';
             guestAccommodationTextarea.value = guest.hospedagem || '';
-
             document.querySelector('#form-section h2').textContent = 'Editar Convidado';
             cancelEditBtn.style.display = 'inline-block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
         
-        // Função para deletar um convidado
         window.deleteGuest = (id) => {
-            if (confirm('Tem certeza que deseja excluir este convidado? Esta ação não pode ser desfeita.')) {
-                guestsRef.child(id).remove()
-                    .then(() => {
-                        console.log('Convidado removido com sucesso!');
-                        resetForm(); // Limpa o formulário caso o convidado deletado estivesse em edição
-                    })
-                    .catch(error => console.error('Erro ao remover convidado: ', error));
+            if (confirm('Tem certeza que deseja excluir este convidado?')) {
+                guestsRef.child(id).remove().then(resetForm);
             }
         };
 
-        // Event listener para salvar (criar ou atualizar)
         guestForm.addEventListener('submit', (e) => {
             e.preventDefault();
-
+            const id = guestIdInput.value;
             const guestData = {
                 nome: guestNameInput.value,
                 mesa: parseInt(guestTableInput.value) || null,
-                rsvp: guestRsvpSelect.value === 'true',
                 responsavel: guestResponsibleSelect.value,
                 viagem: guestTravelTextarea.value,
                 hospedagem: guestAccommodationTextarea.value,
             };
 
-            const id = guestIdInput.value;
             if (id) {
-                // Atualizar convidado existente
-                guestsRef.child(id).update(guestData)
-                    .then(() => console.log('Convidado atualizado!'))
-                    .catch(error => console.error('Erro ao atualizar: ', error));
+                guestsRef.child(id).update(guestData);
             } else {
-                // Criar novo convidado
-                guestsRef.push(guestData)
-                    .then(() => console.log('Convidado salvo!'))
-                    .catch(error => console.error('Erro ao salvar: ', error));
+                // Ao criar, inicia com rsvp e checkin como nulos (pendente)
+                guestData.rsvp = null;
+                guestData.checkin = false;
+                guestsRef.push(guestData);
             }
-
             resetForm();
         });
 
-        // Event listener para o botão de cancelar edição
         cancelEditBtn.addEventListener('click', resetForm);
+        window.generateInvite = (uuid) => {
+            const inviteLink = `https://www.16deagosto.com.br/convidado.html?invite=${uuid}`;
+            prompt("Link do convite (copie e envie):", inviteLink);
+        };
 
-        // Iniciar o carregamento dos dados quando a página carregar
-        document.addEventListener('DOMContentLoaded', loadGuests);
+        // ================== CHECK-IN, MENSAGENS E PRESENTES (CÓDIGO ANTERIOR) ==================
+        const startCheckinBtn=document.getElementById("start-checkin-btn"),qrReaderElement=document.getElementById("qr-reader"),qrResultsElement=document.getElementById("qr-reader-results");let html5QrCode=null;startCheckinBtn.addEventListener("click",()=>{html5QrCode&&html5QrCode.isScanning?html5QrCode.stop().then(()=>{qrReaderElement.style.display="none",startCheckinBtn.textContent="Fazer Check-in (QR Code)",qrResultsElement.textContent=""}).catch(e=>console.error(e)):(qrReaderElement.style.display="block",startCheckinBtn.textContent="Parar Leitor",html5QrCode=new Html5Qrcode("qr-reader"),html5QrCode.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:250}},onScanSuccess,e=>{}))});function onScanSuccess(e,t){html5QrCode.stop(),qrReaderElement.style.display="none",startCheckinBtn.textContent="Fazer Check-in (QR Code)";const o=e;guestsRef.child(o).once("value",e=>{e.exists()?(e.val().checkin?(qrResultsElement.textContent=`Atenção! Convidado "${e.val().nome}" já fez check-in.`,alert(`Atenção! Convidado "${e.val().nome}" já fez check-in.`)):(guestsRef.child(o).update({checkin:!0}),qrResultsElement.textContent=`Check-in de "${e.val().nome}" realizado com sucesso!`,alert(`Check-in de "${e.val().nome}" realizado com sucesso!`))):(qrResultsElement.textContent="Erro: Convidado não encontrado.",alert("Erro: Convidado não encontrado."))})}
+        const messagesListBody=document.getElementById("messages-list-body");messagesRef.on("value",e=>{messagesListBody.innerHTML="";const t=e.val()||{};for(const o in t){const n=t[o],s=document.createElement("tr");s.innerHTML=`<td>${n.nome||"Anônimo"}</td><td>${n.mensagem}</td><td>${n.aprovado?"✅ Aprovada":"🟡 Pendente"}</td><td class="actions-cell">${n.aprovado?`<button class="btn btn-secondary" onclick="toggleMessageApproval('${o}', false)">Reprovar</button>`:`<button class="btn btn-success" onclick="toggleMessageApproval('${o}', true)">Aprovar</button>`}<button class="btn btn-danger" onclick="deleteMessage('${o}')">Excluir</button></td>`,messagesListBody.appendChild(s)}}),window.toggleMessageApproval=(e,t)=>{messagesRef.child(e).update({aprovado:t})},window.deleteMessage=e=>{confirm("Tem certeza?")&&messagesRef.child(e).remove()};const giftsListBody=document.getElementById("gifts-list-body");giftsRef.on("value",e=>{giftsListBody.innerHTML="";const t=e.val()||{};for(const o in t){const n=t[o];giftsListBody.innerHTML+=`<tr><td>${n.nome||"Anônimo"}</td><td>${n.item}</td><td>${n.valor?`R$ ${n.valor.toFixed(2).replace(".",",")}`:"N/A"}</td><td>${n.mensagem||"-"}</td></tr>`}});
     </script>
 </body>
 </html>

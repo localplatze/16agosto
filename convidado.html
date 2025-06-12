@@ -1,313 +1,235 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Seu Convite - Elian & Keytiane</title>
-<link rel="icon" href="icon.png" type="image/x-icon">
-<!-- Fontes (as mesmas do site principal para consistência) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;400;500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-
-<style>
-    :root {
-        --cover-color: #192a56;
-        --gold-color: #D4AF37;
-        --white-color: #FFFFFF;
-        --paper-color: #f8f8f8;
-        --font-title: 'Playfair Display', serif;
-        --font-body: 'Montserrat', sans-serif;
-        --font-cursive: 'Dancing Script', cursive;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-        font-family: var(--font-body);
-        background-color: #2c3e50;
-        background-image: url('bg_splash.png');
-        backdrop-filter: blur(5px);
-        color: var(--cover-color);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        padding: 20px;
-    }
-
-    .ticket-container {
-        width: 100%;
-        max-width: 800px;
-        margin-bottom: 40px;
-    }
-
-    .ticket-card {
-        background-color: var(--paper-color);
-        border-radius: 16px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        display: flex;
-        overflow: hidden;
-    }
-
-    .ticket-main {
-        padding: 30px 40px;
-        flex-grow: 1;
-        text-align: center;
-    }
-
-    .ticket-header {
-        font-family: var(--font-title);
-        font-size: 1.2rem;
-        color: var(--gold-color);
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        margin-bottom: 10px;
-    }
-
-    .ticket-couple {
-        font-family: var(--font-cursive);
-        font-size: 3rem;
-        color: var(--cover-color);
-        line-height: 1.2;
-    }
-    
-    .ticket-info {
-        margin-top: 20px;
-        border-top: 1px solid #ddd;
-        padding-top: 20px;
-    }
-    
-    .ticket-info p {
-        margin-bottom: 5px;
-        font-size: 1rem;
-    }
-    .ticket-info strong {
-        font-weight: 500;
-    }
-
-    .ticket-stub {
-        background-color: #f0f0f0;
-        min-width: 200px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        border-left: 2px dashed #ccc;
-        position: relative;
-    }
-    
-    .qr-code {
-        width: 140px;
-        height: 140px;
-        background-color: #fff;
-        padding: 10px;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    .qr-code img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-    }
-    .qr-code-label {
-        margin-top: 15px;
-        font-size: 0.8rem;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    /* Accordion para informações adicionais */
-    .info-accordion {
-        width: 100%;
-        max-width: 800px;
-        background: var(--white-color);
-        border-radius: 12px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        padding: 20px;
-    }
-
-    .accordion-item {
-        border-bottom: 1px solid #e0e0e0;
-    }
-    .accordion-item:last-child {
-        border-bottom: none;
-    }
-
-    .accordion-header {
-        padding: 20px;
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 1.2rem;
-        font-weight: 500;
-        color: var(--cover-color);
-        transition: background-color 0.3s;
-    }
-    .accordion-header:hover {
-        background-color: #f9f9f9;
-    }
-    .accordion-header::after {
-        content: '+';
-        font-size: 1.8rem;
-        font-weight: 300;
-        color: var(--gold-color);
-        transition: transform 0.3s ease;
-    }
-    .accordion-item.active .accordion-header::after {
-        transform: rotate(45deg);
-    }
-
-    .accordion-content {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.5s cubic-bezier(0, 1, 0, 1), padding 0.5s ease;
-        padding: 0 20px;
-    }
-    .accordion-item.active .accordion-content {
-        max-height: 500px; /* Altura suficiente para o conteúdo */
-        transition: max-height 1s cubic-bezier(1, 0, 1, 0);
-        padding: 0 20px 20px 20px;
-    }
-    .accordion-content p {
-        line-height: 1.7;
-        margin-bottom: 15px;
-    }
-    .accordion-content a {
-        color: var(--gold-color);
-        font-weight: 500;
-        text-decoration: none;
-    }
-    .accordion-content a:hover {
-        text-decoration: underline;
-    }
-
-    /* Link de volta */
-    .back-link {
-        margin-top: 40px;
-        color: var(--white-color);
-        text-decoration: none;
-        padding: 10px 20px;
-        border: 1px solid var(--gold-color);
-        border-radius: 8px;
-        transition: background-color 0.3s, color 0.3s;
-    }
-    .back-link:hover {
-        background-color: var(--gold-color);
-        color: var(--cover-color);
-    }
-
-    /* Responsividade */
-    @media (max-width: 768px) {
-        .ticket-card {
-            flex-direction: column;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seu Convite - Elian & Keytiane</title>
+    <link rel="icon" href="icon.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;400;500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cover-color: #192a56;
+            --gold-color: #D4AF37;
+            --white-color: #FFFFFF;
+            --paper-color: #f8f8f8;
+            --success-color: #27ae60;
+            --danger-color: #c0392b;
+            --font-title: 'Playfair Display', serif;
+            --font-body: 'Montserrat', sans-serif;
+            --font-cursive: 'Dancing Script', cursive;
         }
-        .ticket-stub {
-            border-left: none;
-            border-top: 2px dashed #ccc;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background-color: #2c3e50; background-image: url('bg_splash.png'); backdrop-filter: blur(5px); color: var(--cover-color); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .content-wrapper, #loading-state, #error-state { width: 100%; max-width: 800px; text-align: center; }
+        .content-wrapper { display: none; }
+        #loading-state h2, #error-state h2 { color: var(--white-color); font-family: var(--font-title); }
+        #error-state p { color: #ccc; }
+
+        /* Estilos do Ticket do Convite */
+        .ticket-container { margin-bottom: 40px; }
+        .ticket-card { background-color: var(--paper-color); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); display: flex; overflow: hidden; position: relative; }
+        .ticket-main { padding: 30px 40px; flex-grow: 1; text-align: center; }
+        .ticket-header { font-family: var(--font-title); font-size: 1.2rem; color: var(--gold-color); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+        .ticket-couple { font-family: var(--font-cursive); font-size: 3rem; color: var(--cover-color); line-height: 1.2; }
+        .ticket-info { margin-top: 20px; border-top: 1px solid #ddd; padding-top: 20px; }
+        .ticket-info p { margin-bottom: 5px; font-size: 1rem; }
+        .ticket-info strong { font-weight: 500; }
+        .ticket-stub { background-color: #f0f0f0; min-width: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .ticket-card::before, .ticket-card::after { content: ''; position: absolute; top: 50%; width: 20px; height: 20px; background-color: #2c3e50; border-radius: 50%; z-index: 1; }
+        .ticket-card::before { left: 210px; transform: translateY(-50%) translateX(-50%); }
+        .ticket-card::after { right: -10px; transform: translateY(-50%); display: none; /* Escondido por padrão, ajustado em media query */ }
+        
+        .qr-code { width: 140px; height: 140px; background-color: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .qr-code img { width: 100%; height: 100%; object-fit: contain; }
+        .qr-code-label { margin-top: 15px; font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* [MELHORADO] Estilos do Formulário RSVP */
+        .rsvp-form-container { background: var(--paper-color); padding: 40px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); text-align: center; margin-bottom: 40px;}
+        .rsvp-form-container h2 { font-family: var(--font-title); color: var(--cover-color); }
+        .rsvp-form-container .guest-names { font-family: var(--font-cursive); font-size: 2.5rem; color: var(--cover-color); margin: 15px 0; }
+        .rsvp-form-container p { color: #555; margin-bottom: 30px; }
+        .rsvp-buttons { display: flex; flex-direction: column; gap: 15px; }
+        .rsvp-btn { padding: 15px; font-size: 1.1rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: transform 0.2s ease; }
+        .rsvp-btn:hover { transform: scale(1.03); }
+        .btn-confirm { background-color: var(--success-color); color: var(--white-color); }
+        .btn-decline { background-color: var(--danger-color); color: var(--white-color); }
+        
+        /* [MELHORADO] Estilos do Accordion */
+        .info-accordion { width: 100%; max-width: 800px; background: var(--white-color); border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; }
+        .accordion-item { border-bottom: 1px solid #e0e0e0; }
+        .accordion-item:last-child { border-bottom: none; }
+        .accordion-header { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; font-weight: 500; color: var(--cover-color); transition: background-color 0.3s; }
+        .accordion-header:hover { background-color: #f9f9f9; }
+        .accordion-header .icon { margin-right: 15px; color: var(--gold-color); font-size: 1.5rem; }
+        .accordion-header .arrow { font-size: 1.2rem; transition: transform 0.4s ease; }
+        .accordion-item.active .accordion-header .arrow { transform: rotate(180deg); }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out, padding 0.4s ease-out; padding: 0 20px; text-align: left; }
+        .accordion-item.active .accordion-content { padding: 0 20px 20px 20px; }
+        .accordion-content p { line-height: 1.7; margin-bottom: 15px; color: #555; }
+        .accordion-content a { color: var(--gold-color); font-weight: 500; text-decoration: none; }
+        .accordion-content a:hover { text-decoration: underline; }
+
+        /* Link de Volta */
+        .back-link { margin-top: 40px; color: var(--white-color); text-decoration: none; padding: 10px 20px; border: 1px solid var(--gold-color); border-radius: 8px; transition: all 0.3s; }
+        .back-link:hover { background-color: var(--gold-color); color: var(--cover-color); }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .ticket-card { flex-direction: column; }
+            .ticket-stub { border-left: none; border-top: 2px dashed #ccc; }
+            .ticket-card::before { left: 50%; top: -10px; transform: translateX(-50%); }
+            .ticket-card::after { display: block; right: 50%; bottom: -10px; transform: translateX(50%); top: auto; }
         }
-        .ticket-main {
-            padding: 20px;
-        }
-        .ticket-couple {
-            font-size: 2.5rem;
-        }
-    }
-</style>
+    </style>
 </head>
 <body>
 
-    <div class="ticket-container">
-        <div class="ticket-card">
-            <div class="ticket-main">
-                <p class="ticket-header">Você está convidado para celebrar</p>
-                <h1 class="ticket-couple">Elian<br>&<br>Keytiane</h1>
-                <div class="ticket-info">
-                    <p><strong>Data:</strong> 16 de Agosto de 2025</p>
-                    <p><strong>Convidado:</strong> [Nome do Convidado]</p>
-                    <p>Apresente o QR Code na entrada do evento.</p>
-                </div>
-            </div>
-            <div class="ticket-stub">
-                <div class="qr-code">
-                    <!-- IMPORTANTE: Substitua o 'src' por um link do QR Code real para seu convidado -->
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Confirme_sua_presenca_aqui" alt="QR Code do Convite">
-                </div>
-                <p class="qr-code-label">Acesso ao evento</p>
-            </div>
-        </div>
-    </div>
-    
-    <div class="info-accordion">
-        <div class="accordion-item">
-            <div class="accordion-header"><span>⛪</span> Informações da Cerimônia</div>
-            <div class="accordion-content">
-                <p>
-                    <strong>Local:</strong> Igreja do Sagrado Coração de Jesus<br>
-                    <strong>Endereço:</strong> R. Silva Campos - Centro, Parintins - AM<br>
-                    <strong>Horário:</strong> 18:30
-                </p>
-                <p><a href="https://maps.app.goo.gl/ZXFqEyJoepWR39HV7" target="_blank">Ver no mapa</a></p>
-            </div>
-        </div>
-        <div class="accordion-item">
-            <div class="accordion-header"><span>🎉</span> Informações da Festa</div>
-            <div class="accordion-content">
-                <p>
-                    <strong>Local:</strong> Kwati Villa<br>
-                    <strong>Endereço:</strong> Av. Paulo Teixeira - Sta. Rita de Cassia, Parintins - AM<br>
-                    <strong>Horário:</strong> Logo após a cerimônia.
-                </p>
-                <p>Contamos com sua presença para celebrar conosco até o amanhecer!</p>
-                <p><a href="https://maps.app.goo.gl/ZXFqEyJoepWR39HV7" target="_blank">Ver no mapa</a></p>
-            </div>
-        </div>
-        <div class="accordion-item">
-            <div class="accordion-header"><span>👗</span> Vestimenta (Dress Code)</div>
-            <div class="accordion-content">
-                <p>O traje recomendado é <strong>Esporte Fino</strong>.</p>
-                <p>🤵‍♂️ O noivo usará um terno azul marinho.</p>
-                <p>👗 As madrinhas usarão vestidos na cor verde oliva.</p>
-                <p>🕴️ Os padrinhos estarão de terno cinza.</p>
-                <p>✨ Por isso, pedimos com carinho que os convidados evitem roupas nessas cores (azul marinho, verde oliva e cinza), para preservar o destaque especial dos nossos padrinhos e madrinhas.</p>
-                <p>🔹 Traje dos convidados: Social</p>
-                <p>Agradecemos desde já pela compreensão e por fazerem parte desse dia tão especial para nós!</p>
-            </div>
-        </div>
-        <div class="accordion-item">
-            <div class="accordion-header"><span>✈️</span> Viagem e Hospedagem</div>
-            <div class="accordion-content">
-                <p>Em breve apresentaremos opções referentes à sua estadia e viagem</p>
-            </div>
-        </div>
+    <div id="loading-state"><h2>Carregando seu convite...</h2></div>
+    <div id="error-state" style="display: none;"><h2>Ops! Convite não encontrado.</h2><p>Por favor, verifique o link ou entre em contato com os noivos.</p></div>
+
+    <div id="content-wrapper" class="content-wrapper">
+        <div id="ticket-or-rsvp-area"></div>
+        <div class="info-accordion" id="info-accordion"></div>
+        <a href="index.html" class="back-link">← Voltar para o site principal</a>
     </div>
 
-    <a href="index.html" class="back-link">
-        ← Voltar para o site principal
-    </a>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const accordionItems = document.querySelectorAll('.accordion-item');
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAQ3txJQ09muNi5xaBhOPwFztT1fCR1qmE",
+            authDomain: "formagest-a7591.firebaseapp.com",
+            databaseURL: "https://formagest-a7591-default-rtdb.firebaseio.com",
+            projectId: "formagest-a7591",
+            storageBucket: "formagest-a7591.appspot.com",
+            messagingSenderId: "27539451532",
+            appId: "1:27539451532:web:76f7eed9eafc3ca1c115a9",
+            measurementId: "G-VXKWZPC8LZ"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        const TELEGRAM_BOT_TOKEN = '7790968479:AAFWGQcuxa2sy95191i0IjNAFAZNDspDLXI';
+        const TELEGRAM_CHANNEL_ID = '-1002378516159';
 
-        accordionItems.forEach(item => {
-            const header = item.querySelector('.accordion-header');
-            header.addEventListener('click', () => {
-                // Fecha todos os outros itens abertos
-                const openItem = document.querySelector('.accordion-item.active');
-                if(openItem && openItem !== item) {
-                    openItem.classList.remove('active');
+        function generateReport(guestName, response) {
+            const timestamp = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+            const emoji = response ? '✅' : '❌';
+            const status = response ? 'Confirmou Presença' : 'Não Poderá Comparecer';
+            let report = `<b>🎉 Novo RSVP Recebido! 🎉</b>\n\n`;
+            report += `<b>De:</b> ${guestName}\n`;
+            report += `<b>Status:</b> ${emoji} ${status}\n`;
+            report += `<b>📅 Data/Hora:</b> ${timestamp}\n`;
+            return report;
+        }
+
+        async function sendToTelegram(message) {
+            try {
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TELEGRAM_CHANNEL_ID, text: message, parse_mode: 'HTML' })
+                });
+            } catch (error) { console.error('Erro na requisição para o Telegram:', error); }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const inviteId = urlParams.get('invite');
+
+            if (!inviteId) {
+                document.getElementById('loading-state').style.display = 'none';
+                document.getElementById('error-state').style.display = 'block';
+                return;
+            }
+
+            const guestRef = database.ref('convidados/' + inviteId);
+            guestRef.on('value', (snapshot) => {
+                if (!snapshot.exists()) {
+                    document.getElementById('loading-state').style.display = 'none';
+                    document.getElementById('error-state').style.display = 'block';
+                    return;
                 }
-
-                // Abre ou fecha o item clicado
-                item.classList.toggle('active');
+                const guestData = snapshot.val();
+                document.getElementById('loading-state').style.display = 'none';
+                document.getElementById('content-wrapper').style.display = 'flex';
+                document.getElementById('content-wrapper').style.flexDirection = 'column';
+                renderContent(inviteId, guestData);
             });
         });
-    });
-</script>
 
+        function renderContent(uuid, data) {
+            const ticketOrRsvpArea = document.getElementById('ticket-or-rsvp-area');
+            if (data.rsvp === true || data.rsvp === false) { // Se já respondeu (Sim ou Não)
+                ticketOrRsvpArea.innerHTML = `
+                    <div class="ticket-container">
+                        <div class="ticket-card">
+                            <div class="ticket-main">
+                                <p class="ticket-header">Você está convidado para celebrar</p>
+                                <h1 class="ticket-couple">Elian<br>&<br>Keytiane</h1>
+                                <div class="ticket-info">
+                                    <p><strong>Convidado(s):</strong> ${data.nome.replace(/;/g, ', ')}</p>
+                                    <p><strong>Mesa:</strong> ${data.mesa || 'A ser definida'}</p>
+                                    ${data.rsvp ? '<p>Apresente este QR Code na entrada do evento.</p>' : '<p style="color: var(--danger-color); font-weight: 500;">Agradecemos por nos avisar. Sentiremos sua falta!</p>'}
+                                </div>
+                            </div>
+                            ${data.rsvp ? `<div class="ticket-stub"><div class="qr-code"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${uuid}" alt="QR Code"></div><p class="qr-code-label">Seu Acesso</p></div>` : ''}
+                        </div>
+                    </div>`;
+            } else {
+                ticketOrRsvpArea.innerHTML = `
+                    <div class="rsvp-form-container">
+                        <h2>Confirme sua Presença</h2>
+                        <div class="guest-names">${data.nome.replace(/;/g, ', ')}</div>
+                        <p>Por favor, confirme sua presença para nos ajudar na organização. O prazo é até 30/06/2025.</p>
+                        <div class="rsvp-buttons">
+                            <button class="rsvp-btn btn-confirm" data-response="true">✅ Sim, estaremos lá!</button>
+                            <button class="rsvp-btn btn-decline" data-response="false">❌ Infelizmente, não poderemos ir</button>
+                        </div>
+                    </div>`;
+                
+                document.querySelectorAll('.rsvp-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const response = e.target.dataset.response === 'true';
+                        const report = generateReport(data.nome, response);
+                        sendToTelegram(report);
+                        database.ref('convidados/' + uuid).update({ rsvp: response });
+                        alert('Obrigado por confirmar!');
+                        // A página irá recarregar automaticamente por causa do listener do Firebase.
+                    });
+                });
+            }
+
+            const accordionContainer = document.getElementById('info-accordion');
+            accordionContainer.innerHTML = `
+                <div class="accordion-item"><div class="accordion-header"><span class="icon">⛪</span>Informações da Cerimônia<span class="arrow">▼</span></div><div class="accordion-content"><p><strong>Local:</strong> Igreja do Sagrado Coração de Jesus<br><strong>Endereço:</strong> R. Silva Campos - Centro, Parintins - AM<br><strong>Horário:</strong> 18:30</p><p><a href="https://maps.app.goo.gl/ZXFqEyJoepWR39HV7" target="_blank">Ver no mapa</a></p></div></div>
+                <div class="accordion-item"><div class="accordion-header"><span class="icon">🎉</span>Informações da Festa<span class="arrow">▼</span></div><div class="accordion-content"><p><strong>Local:</strong> Kwati Villa<br><strong>Endereço:</strong> Av. Paulo Teixeira - Sta. Rita de Cassia, Parintins - AM<br><strong>Horário:</strong> Logo após a cerimônia.</p><p><a href="https://maps.app.goo.gl/dx9ByZR7nKrHY7hb8" target="_blank">Ver no mapa</a></p></div></div>
+                <div class="accordion-item"><div class="accordion-header"><span class="icon">👗</span>Vestimenta (Dress Code)<span class="arrow">▼</span></div><div class="accordion-content"><p>O traje recomendado é <strong>Esporte Fino</strong>.</p><p>🤵‍♂️ O noivo usará um terno azul marinho.</p><p>👗 As madrinhas usarão vestidos na cor verde oliva.</p><p>🕴️ Os padrinhos estarão de terno cinza.</p><p>✨ Por isso, pedimos com carinho que os convidados evitem roupas nessas cores (azul marinho, verde oliva e cinza), para preservar o destaque especial dos nossos padrinhos e madrinhas.</p><p>🔹 Traje dos convidados: Social</p><p>Agradecemos desde já pela compreensão e por fazerem parte desse dia tão especial para nós!</p></div></div>
+                <div class="accordion-item"><div class="accordion-header"><span class="icon">✈️</span>Viagem e Hospedagem<span class="arrow">▼</span></div><div class="accordion-content"><p>${data.viagem || "Nenhuma informação de viagem personalizada cadastrada."}</p><p>${data.hospedagem || "Nenhuma informação de hospedagem personalizada cadastrada."}</p></div></div>
+            `;
+
+            document.querySelectorAll('.accordion-header').forEach(header => {
+                header.addEventListener('click', () => {
+                    const item = header.parentElement;
+                    const content = item.querySelector('.accordion-content');
+                    if (item.classList.contains('active')) {
+                        item.classList.remove('active');
+                        content.style.maxHeight = null;
+                    } else {
+                        const openItem = document.querySelector('.accordion-item.active');
+                        if (openItem) {
+                            openItem.classList.remove('active');
+                            openItem.querySelector('.accordion-content').style.maxHeight = null;
+                        }
+                        item.classList.add('active');
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                    }
+                });
+            });
+        }
+    </script>
 </body>
 </html>
