@@ -29,9 +29,9 @@ app.post('/create-preference', async (req, res) => {
             ],
             // URLs para onde o usuário será redirecionado após o pagamento
             back_urls: {
-                success: 'https://seusite.com/sucesso', // Futuramente, a página de "obrigado"
-                failure: 'https://seusite.com/falha',
-                pending: 'https://seusite.com/pendente'
+                success: 'https://www.16deagosto.com.br/obrigado.html',
+                failure: 'https://www.16deagosto.com.br/index.html',
+                pending: 'https://www.16deagosto.com.br/index.html'
             },
             auto_return: 'approved',
         };
