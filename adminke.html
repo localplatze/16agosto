@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <!-- ... seu cabeçalho e estilos permanecem os mesmos ... -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Admin - Casamento Elian & Keytiane</title>
@@ -33,18 +32,23 @@
         .form-actions { display: flex; gap: 15px; margin-top: 20px; justify-content: flex-end; }
         .table-wrapper { overflow-x: auto; margin-top: 20px; }
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; white-space: nowrap; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
         th { background-color: #f2f2f2; }
-        .actions-cell button { white-space: nowrap; }
+        td.actions-cell { white-space: nowrap; }
         .checkin-button-container { text-align: center; margin-bottom: 20px; }
         #qr-reader { width: 100%; max-width: 500px; margin: 20px auto; border: 2px solid var(--gold-color); border-radius: 8px; display: none; }
         #qr-reader-results { margin-top: 10px; text-align: center; font-weight: bold; }
-        @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
+        .invite-dialog { padding: 30px; border-radius: 12px; border: 2px solid var(--gold-color); box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-width: 500px; width: 90%; position: relative; }
+        .invite-dialog::backdrop { background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); }
+        .invite-dialog-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .invite-dialog-header h3 { margin: 0; color: var(--cover-color); }
+        .invite-dialog-body { background-color: #f9f9f9; border-radius: 8px; padding: 20px; white-space: pre-wrap; word-wrap: break-word; font-size: 1rem; line-height: 1.6; color: #333; max-height: 60vh; overflow-y: auto; }
+        .invite-dialog-actions { margin-top: 25px; display: flex; justify-content: flex-end; gap: 10px; }
+        @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } th, td { white-space: normal; } }
     </style>
 </head>
 <body>
 
-    <!-- ... seu body HTML permanece o mesmo ... -->
     <div id="login-overlay" class="login-overlay">
         <div class="login-box">
             <h3>Acesso ao Painel</h3>
@@ -52,9 +56,11 @@
             <button id="login-btn" class="btn btn-primary">Entrar</button>
         </div>
     </div>
+
     <div id="admin-panel" class="container" style="display: none;">
         <h1>Painel de Administração</h1>
         <p class="subtitle">Gerenciamento de Convidados, Mensagens e Presentes</p>
+
         <section id="form-section">
             <h2>Adicionar / Editar Convidado</h2>
             <form id="guest-form">
@@ -62,13 +68,13 @@
                 <div class="form-grid">
                     <div class="form-group full-width">
                         <label for="guest-name">Nome(s) do Convidado (separar com ";")</label>
-                        <input type="text" id="guest-name" placeholder="Ex: João Silva; Maria Silva" required>
+                        <input type="text" id="guest-name" placeholder="Ex: João Silva; Maria da Silva" required>
                     </div>
                     <div class="form-group">
                         <label for="guest-table">Mesa</label>
                         <input type="number" id="guest-table" placeholder="Nº da mesa">
                     </div>
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="guest-responsible">Responsável pelo Check-in</label>
                         <select id="guest-responsible"><option value="">Nenhum (Convidado Principal)</option></select>
                     </div>
@@ -87,46 +93,28 @@
                 </div>
             </form>
         </section>
+
         <div class="checkin-button-container">
-            <button id="start-checkin-btn" class="btn btn-success">Fazer Check-in de Convidado (QR Code)</button>
+            <button id="start-checkin-btn" class="btn btn-success">Fazer Check-in (QR Code)</button>
         </div>
         <div id="qr-reader"></div>
         <p id="qr-reader-results"></p>
+
         <section>
             <h2>Gerenciar Convidados</h2>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr><th>Nome</th><th>RSVP</th><th>Check-in</th><th>Ações</th></tr>
-                    </thead>
-                    <tbody id="guest-list-body"></tbody>
-                </table>
-            </div>
+            <div class="table-wrapper"><table id="guest-table"><thead><tr><th>Nome</th><th>RSVP</th><th>Check-in</th><th>Ações</th></tr></thead><tbody id="guest-list-body"></tbody></table></div>
         </section>
+
         <section>
             <h2>Moderar Mensagens</h2>
-            <div class="table-wrapper">
-                <table>
-                     <thead>
-                        <tr><th>Nome</th><th>Mensagem</th><th>Status</th><th>Ações</th></tr>
-                    </thead>
-                    <tbody id="messages-list-body"></tbody>
-                </table>
-            </div>
+            <div class="table-wrapper"><table><thead><tr><th>Nome</th><th>Mensagem</th><th>Status</th><th>Ações</th></tr></thead><tbody id="messages-list-body"></tbody></table></div>
         </section>
+        
         <section>
             <h2>Gerenciar Presentes</h2>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr><th>Nome</th><th>Presente</th><th>Valor</th><th>Status</th><th>Ações</th></tr>
-                    </thead>
-                    <tbody id="gifts-list-body"></tbody>
-                </table>
-            </div>
+            <div class="table-wrapper"><table><thead><tr><th>Nome</th><th>Presente</th><th>Valor</th><th>Mensagem</th><th>Status</th><th>Ações</th></tr></thead><tbody id="gifts-list-body"></tbody></table></div>
         </section>
     </div>
-
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -141,13 +129,9 @@
             const guestsRef = database.ref('convidados');
             const messagesRef = database.ref('mensagens');
             const giftsRef = database.ref('presentes');
+            let allGuestsData = {};
 
             // --- ELEMENTOS DA UI ---
-            const loginBtn = document.getElementById('login-btn');
-            const adminPasswordInput = document.getElementById('admin-password');
-            const loginOverlay = document.getElementById('login-overlay');
-            const adminPanel = document.getElementById('admin-panel');
-            
             const guestForm = document.getElementById('guest-form');
             const guestIdInput = document.getElementById('guest-id');
             const guestNameInput = document.getElementById('guest-name');
@@ -155,41 +139,58 @@
             const guestResponsibleSelect = document.getElementById('guest-responsible');
             const guestTravelTextarea = document.getElementById('guest-travel');
             const guestAccommodationTextarea = document.getElementById('guest-accommodation');
-            const guestListBody = document.getElementById('guest-list-body');
             const cancelEditBtn = document.getElementById('cancel-edit-btn');
             
-            const messagesListBody = document.getElementById('messages-list-body');
-            const giftsListBody = document.getElementById('gifts-list-body');
-            
-            let allGuestsData = {};
+            // --- FUNÇÕES GLOBAIS DE MANIPULAÇÃO (disponíveis para o onclick no HTML) ---
+            window.toggleMessageApproval = (id, status) => messagesRef.child(id).update({ aprovado: status });
+            window.deleteMessage = (id) => { if (confirm("Tem certeza?")) messagesRef.child(id).remove(); };
+            window.toggleGiftStatus = (id, status) => giftsRef.child(id).update({ pago: status });
+            window.deleteGift = (id) => { if (confirm("Tem certeza?")) giftsRef.child(id).remove(); };
+            window.deleteGuest = (id) => { if (confirm('Tem certeza?')) guestsRef.child(id).remove().then(resetForm); };
 
             // --- LÓGICA DE LOGIN ---
-            loginBtn.addEventListener('click', () => {
-                if (adminPasswordInput.value === '9272') { // MUDE A SENHA AQUI
-                    loginOverlay.style.display = 'none';
-                    adminPanel.style.display = 'block';
+            document.getElementById('login-btn').addEventListener('click', () => {
+                if (document.getElementById('admin-password').value === '9272') { // MUDE A SENHA AQUI
+                    document.getElementById('login-overlay').style.display = 'none';
+                    document.getElementById('admin-panel').style.display = 'block';
                 } else {
                     alert('Senha incorreta!');
                 }
             });
 
-            // --- FUNÇÕES GLOBAIS DE MANIPULAÇÃO DO FIREBASE (para acesso no HTML) ---
-            window.toggleMessageApproval = (id, status) => {
-                messagesRef.child(id).update({ aprovado: status });
+            // --- GERAÇÃO DE CONVITE ---
+            window.generateInvite = (uuid) => {
+                const guest = allGuestsData[uuid];
+                if (!guest) return;
+                const oldDialog = document.getElementById('invite-dialog');
+                if (oldDialog) oldDialog.remove();
+                
+                const guestNames = guest.nome.split(';').map(name => name.trim().split(' ')[0]);
+                const greeting = guestNames.length > 1 ? `Queridos(as) ${guestNames.join(' e ')},` : `Querido(a) ${guestNames[0]},`;
+                const inviteLink = `https://www.16deagosto.com.br/index.html?invite=${uuid}`;
+                const inviteText = `${greeting}\n\nÉ com o coração transbordando de alegria que convidamos vocês para celebrar o nosso amor e o início da nossa jornada como marido e mulher! 💍\n\nCriamos um site com todos os detalhes do nosso grande dia, onde vocês podem confirmar a presença, ver nossa lista de presentes e deixar uma mensagem de carinho.\n\nA presença de vocês é o nosso maior presente!\n\nAcesse seu convite exclusivo aqui:\n🔗 ${inviteLink}\n\nObs.: Este link é pessoal e contém o seu convite. Pedimos que não o compartilhe.\n\nCom muito carinho,\nElian & Keytiane ❤️`.trim();
+
+                const dialog = document.createElement('dialog');
+                dialog.id = 'invite-dialog';
+                dialog.className = 'invite-dialog';
+                dialog.innerHTML = `<div class="invite-dialog-header"><h3>Mensagem do Convite</h3><button class="btn btn-secondary" onclick="this.closest('dialog').close()">Fechar</button></div><div class="invite-dialog-body">${inviteText}</div><div class="invite-dialog-actions"><button id="copy-invite-btn" class="btn btn-primary">Copiar Texto</button></div>`;
+                document.body.appendChild(dialog);
+                dialog.showModal();
+                dialog.querySelector('#copy-invite-btn').addEventListener('click', (e) => {
+                    navigator.clipboard.writeText(inviteText).then(() => {
+                        e.target.textContent = 'Copiado!';
+                        setTimeout(() => { e.target.textContent = 'Copiar Texto'; }, 2000);
+                    });
+                });
             };
-            window.deleteMessage = (id) => {
-                if (confirm("Tem certeza que deseja excluir esta mensagem?")) {
-                    messagesRef.child(id).remove();
-                }
+            
+            const resetForm = () => {
+                guestForm.reset();
+                guestIdInput.value = '';
+                cancelEditBtn.style.display = 'none';
+                document.querySelector('#form-section h2').textContent = 'Adicionar Convidado';
             };
-            window.toggleGiftStatus = (id, status) => {
-                giftsRef.child(id).update({ pago: status });
-            };
-            window.deleteGift = (id) => {
-                if (confirm("Tem certeza que deseja excluir este registro de presente?")) {
-                    giftsRef.child(id).remove();
-                }
-            };
+
             window.editGuest = (id) => {
                 const guest = allGuestsData[id];
                 if (!guest) return;
@@ -203,25 +204,43 @@
                 cancelEditBtn.style.display = 'inline-block';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             };
-            window.deleteGuest = (id) => {
-                if (confirm('Tem certeza que deseja excluir este convidado?')) {
-                    guestsRef.child(id).remove().then(resetForm);
-                }
-            };
-            window.generateInvite = (uuid) => {
-                const inviteLink = `https://www.16deagosto.com.br/index.html?invite=${uuid}`;
-                prompt("Link do convite (copie e envie):", inviteLink);
-            };
-            
-            // --- GERENCIAMENTO DE CONVIDADOS ---
-            const resetForm = () => {
-                guestForm.reset();
-                guestIdInput.value = '';
-                cancelEditBtn.style.display = 'none';
-                document.querySelector('#form-section h2').textContent = 'Adicionar Convidado';
-            };
 
+            // [BUGFIX] O listener do formulário agora está FORA do listener de dados.
+            guestForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const id = guestIdInput.value;
+                const nameValue = guestNameInput.value.trim();
+
+                if (!nameValue) {
+                    alert("O nome do convidado não pode estar vazio.");
+                    return;
+                }
+
+                const guestData = {
+                    nome: nameValue,
+                    mesa: parseInt(guestTableInput.value) || null,
+                    responsavel: guestResponsibleSelect.value || null,
+                    viagem: guestTravelTextarea.value,
+                    hospedagem: guestAccommodationTextarea.value,
+                };
+
+                if (id) { // Editando um convidado existente
+                    guestsRef.child(id).update(guestData);
+                } else { // Criando um novo convidado
+                    // [NOVA FUNCIONALIDADE] Pergunta sobre o RSVP
+                    const rsvpConfirmed = confirm("Marcar a presença deste convidado como CONFIRMADA (Sim)?\n\n(Clique em 'Cancelar' para deixar como Pendente)");
+                    guestData.rsvp = rsvpConfirmed ? true : null; // Se cancelar, fica pendente (null)
+                    guestData.checkin = false;
+                    guestsRef.push(guestData);
+                }
+                resetForm();
+            });
+            
+            cancelEditBtn.addEventListener('click', resetForm);
+
+            // --- LISTENERS DE DADOS (renderizam as tabelas) ---
             guestsRef.on('value', (snapshot) => {
+                const guestListBody = document.getElementById('guest-list-body');
                 guestListBody.innerHTML = '';
                 guestResponsibleSelect.innerHTML = '<option value="">Nenhum (Convidado Principal)</option>';
                 allGuestsData = snapshot.val() || {};
@@ -231,7 +250,6 @@
                     return;
                 }
 
-                // Popula o dropdown de responsáveis primeiro
                 for (const uuid in allGuestsData) {
                     const guest = allGuestsData[uuid];
                     const option = document.createElement('option');
@@ -240,106 +258,48 @@
                     guestResponsibleSelect.appendChild(option);
                 }
 
-                // Popula a tabela de convidados
                 for (const uuid in allGuestsData) {
                     const guest = allGuestsData[uuid];
                     const tr = document.createElement('tr');
-                    
                     let rsvpStatus = '❓ Pendente';
                     if (guest.rsvp === true) rsvpStatus = '✅ Sim';
                     if (guest.rsvp === false) rsvpStatus = '❌ Não';
 
                     tr.innerHTML = `
-                        <td>${guest.nome}</td>
-                        <td>${rsvpStatus}</td>
-                        <td>${guest.checkin ? '✅ Sim' : '❌ Não'}</td>
+                        <td>${guest.nome}</td><td>${rsvpStatus}</td><td>${guest.checkin ? '✅ Sim' : '❌ Não'}</td>
                         <td class="actions-cell">
                             <button class="btn btn-secondary" onclick="editGuest('${uuid}')">Editar</button>
                             <button class="btn btn-primary" onclick="generateInvite('${uuid}')">Gerar Convite</button>
                             <button class="btn btn-danger" onclick="deleteGuest('${uuid}')">Excluir</button>
-                        </td>
-                    `;
+                        </td>`;
                     guestListBody.appendChild(tr);
                 }
             });
 
-            guestForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const id = guestIdInput.value;
-                const guestData = {
-                    nome: guestNameInput.value,
-                    mesa: parseInt(guestTableInput.value) || null,
-                    responsavel: guestResponsibleSelect.value || null,
-                    viagem: guestTravelTextarea.value,
-                    hospedagem: guestAccommodationTextarea.value,
-                };
-
-                if (id) {
-                    guestsRef.child(id).update(guestData);
-                } else {
-                    guestData.rsvp = null;
-                    guestData.checkin = false;
-                    guestsRef.push(guestData);
-                }
-                resetForm();
-            });
-
-            cancelEditBtn.addEventListener('click', resetForm);
-
-            // --- MODERAÇÃO DE MENSAGENS ---
             messagesRef.on('value', (snapshot) => {
+                const messagesListBody = document.getElementById('messages-list-body');
                 messagesListBody.innerHTML = "";
                 const messages = snapshot.val() || {};
-                if (Object.keys(messages).length === 0) {
-                    messagesListBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Nenhuma mensagem recebida.</td></tr>';
-                    return;
-                }
                 for (const id in messages) {
                     const msg = messages[id];
                     const tr = document.createElement("tr");
-                    tr.innerHTML = `
-                        <td>${msg.nome || "Anônimo"}</td>
-                        <td>${msg.mensagem}</td>
-                        <td>${msg.aprovado ? "✅ Aprovada" : "🟡 Pendente"}</td>
-                        <td class="actions-cell">
-                            ${msg.aprovado ? 
-                                `<button class="btn btn-secondary" onclick="toggleMessageApproval('${id}', false)">Reprovar</button>` : 
-                                `<button class="btn btn-success" onclick="toggleMessageApproval('${id}', true)">Aprovar</button>`
-                            }
-                            <button class="btn btn-danger" onclick="deleteMessage('${id}')">Excluir</button>
-                        </td>`;
+                    tr.innerHTML = `<td>${msg.nome ||"Anônimo"}</td><td>${msg.mensagem}</td><td>${msg.aprovado ? "✅ Aprovada":"🟡 Pendente"}</td><td class="actions-cell">${msg.aprovado ? `<button class="btn btn-secondary" onclick="toggleMessageApproval('${id}',false)">Reprovar</button>`:`<button class="btn btn-success" onclick="toggleMessageApproval('${id}',true)">Aprovar</button>`}<button class="btn btn-danger" onclick="deleteMessage('${id}')">Excluir</button></td>`;
                     messagesListBody.appendChild(tr);
                 }
             });
 
-            // --- GERENCIAMENTO DE PRESENTES ---
             giftsRef.on('value', (snapshot) => {
+                const giftsListBody = document.getElementById('gifts-list-body');
                 giftsListBody.innerHTML = "";
                 const gifts = snapshot.val() || {};
-                 if (Object.keys(gifts).length === 0) {
-                    giftsListBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Nenhum presente registrado.</td></tr>';
-                    return;
-                }
                 for (const id in gifts) {
                     const gift = gifts[id];
                     const tr = document.createElement("tr");
-                    tr.innerHTML = `
-                        <td>${gift.nome || "Anônimo"}</td>
-                        <td>${gift.item}</td>
-                        <td>${gift.valor ? `R$ ${gift.valor.toFixed(2).replace(".", ",")}` : "N/A"}</td>
-                        <td>${gift.pago ? "✅ Pago" : "🟡 Pendente"}</td>
-                        <td class="actions-cell">
-                             ${gift.pago ? 
-                                `<button class="btn btn-secondary" onclick="toggleGiftStatus('${id}', false)">Marcar Pendente</button>` : 
-                                `<button class="btn btn-success" onclick="toggleGiftStatus('${id}', true)">Marcar Pago</button>`
-                            }
-                            <button class="btn btn-danger" onclick="deleteGift('${id}')">Excluir</button>
-                        </td>
-                    `;
+                    tr.innerHTML = `<td>${gift.nome || "Anônimo"}</td><td>${gift.item}</td><td>${gift.valor ? `R$ ${gift.valor.toFixed(2).replace(".",",")}`:"N/A"}</td><td>${gift.mensagem || "-"}</td><td>${gift.pago ? "✅ Pago":"🟡 Pendente"}</td><td class="actions-cell">${gift.pago ? `<button class="btn btn-secondary" onclick="toggleGiftStatus('${id}',false)">Marcar Pendente</button>`:`<button class="btn btn-success" onclick="toggleGiftStatus('${id}',true)">Marcar Pago</button>`}<button class="btn btn-danger" onclick="deleteGift('${id}')">Excluir</button></td>`;
                     giftsListBody.appendChild(tr);
                 }
             });
-
+            
             // --- LÓGICA DE CHECK-IN (QR CODE) ---
             const startCheckinBtn = document.getElementById("start-checkin-btn");
             const qrReaderElement = document.getElementById("qr-reader");
