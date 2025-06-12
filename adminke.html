@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- ... seu cabeçalho e estilos permanecem os mesmos ... -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Admin - Casamento Elian & Keytiane</title>
@@ -43,6 +44,7 @@
 </head>
 <body>
 
+    <!-- ... seu body HTML permanece o mesmo ... -->
     <div id="login-overlay" class="login-overlay">
         <div class="login-box">
             <h3>Acesso ao Painel</h3>
@@ -50,12 +52,9 @@
             <button id="login-btn" class="btn btn-primary">Entrar</button>
         </div>
     </div>
-
     <div id="admin-panel" class="container" style="display: none;">
         <h1>Painel de Administração</h1>
         <p class="subtitle">Gerenciamento de Convidados, Mensagens e Presentes</p>
-
-        <!-- [REINTEGRADO] Formulário para Adicionar/Editar Convidado -->
         <section id="form-section">
             <h2>Adicionar / Editar Convidado</h2>
             <form id="guest-form">
@@ -88,13 +87,11 @@
                 </div>
             </form>
         </section>
-
         <div class="checkin-button-container">
             <button id="start-checkin-btn" class="btn btn-success">Fazer Check-in de Convidado (QR Code)</button>
         </div>
         <div id="qr-reader"></div>
         <p id="qr-reader-results"></p>
-
         <section>
             <h2>Gerenciar Convidados</h2>
             <div class="table-wrapper">
@@ -106,7 +103,6 @@
                 </table>
             </div>
         </section>
-
         <section>
             <h2>Moderar Mensagens</h2>
             <div class="table-wrapper">
@@ -118,159 +114,278 @@
                 </table>
             </div>
         </section>
-        
         <section>
-            <h2>Presentes Recebidos</h2>
+            <h2>Gerenciar Presentes</h2>
             <div class="table-wrapper">
-                 <thead>
-                        <tr><th>Nome</th><th>Presente</th><th>Valor</th><th>Mensagem</th></tr>
+                <table>
+                    <thead>
+                        <tr><th>Nome</th><th>Presente</th><th>Valor</th><th>Status</th><th>Ações</th></tr>
                     </thead>
-                <tbody id="gifts-list-body"></tbody>
+                    <tbody id="gifts-list-body"></tbody>
+                </table>
             </div>
         </section>
-
     </div>
+
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyAQ3txJQ09muNi5xaBhOPwFztT1fCR1qmE",
-            authDomain: "formagest-a7591.firebaseapp.com",
-            databaseURL: "https://formagest-a7591-default-rtdb.firebaseio.com",
-            projectId: "formagest-a7591",
-            storageBucket: "formagest-a7591.appspot.com",
-            messagingSenderId: "27539451532",
-            appId: "1:27539451532:web:76f7eed9eafc3ca1c115a9",
-            measurementId: "G-VXKWZPC8LZ"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        
-        const guestsRef = database.ref('convidados');
-        const messagesRef = database.ref('mensagens');
-        const giftsRef = database.ref('presentes');
-        
-        document.getElementById('login-btn').addEventListener('click', () => {
-            if (document.getElementById('admin-password').value === '9272') { // MUDE A SENHA
-                document.getElementById('login-overlay').style.display = 'none';
-                document.getElementById('admin-panel').style.display = 'block';
-            } else {
-                alert('Senha incorreta!');
-            }
-        });
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- CONFIGURAÇÃO INICIAL ---
+            const firebaseConfig = { apiKey: "AIzaSyAQ3txJQ09muNi5xaBhOPwFztT1fCR1qmE", authDomain: "formagest-a7591.firebaseapp.com", databaseURL: "https://formagest-a7591-default-rtdb.firebaseio.com", projectId: "formagest-a7591", storageBucket: "formagest-a7591.appspot.com", messagingSenderId: "27539451532", appId: "1:27539451532:web:76f7eed9eafc3ca1c115a9", measurementId: "G-VXKWZPC8LZ" };
+            firebase.initializeApp(firebaseConfig);
+            const database = firebase.database();
+            
+            const guestsRef = database.ref('convidados');
+            const messagesRef = database.ref('mensagens');
+            const giftsRef = database.ref('presentes');
 
-        // ================== GERENCIAMENTO DE CONVIDADOS (COM EDIÇÃO) ==================
-        const guestForm = document.getElementById('guest-form');
-        const guestIdInput = document.getElementById('guest-id');
-        const guestNameInput = document.getElementById('guest-name');
-        const guestTableInput = document.getElementById('guest-table');
-        const guestResponsibleSelect = document.getElementById('guest-responsible');
-        const guestTravelTextarea = document.getElementById('guest-travel');
-        const guestAccommodationTextarea = document.getElementById('guest-accommodation');
-        const guestListBody = document.getElementById('guest-list-body');
-        const cancelEditBtn = document.getElementById('cancel-edit-btn');
-        let allGuestsData = {};
+            // --- ELEMENTOS DA UI ---
+            const loginBtn = document.getElementById('login-btn');
+            const adminPasswordInput = document.getElementById('admin-password');
+            const loginOverlay = document.getElementById('login-overlay');
+            const adminPanel = document.getElementById('admin-panel');
+            
+            const guestForm = document.getElementById('guest-form');
+            const guestIdInput = document.getElementById('guest-id');
+            const guestNameInput = document.getElementById('guest-name');
+            const guestTableInput = document.getElementById('guest-table');
+            const guestResponsibleSelect = document.getElementById('guest-responsible');
+            const guestTravelTextarea = document.getElementById('guest-travel');
+            const guestAccommodationTextarea = document.getElementById('guest-accommodation');
+            const guestListBody = document.getElementById('guest-list-body');
+            const cancelEditBtn = document.getElementById('cancel-edit-btn');
+            
+            const messagesListBody = document.getElementById('messages-list-body');
+            const giftsListBody = document.getElementById('gifts-list-body');
+            
+            let allGuestsData = {};
 
-        const resetForm = () => {
-            guestForm.reset();
-            guestIdInput.value = '';
-            cancelEditBtn.style.display = 'none';
-            document.querySelector('#form-section h2').textContent = 'Adicionar Convidado';
-        };
+            // --- LÓGICA DE LOGIN ---
+            loginBtn.addEventListener('click', () => {
+                if (adminPasswordInput.value === '9272') { // MUDE A SENHA AQUI
+                    loginOverlay.style.display = 'none';
+                    adminPanel.style.display = 'block';
+                } else {
+                    alert('Senha incorreta!');
+                }
+            });
 
-        guestsRef.on('value', (snapshot) => {
-            guestListBody.innerHTML = '';
-            guestResponsibleSelect.innerHTML = '<option value="">Nenhum (Convidado Principal)</option>';
-            allGuestsData = snapshot.val() || {};
-
-            if (Object.keys(allGuestsData).length === 0) {
-                guestListBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Nenhum convidado cadastrado.</td></tr>';
-                return;
-            }
-
-            for (const uuid in allGuestsData) {
-                const guest = allGuestsData[uuid];
-                const option = document.createElement('option');
-                option.value = uuid;
-                option.textContent = guest.nome;
-                guestResponsibleSelect.appendChild(option);
-            }
-
-            for (const uuid in allGuestsData) {
-                const guest = allGuestsData[uuid];
-                const tr = document.createElement('tr');
-                
-                let rsvpStatus = '❓ Pendente';
-                if (guest.rsvp === true) rsvpStatus = '✅ Sim';
-                if (guest.rsvp === false) rsvpStatus = '❌ Não';
-
-                tr.innerHTML = `
-                    <td>${guest.nome}</td>
-                    <td>${rsvpStatus}</td>
-                    <td>${guest.checkin ? '✅ Sim' : '❌ Não'}</td>
-                    <td class="actions-cell">
-                        <button class="btn btn-secondary" onclick="editGuest('${uuid}')">Editar</button>
-                        <button class="btn btn-primary" onclick="generateInvite('${uuid}')">Gerar Convite</button>
-                        <button class="btn btn-danger" onclick="deleteGuest('${uuid}')">Excluir</button>
-                    </td>
-                `;
-                guestListBody.appendChild(tr);
-            }
-        });
-
-        window.editGuest = (id) => {
-            const guest = allGuestsData[id];
-            if (!guest) return;
-            guestIdInput.value = id;
-            guestNameInput.value = guest.nome;
-            guestTableInput.value = guest.mesa || '';
-            guestResponsibleSelect.value = guest.responsavel || '';
-            guestTravelTextarea.value = guest.viagem || '';
-            guestAccommodationTextarea.value = guest.hospedagem || '';
-            document.querySelector('#form-section h2').textContent = 'Editar Convidado';
-            cancelEditBtn.style.display = 'inline-block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-        
-        window.deleteGuest = (id) => {
-            if (confirm('Tem certeza que deseja excluir este convidado?')) {
-                guestsRef.child(id).remove().then(resetForm);
-            }
-        };
-
-        guestForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const id = guestIdInput.value;
-            const guestData = {
-                nome: guestNameInput.value,
-                mesa: parseInt(guestTableInput.value) || null,
-                responsavel: guestResponsibleSelect.value,
-                viagem: guestTravelTextarea.value,
-                hospedagem: guestAccommodationTextarea.value,
+            // --- FUNÇÕES GLOBAIS DE MANIPULAÇÃO DO FIREBASE (para acesso no HTML) ---
+            window.toggleMessageApproval = (id, status) => {
+                messagesRef.child(id).update({ aprovado: status });
+            };
+            window.deleteMessage = (id) => {
+                if (confirm("Tem certeza que deseja excluir esta mensagem?")) {
+                    messagesRef.child(id).remove();
+                }
+            };
+            window.toggleGiftStatus = (id, status) => {
+                giftsRef.child(id).update({ pago: status });
+            };
+            window.deleteGift = (id) => {
+                if (confirm("Tem certeza que deseja excluir este registro de presente?")) {
+                    giftsRef.child(id).remove();
+                }
+            };
+            window.editGuest = (id) => {
+                const guest = allGuestsData[id];
+                if (!guest) return;
+                guestIdInput.value = id;
+                guestNameInput.value = guest.nome;
+                guestTableInput.value = guest.mesa || '';
+                guestResponsibleSelect.value = guest.responsavel || '';
+                guestTravelTextarea.value = guest.viagem || '';
+                guestAccommodationTextarea.value = guest.hospedagem || '';
+                document.querySelector('#form-section h2').textContent = 'Editar Convidado';
+                cancelEditBtn.style.display = 'inline-block';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+            window.deleteGuest = (id) => {
+                if (confirm('Tem certeza que deseja excluir este convidado?')) {
+                    guestsRef.child(id).remove().then(resetForm);
+                }
+            };
+            window.generateInvite = (uuid) => {
+                const inviteLink = `https://www.16deagosto.com.br/convidado.html?invite=${uuid}`;
+                prompt("Link do convite (copie e envie):", inviteLink);
+            };
+            
+            // --- GERENCIAMENTO DE CONVIDADOS ---
+            const resetForm = () => {
+                guestForm.reset();
+                guestIdInput.value = '';
+                cancelEditBtn.style.display = 'none';
+                document.querySelector('#form-section h2').textContent = 'Adicionar Convidado';
             };
 
-            if (id) {
-                guestsRef.child(id).update(guestData);
-            } else {
-                // Ao criar, inicia com rsvp e checkin como nulos (pendente)
-                guestData.rsvp = null;
-                guestData.checkin = false;
-                guestsRef.push(guestData);
+            guestsRef.on('value', (snapshot) => {
+                guestListBody.innerHTML = '';
+                guestResponsibleSelect.innerHTML = '<option value="">Nenhum (Convidado Principal)</option>';
+                allGuestsData = snapshot.val() || {};
+
+                if (Object.keys(allGuestsData).length === 0) {
+                    guestListBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Nenhum convidado cadastrado.</td></tr>';
+                    return;
+                }
+
+                // Popula o dropdown de responsáveis primeiro
+                for (const uuid in allGuestsData) {
+                    const guest = allGuestsData[uuid];
+                    const option = document.createElement('option');
+                    option.value = uuid;
+                    option.textContent = guest.nome;
+                    guestResponsibleSelect.appendChild(option);
+                }
+
+                // Popula a tabela de convidados
+                for (const uuid in allGuestsData) {
+                    const guest = allGuestsData[uuid];
+                    const tr = document.createElement('tr');
+                    
+                    let rsvpStatus = '❓ Pendente';
+                    if (guest.rsvp === true) rsvpStatus = '✅ Sim';
+                    if (guest.rsvp === false) rsvpStatus = '❌ Não';
+
+                    tr.innerHTML = `
+                        <td>${guest.nome}</td>
+                        <td>${rsvpStatus}</td>
+                        <td>${guest.checkin ? '✅ Sim' : '❌ Não'}</td>
+                        <td class="actions-cell">
+                            <button class="btn btn-secondary" onclick="editGuest('${uuid}')">Editar</button>
+                            <button class="btn btn-primary" onclick="generateInvite('${uuid}')">Gerar Convite</button>
+                            <button class="btn btn-danger" onclick="deleteGuest('${uuid}')">Excluir</button>
+                        </td>
+                    `;
+                    guestListBody.appendChild(tr);
+                }
+            });
+
+            guestForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const id = guestIdInput.value;
+                const guestData = {
+                    nome: guestNameInput.value,
+                    mesa: parseInt(guestTableInput.value) || null,
+                    responsavel: guestResponsibleSelect.value || null,
+                    viagem: guestTravelTextarea.value,
+                    hospedagem: guestAccommodationTextarea.value,
+                };
+
+                if (id) {
+                    guestsRef.child(id).update(guestData);
+                } else {
+                    guestData.rsvp = null;
+                    guestData.checkin = false;
+                    guestsRef.push(guestData);
+                }
+                resetForm();
+            });
+
+            cancelEditBtn.addEventListener('click', resetForm);
+
+            // --- MODERAÇÃO DE MENSAGENS ---
+            messagesRef.on('value', (snapshot) => {
+                messagesListBody.innerHTML = "";
+                const messages = snapshot.val() || {};
+                if (Object.keys(messages).length === 0) {
+                    messagesListBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Nenhuma mensagem recebida.</td></tr>';
+                    return;
+                }
+                for (const id in messages) {
+                    const msg = messages[id];
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${msg.nome || "Anônimo"}</td>
+                        <td>${msg.mensagem}</td>
+                        <td>${msg.aprovado ? "✅ Aprovada" : "🟡 Pendente"}</td>
+                        <td class="actions-cell">
+                            ${msg.aprovado ? 
+                                `<button class="btn btn-secondary" onclick="toggleMessageApproval('${id}', false)">Reprovar</button>` : 
+                                `<button class="btn btn-success" onclick="toggleMessageApproval('${id}', true)">Aprovar</button>`
+                            }
+                            <button class="btn btn-danger" onclick="deleteMessage('${id}')">Excluir</button>
+                        </td>`;
+                    messagesListBody.appendChild(tr);
+                }
+            });
+
+            // --- GERENCIAMENTO DE PRESENTES ---
+            giftsRef.on('value', (snapshot) => {
+                giftsListBody.innerHTML = "";
+                const gifts = snapshot.val() || {};
+                 if (Object.keys(gifts).length === 0) {
+                    giftsListBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Nenhum presente registrado.</td></tr>';
+                    return;
+                }
+                for (const id in gifts) {
+                    const gift = gifts[id];
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${gift.nome || "Anônimo"}</td>
+                        <td>${gift.item}</td>
+                        <td>${gift.valor ? `R$ ${gift.valor.toFixed(2).replace(".", ",")}` : "N/A"}</td>
+                        <td>${gift.pago ? "✅ Pago" : "🟡 Pendente"}</td>
+                        <td class="actions-cell">
+                             ${gift.pago ? 
+                                `<button class="btn btn-secondary" onclick="toggleGiftStatus('${id}', false)">Marcar Pendente</button>` : 
+                                `<button class="btn btn-success" onclick="toggleGiftStatus('${id}', true)">Marcar Pago</button>`
+                            }
+                            <button class="btn btn-danger" onclick="deleteGift('${id}')">Excluir</button>
+                        </td>
+                    `;
+                    giftsListBody.appendChild(tr);
+                }
+            });
+
+            // --- LÓGICA DE CHECK-IN (QR CODE) ---
+            const startCheckinBtn = document.getElementById("start-checkin-btn");
+            const qrReaderElement = document.getElementById("qr-reader");
+            const qrResultsElement = document.getElementById("qr-reader-results");
+            let html5QrCode = null;
+
+            startCheckinBtn.addEventListener("click", () => {
+                if (html5QrCode && html5QrCode.isScanning) {
+                    html5QrCode.stop().then(() => {
+                        qrReaderElement.style.display = "none";
+                        startCheckinBtn.textContent = "Fazer Check-in de Convidado (QR Code)";
+                        qrResultsElement.textContent = "";
+                    }).catch(err => console.error(err));
+                } else {
+                    qrReaderElement.style.display = "block";
+                    startCheckinBtn.textContent = "Parar Leitor de QR Code";
+                    html5QrCode = new Html5Qrcode("qr-reader");
+                    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+                    html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, (error) => {});
+                }
+            });
+
+            function onScanSuccess(decodedText, decodedResult) {
+                html5QrCode.stop();
+                qrReaderElement.style.display = 'none';
+                startCheckinBtn.textContent = "Fazer Check-in de Convidado (QR Code)";
+                
+                const guestId = decodedText;
+                guestsRef.child(guestId).once("value", (snapshot) => {
+                    if (snapshot.exists()) {
+                        const guest = snapshot.val();
+                        if (guest.checkin) {
+                            qrResultsElement.textContent = `Atenção! Convidado "${guest.nome}" já fez check-in.`;
+                            alert(`Atenção! Convidado "${guest.nome}" já fez check-in.`);
+                        } else {
+                            guestsRef.child(guestId).update({ checkin: true });
+                            qrResultsElement.textContent = `Check-in de "${guest.nome}" realizado com sucesso!`;
+                            alert(`Check-in de "${guest.nome}" realizado com sucesso!`);
+                        }
+                    } else {
+                        qrResultsElement.textContent = "Erro: Convidado não encontrado.";
+                        alert("Erro: Convidado não encontrado.");
+                    }
+                });
             }
-            resetForm();
         });
-
-        cancelEditBtn.addEventListener('click', resetForm);
-        window.generateInvite = (uuid) => {
-            const inviteLink = `https://www.16deagosto.com.br/convidado.html?invite=${uuid}`;
-            prompt("Link do convite (copie e envie):", inviteLink);
-        };
-
-        // ================== CHECK-IN, MENSAGENS E PRESENTES (CÓDIGO ANTERIOR) ==================
-        const startCheckinBtn=document.getElementById("start-checkin-btn"),qrReaderElement=document.getElementById("qr-reader"),qrResultsElement=document.getElementById("qr-reader-results");let html5QrCode=null;startCheckinBtn.addEventListener("click",()=>{html5QrCode&&html5QrCode.isScanning?html5QrCode.stop().then(()=>{qrReaderElement.style.display="none",startCheckinBtn.textContent="Fazer Check-in (QR Code)",qrResultsElement.textContent=""}).catch(e=>console.error(e)):(qrReaderElement.style.display="block",startCheckinBtn.textContent="Parar Leitor",html5QrCode=new Html5Qrcode("qr-reader"),html5QrCode.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:250}},onScanSuccess,e=>{}))});function onScanSuccess(e,t){html5QrCode.stop(),qrReaderElement.style.display="none",startCheckinBtn.textContent="Fazer Check-in (QR Code)";const o=e;guestsRef.child(o).once("value",e=>{e.exists()?(e.val().checkin?(qrResultsElement.textContent=`Atenção! Convidado "${e.val().nome}" já fez check-in.`,alert(`Atenção! Convidado "${e.val().nome}" já fez check-in.`)):(guestsRef.child(o).update({checkin:!0}),qrResultsElement.textContent=`Check-in de "${e.val().nome}" realizado com sucesso!`,alert(`Check-in de "${e.val().nome}" realizado com sucesso!`))):(qrResultsElement.textContent="Erro: Convidado não encontrado.",alert("Erro: Convidado não encontrado."))})}
-        const messagesListBody=document.getElementById("messages-list-body");messagesRef.on("value",e=>{messagesListBody.innerHTML="";const t=e.val()||{};for(const o in t){const n=t[o],s=document.createElement("tr");s.innerHTML=`<td>${n.nome||"Anônimo"}</td><td>${n.mensagem}</td><td>${n.aprovado?"✅ Aprovada":"🟡 Pendente"}</td><td class="actions-cell">${n.aprovado?`<button class="btn btn-secondary" onclick="toggleMessageApproval('${o}', false)">Reprovar</button>`:`<button class="btn btn-success" onclick="toggleMessageApproval('${o}', true)">Aprovar</button>`}<button class="btn btn-danger" onclick="deleteMessage('${o}')">Excluir</button></td>`,messagesListBody.appendChild(s)}}),window.toggleMessageApproval=(e,t)=>{messagesRef.child(e).update({aprovado:t})},window.deleteMessage=e=>{confirm("Tem certeza?")&&messagesRef.child(e).remove()};const giftsListBody=document.getElementById("gifts-list-body");giftsRef.on("value",e=>{giftsListBody.innerHTML="";const t=e.val()||{};for(const o in t){const n=t[o];giftsListBody.innerHTML+=`<tr><td>${n.nome||"Anônimo"}</td><td>${n.item}</td><td>${n.valor?`R$ ${n.valor.toFixed(2).replace(".",",")}`:"N/A"}</td><td>${n.mensagem||"-"}</td></tr>`}});
     </script>
 </body>
 </html>

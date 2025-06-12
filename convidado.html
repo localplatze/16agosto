@@ -23,41 +23,41 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: var(--font-body); background-color: #2c3e50; background-image: url('bg_splash.png'); backdrop-filter: blur(5px); color: var(--cover-color); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         .content-wrapper, #loading-state, #error-state { width: 100%; max-width: 800px; text-align: center; }
-        .content-wrapper { display: none; }
+        .content-wrapper { display: none; flex-direction: column; align-items: center;}
         #loading-state h2, #error-state h2 { color: var(--white-color); font-family: var(--font-title); }
         #error-state p { color: #ccc; }
 
+        /* [NOVO] Wrapper para a área de impressão */
+        #printable-area { width: 100%; }
+
         /* Estilos do Ticket do Convite */
-        .ticket-container { margin-bottom: 40px; }
-        .ticket-card { background-color: var(--paper-color); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); display: flex; overflow: hidden; position: relative; }
-        .ticket-main { padding: 30px 40px; flex-grow: 1; text-align: center; }
-        .ticket-header { font-family: var(--font-title); font-size: 1.2rem; color: var(--gold-color); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
-        .ticket-couple { font-family: var(--font-cursive); font-size: 3rem; color: var(--cover-color); line-height: 1.2; }
-        .ticket-info { margin-top: 20px; border-top: 1px solid #ddd; padding-top: 20px; }
-        .ticket-info p { margin-bottom: 5px; font-size: 1rem; }
-        .ticket-info strong { font-weight: 500; }
-        .ticket-stub { background-color: #f0f0f0; min-width: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .ticket-card::before, .ticket-card::after { content: ''; position: absolute; top: 50%; width: 20px; height: 20px; background-color: #2c3e50; border-radius: 50%; z-index: 1; }
-        .ticket-card::before { left: 210px; transform: translateY(-50%) translateX(-50%); }
-        .ticket-card::after { right: -10px; transform: translateY(-50%); display: none; /* Escondido por padrão, ajustado em media query */ }
+        .ticket-container { margin-bottom: 20px; }
+        .ticket-card { background-color: var(--paper-color); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); display: flex; overflow: hidden; position: relative; border-left: 10px solid var(--gold-color); }
+        .ticket-main { padding: 30px 40px; flex-grow: 1; text-align: left; }
+        .ticket-header { font-family: var(--font-title); font-size: 1.1rem; color: #888; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+        .ticket-couple { font-family: var(--font-cursive); font-size: 2.8rem; color: var(--cover-color); line-height: 1.2; margin-bottom: 20px; border-bottom: 1px dashed #ccc; padding-bottom: 20px; }
+        .ticket-info { margin-top: 20px; }
+        .ticket-info p { margin-bottom: 10px; font-size: 1rem; line-height: 1.5; }
+        .ticket-info strong { font-weight: 500; color: var(--cover-color); }
+        .ticket-stub { background-color: #f0f0f0; min-width: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; border-left: 2px dashed #ccc; }
         
         .qr-code { width: 140px; height: 140px; background-color: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .qr-code img { width: 100%; height: 100%; object-fit: contain; }
         .qr-code-label { margin-top: 15px; font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* [MELHORADO] Estilos do Formulário RSVP */
+        /* Estilos do Formulário RSVP */
         .rsvp-form-container { background: var(--paper-color); padding: 40px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); text-align: center; margin-bottom: 40px;}
-        .rsvp-form-container h2 { font-family: var(--font-title); color: var(--cover-color); }
-        .rsvp-form-container .guest-names { font-family: var(--font-cursive); font-size: 2.5rem; color: var(--cover-color); margin: 15px 0; }
-        .rsvp-form-container p { color: #555; margin-bottom: 30px; }
-        .rsvp-buttons { display: flex; flex-direction: column; gap: 15px; }
-        .rsvp-btn { padding: 15px; font-size: 1.1rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: transform 0.2s ease; }
-        .rsvp-btn:hover { transform: scale(1.03); }
+        .rsvp-form-container h2 { font-family: var(--font-title); color: var(--cover-color); margin-bottom: 10px; font-size: 2.2rem; }
+        .rsvp-form-container .guest-names { font-family: var(--font-cursive); font-size: 2.5rem; color: var(--gold-color); margin: 15px 0; }
+        .rsvp-form-container p { color: #555; margin-bottom: 30px; line-height: 1.6; }
+        .rsvp-buttons { display: flex; flex-direction: column; gap: 15px; max-width: 350px; margin: 0 auto; }
+        .rsvp-btn { padding: 15px; font-size: 1.1rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .rsvp-btn:hover { transform: scale(1.03); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .btn-confirm { background-color: var(--success-color); color: var(--white-color); }
         .btn-decline { background-color: var(--danger-color); color: var(--white-color); }
         
-        /* [MELHORADO] Estilos do Accordion */
-        .info-accordion { width: 100%; max-width: 800px; background: var(--white-color); border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; }
+        /* Estilos do Accordion */
+        .info-accordion { width: 100%; max-width: 800px; background: var(--white-color); border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; margin-top: 40px; }
         .accordion-item { border-bottom: 1px solid #e0e0e0; }
         .accordion-item:last-child { border-bottom: none; }
         .accordion-header { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; font-weight: 500; color: var(--cover-color); transition: background-color 0.3s; }
@@ -71,16 +71,20 @@
         .accordion-content a { color: var(--gold-color); font-weight: 500; text-decoration: none; }
         .accordion-content a:hover { text-decoration: underline; }
 
+        /* Estilos para botões de ação */
+        .actions-container { margin-top: 20px; margin-bottom: 20px; }
+        .print-btn { background-color: var(--cover-color); color: var(--white-color); border: 2px solid var(--gold-color); padding: 12px 24px; font-size: 1rem; font-weight: 500; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
+        .print-btn:hover { background-color: var(--gold-color); color: var(--cover-color); }
+
         /* Link de Volta */
-        .back-link { margin-top: 40px; color: var(--white-color); text-decoration: none; padding: 10px 20px; border: 1px solid var(--gold-color); border-radius: 8px; transition: all 0.3s; }
+        .back-link { margin-top: 20px; color: var(--white-color); text-decoration: none; padding: 10px 20px; border: 1px solid var(--gold-color); border-radius: 8px; transition: all 0.3s; }
         .back-link:hover { background-color: var(--gold-color); color: var(--cover-color); }
         
         /* Responsividade */
         @media (max-width: 768px) {
-            .ticket-card { flex-direction: column; }
+            .ticket-card { flex-direction: column; border-left: none; border-top: 10px solid var(--gold-color); }
             .ticket-stub { border-left: none; border-top: 2px dashed #ccc; }
-            .ticket-card::before { left: 50%; top: -10px; transform: translateX(-50%); }
-            .ticket-card::after { display: block; right: 50%; bottom: -10px; transform: translateX(50%); top: auto; }
+            .ticket-main { text-align: center; }
         }
     </style>
 </head>
@@ -90,25 +94,20 @@
     <div id="error-state" style="display: none;"><h2>Ops! Convite não encontrado.</h2><p>Por favor, verifique o link ou entre em contato com os noivos.</p></div>
 
     <div id="content-wrapper" class="content-wrapper">
-        <div id="ticket-or-rsvp-area"></div>
-        <div class="info-accordion" id="info-accordion"></div>
+        <div id="printable-area">
+            <div id="ticket-or-rsvp-area"></div>
+            <div class="info-accordion" id="info-accordion"></div>
+        </div>
+        <div id="actions-area"></div>
         <a href="index.html" class="back-link">← Voltar para o site principal</a>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyAQ3txJQ09muNi5xaBhOPwFztT1fCR1qmE",
-            authDomain: "formagest-a7591.firebaseapp.com",
-            databaseURL: "https://formagest-a7591-default-rtdb.firebaseio.com",
-            projectId: "formagest-a7591",
-            storageBucket: "formagest-a7591.appspot.com",
-            messagingSenderId: "27539451532",
-            appId: "1:27539451532:web:76f7eed9eafc3ca1c115a9",
-            measurementId: "G-VXKWZPC8LZ"
-        };
+        const firebaseConfig = { apiKey: "AIzaSyAQ3txJQ09muNi5xaBhOPwFztT1fCR1qmE", authDomain: "formagest-a7591.firebaseapp.com", databaseURL: "https://formagest-a7591-default-rtdb.firebaseio.com", projectId: "formagest-a7591", storageBucket: "formagest-a7591.appspot.com", messagingSenderId: "27539451532", appId: "1:27539451532:web:76f7eed9eafc3ca1c115a9", measurementId: "G-VXKWZPC8LZ" };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         
@@ -128,24 +127,18 @@
 
         async function sendToTelegram(message) {
             try {
-                await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: TELEGRAM_CHANNEL_ID, text: message, parse_mode: 'HTML' })
-                });
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: TELEGRAM_CHANNEL_ID, text: message, parse_mode: 'HTML' }) });
             } catch (error) { console.error('Erro na requisição para o Telegram:', error); }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const inviteId = urlParams.get('invite');
-
             if (!inviteId) {
                 document.getElementById('loading-state').style.display = 'none';
                 document.getElementById('error-state').style.display = 'block';
                 return;
             }
-
             const guestRef = database.ref('convidados/' + inviteId);
             guestRef.on('value', (snapshot) => {
                 if (!snapshot.exists()) {
@@ -156,79 +149,114 @@
                 const guestData = snapshot.val();
                 document.getElementById('loading-state').style.display = 'none';
                 document.getElementById('content-wrapper').style.display = 'flex';
-                document.getElementById('content-wrapper').style.flexDirection = 'column';
                 renderContent(inviteId, guestData);
             });
         });
 
         function renderContent(uuid, data) {
             const ticketOrRsvpArea = document.getElementById('ticket-or-rsvp-area');
-            if (data.rsvp === true || data.rsvp === false) { // Se já respondeu (Sim ou Não)
+            const actionsArea = document.getElementById('actions-area');
+            const isPlural = data.nome.includes(';');
+            const guestLabel = isPlural ? 'Convidados' : 'Convidado';
+            
+            actionsArea.innerHTML = ''; // Limpa a área de ações
+
+            if (data.rsvp === true || data.rsvp === false) { // Se já respondeu
                 ticketOrRsvpArea.innerHTML = `
                     <div class="ticket-container">
                         <div class="ticket-card">
                             <div class="ticket-main">
-                                <p class="ticket-header">Você está convidado para celebrar</p>
-                                <h1 class="ticket-couple">Elian<br>&<br>Keytiane</h1>
+                                <p class="ticket-header">${isPlural ? 'Vocês estão convidados' : 'Você está convidado'} para o casamento de</p>
+                                <h1 class="ticket-couple">Elian & Keytiane</h1>
                                 <div class="ticket-info">
-                                    <p><strong>Convidado(s):</strong> ${data.nome.replace(/;/g, ', ')}</p>
+                                    <p><strong>${guestLabel}:</strong><br>${data.nome.replace(/;/g, '<br>')}</p>
                                     <p><strong>Mesa:</strong> ${data.mesa || 'A ser definida'}</p>
-                                    ${data.rsvp ? '<p>Apresente este QR Code na entrada do evento.</p>' : '<p style="color: var(--danger-color); font-weight: 500;">Agradecemos por nos avisar. Sentiremos sua falta!</p>'}
+                                    ${data.rsvp ? `<p>Apresente este QR Code na entrada do evento para facilitar seu acesso.</p>` : '<p style="color: var(--danger-color); font-weight: 500;">Agradecemos por nos avisar. Sentiremos sua falta!</p>'}
                                 </div>
                             </div>
                             ${data.rsvp ? `<div class="ticket-stub"><div class="qr-code"><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${uuid}" alt="QR Code"></div><p class="qr-code-label">Seu Acesso</p></div>` : ''}
                         </div>
                     </div>`;
-            } else {
+                if (data.rsvp) {
+                    actionsArea.innerHTML = `<div class="actions-container"><button id="print-pdf-btn" class="print-btn">🖨️ Salvar Convite em PDF</button></div>`;
+                }
+            } else { // Se ainda não respondeu
                 ticketOrRsvpArea.innerHTML = `
                     <div class="rsvp-form-container">
-                        <h2>Confirme sua Presença</h2>
-                        <div class="guest-names">${data.nome.replace(/;/g, ', ')}</div>
-                        <p>Por favor, confirme sua presença para nos ajudar na organização. O prazo é até 30/06/2025.</p>
+                        <h2>Confirmação de Presença</h2>
+                        <p>Para os noivos</p>
+                        <div class="guest-names">Elian & Keytiane</div>
+                        <p>Por favor, confirme se ${isPlural ? 'vocês poderão' : 'você poderá'} comparecer a este dia tão especial.<br><strong>Prazo para confirmação: 30/06/2025.</strong></p>
                         <div class="rsvp-buttons">
-                            <button class="rsvp-btn btn-confirm" data-response="true">✅ Sim, estaremos lá!</button>
-                            <button class="rsvp-btn btn-decline" data-response="false">❌ Infelizmente, não poderemos ir</button>
+                            <button class="rsvp-btn btn-confirm" data-response="true">✅ Sim, ${isPlural ? 'estaremos' : 'estarei'} lá!</button>
+                            <button class="rsvp-btn btn-decline" data-response="false">❌ Infelizmente, não ${isPlural ? 'poderemos' : 'poderei'} ir</button>
                         </div>
                     </div>`;
-                
                 document.querySelectorAll('.rsvp-btn').forEach(button => {
                     button.addEventListener('click', (e) => {
                         const response = e.target.dataset.response === 'true';
-                        const report = generateReport(data.nome, response);
-                        sendToTelegram(report);
+                        sendToTelegram(generateReport(data.nome, response));
                         database.ref('convidados/' + uuid).update({ rsvp: response });
                         alert('Obrigado por confirmar!');
-                        // A página irá recarregar automaticamente por causa do listener do Firebase.
                     });
                 });
             }
 
             const accordionContainer = document.getElementById('info-accordion');
             accordionContainer.innerHTML = `
-                <div class="accordion-item"><div class="accordion-header"><span class="icon">⛪</span>Informações da Cerimônia<span class="arrow">▼</span></div><div class="accordion-content"><p><strong>Local:</strong> Igreja do Sagrado Coração de Jesus<br><strong>Endereço:</strong> R. Silva Campos - Centro, Parintins - AM<br><strong>Horário:</strong> 18:30</p><p><a href="https://maps.app.goo.gl/ZXFqEyJoepWR39HV7" target="_blank">Ver no mapa</a></p></div></div>
-                <div class="accordion-item"><div class="accordion-header"><span class="icon">🎉</span>Informações da Festa<span class="arrow">▼</span></div><div class="accordion-content"><p><strong>Local:</strong> Kwati Villa<br><strong>Endereço:</strong> Av. Paulo Teixeira - Sta. Rita de Cassia, Parintins - AM<br><strong>Horário:</strong> Logo após a cerimônia.</p><p><a href="https://maps.app.goo.gl/dx9ByZR7nKrHY7hb8" target="_blank">Ver no mapa</a></p></div></div>
-                <div class="accordion-item"><div class="accordion-header"><span class="icon">👗</span>Vestimenta (Dress Code)<span class="arrow">▼</span></div><div class="accordion-content"><p>O traje recomendado é <strong>Esporte Fino</strong>.</p><p>🤵‍♂️ O noivo usará um terno azul marinho.</p><p>👗 As madrinhas usarão vestidos na cor verde oliva.</p><p>🕴️ Os padrinhos estarão de terno cinza.</p><p>✨ Por isso, pedimos com carinho que os convidados evitem roupas nessas cores (azul marinho, verde oliva e cinza), para preservar o destaque especial dos nossos padrinhos e madrinhas.</p><p>🔹 Traje dos convidados: Social</p><p>Agradecemos desde já pela compreensão e por fazerem parte desse dia tão especial para nós!</p></div></div>
-                <div class="accordion-item"><div class="accordion-header"><span class="icon">✈️</span>Viagem e Hospedagem<span class="arrow">▼</span></div><div class="accordion-content"><p>${data.viagem || "Nenhuma informação de viagem personalizada cadastrada."}</p><p>${data.hospedagem || "Nenhuma informação de hospedagem personalizada cadastrada."}</p></div></div>
+                <div class="accordion-item"><div class="accordion-header"><span class="icon">⛪</span>Informações da Cerimônia<span class="arrow">▼</span></div><div class="accordion-content"><p><strong>Local:</strong> Igreja do Sagrado Coração de Jesus<br><strong>Endereço:</strong> R. Silva Campos - Centro, Parintins - AM<br><strong>Horário:</strong> 18:30</p><p><a href="https://maps.app.goo.gl/ZXFqEyJoepWR39HV7" target="_blank">Ver no mapa »</a></p></div></div>
+                <div class="accordion-item"><div class="accordion-header"><span class="icon">🎉</span>Informações da Festa<span class="arrow">▼</span></div><div class="accordion-content"><p><strong>Local:</strong> Kwati Villa<br><strong>Endereço:</strong> Av. Paulo Teixeira - Sta. Rita de Cassia, Parintins - AM<br><strong>Horário:</strong> Logo após a cerimônia.</p><p><a href="https://maps.app.goo.gl/dx9ByZR7nKrHY7hb8" target="_blank">Ver no mapa »</a></p></div></div>
+                <div class="accordion-item"><div class="accordion-header"><span class="icon">👗</span>Traje Sugerido (Dress Code)<span class="arrow">▼</span></div><div class="accordion-content">
+                    <p>O traje recomendado é <strong>Esporte Fino</strong>.</p>
+                    <p>🤵‍♂️ O noivo usará um terno azul marinho.</p>
+                    <p>👗 As madrinhas usarão vestidos na cor verde oliva.</p>
+                    <p>🕴️ Os padrinhos estarão de terno cinza.</p>
+                    <p>✨ Por isso, pedimos com carinho que os convidados evitem roupas nessas cores (azul marinho, verde oliva e cinza), para preservar o destaque especial dos nossos padrinhos e madrinhas.</p>
+                    <p>🔹 Traje dos convidados: Social</p>
+                    <p>Agradecemos desde já pela compreensão e por fazerem parte desse dia tão especial para nós!</p>
+                </div></div>
+                <div class="accordion-item"><div class="accordion-header"><span class="icon">✈️</span>Viagem e Hospedagem<span class="arrow">▼</span></div><div class="accordion-content"><p>${data.viagem || "Nenhuma informação de viagem personalizada foi cadastrada para você."}</p><p>${data.hospedagem || "Nenhuma informação de hospedagem personalizada foi cadastrada para você."}</p></div></div>
             `;
 
             document.querySelectorAll('.accordion-header').forEach(header => {
                 header.addEventListener('click', () => {
                     const item = header.parentElement;
                     const content = item.querySelector('.accordion-content');
-                    if (item.classList.contains('active')) {
-                        item.classList.remove('active');
-                        content.style.maxHeight = null;
-                    } else {
-                        const openItem = document.querySelector('.accordion-item.active');
-                        if (openItem) {
-                            openItem.classList.remove('active');
-                            openItem.querySelector('.accordion-content').style.maxHeight = null;
-                        }
-                        item.classList.add('active');
-                        content.style.maxHeight = content.scrollHeight + 'px';
-                    }
+                    item.classList.toggle('active');
+                    content.style.maxHeight = item.classList.contains('active') ? content.scrollHeight + 'px' : null;
                 });
             });
+
+            const printBtn = document.getElementById('print-pdf-btn');
+            if (printBtn) {
+                printBtn.addEventListener('click', () => {
+                    printBtn.textContent = 'Gerando PDF...';
+                    printBtn.disabled = true;
+                    
+                    const elementToPrint = document.getElementById('printable-area');
+                    const clone = elementToPrint.cloneNode(true);
+                    
+                    // Expande todos os acordeões no clone para que o conteúdo seja impresso
+                    clone.querySelectorAll('.accordion-item').forEach(item => {
+                        item.classList.add('active');
+                        const content = item.querySelector('.accordion-content');
+                        content.style.maxHeight = 'none'; // Remove a restrição de altura
+                    });
+                    
+                    const opt = {
+                        margin: 0.5,
+                        filename: 'Convite-Casamento-Elian&Keytiane.pdf',
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true },
+                        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                    };
+                    
+                    html2pdf().set(opt).from(clone).save().finally(() => {
+                        printBtn.textContent = '🖨️ Salvar Convite em PDF';
+                        printBtn.disabled = false;
+                    });
+                });
+            }
         }
     </script>
 </body>
