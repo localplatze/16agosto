@@ -8,140 +8,145 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;400;500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-    <script src="https://sdk.mercadopago.com/js/v2"></script>
-<style>
-    :root {
-        --cover-color: #192a56;
-        --gold-color: #D4AF37;
-        --white-color: #FFFFFF;
-        --paper-color: #f8f8f8;
-        --font-title: 'Playfair Display', serif;
-        --font-body: 'Montserrat', sans-serif;
-        --font-cursive: 'Dancing Script', cursive;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { font-family: var(--font-body); overflow-x: hidden; background-color: #2c3e50; }
-    #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('bg_splash.png'); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 1000; transition: visibility 0s 1.5s, opacity 1.5s ease-in-out; }
-    .book-container { perspective: 2500px; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
-    .open-instruction { margin-top: 25px; color: var(--cover-color); font-family: var(--font-body); font-size: 1rem; text-align: center; opacity: 0.8; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); font-weight: 300; }
-    .book { width: 380px; height: 550px; position: relative; transform-style: preserve-3d; transition: transform 1.5s ease-in-out; transform: rotateY(-25deg); }
-    .page-edge { position: absolute; top: 5px; right: 0; width: 100%; height: calc(100% - 10px); background: linear-gradient(to right, #e8e8e8, #ffffff); border-radius: 0 3px 3px 0; transform-origin: left center; }
-    .page-edge:nth-child(1) { transform: translate3d(0, 0, -5px); } .page-edge:nth-child(2) { transform: translate3d(0, 0, -10px); } .page-edge:nth-child(3) { transform: translate3d(0, 0, -15px); } .page-edge:nth-child(4) { transform: translate3d(0, 0, -20px); } .page-edge:nth-child(5) { transform: translate3d(0, 0, -25px); } .page-edge:nth-child(6) { transform: translate3d(0, 0, -30px); } .page-edge:nth-child(7) { transform: translate3d(0, 0, -35px); } .page-edge:nth-child(8) { transform: translate3d(0, 0, -40px); } .page-edge:nth-child(9) { transform: translate3d(0, 0, -45px); } .page-edge:nth-child(10) { transform: translate3d(0, 0, -50px); }
-    .spine { position: absolute; width: 55px; height: 100%; background: #101a35; left: -55px; top: 0; transform: rotateY(-90deg); transform-origin: right center; border-right: 2px solid var(--gold-color); }
-    .cover-flipper { width: 100%; height: 100%; position: absolute; transform-origin: left center; transform-style: preserve-3d; transition: transform 2.5s cubic-bezier(0.65, 0, 0.35, 1); z-index: 10; }
-    .cover-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; }
-    .cover-face-front { background: linear-gradient(145deg, rgba(25, 42, 86, 0.95), rgba(47, 54, 64, 0.9)), url('https://www.transparenttextures.com/patterns/satin-weave.png'); background-blend-mode: overlay; border-radius: 2px 8px 8px 2px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; border: 1px solid var(--gold-color); }
-    .cover-content { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; text-align: center; padding: 40px 20px; position: relative; overflow: hidden; }
-    .couple-photo { position: absolute; bottom: 0; left: 0; width: 100%; height: 160px; background: url('capa_ring.jpg') center center / cover no-repeat; border-top-right-radius: 110px; border-top: 4px solid var(--gold-color); border-right: 4px solid var(--gold-color); box-shadow: 5px -5px 20px rgba(0,0,0,0.4); }
-    .floral-divider { width: 60%; height: 20px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" fill="%23D4AF37"><path d="M10 5c2 0 4-2 4-4s-2-4-4-4-4 2-4 4 2 4 4 4zm30 0c2 0 4-2 4-4s-2-4-4-4-4 2-4 4 2 4 4 4zm30 0c2 0 4-2 4-4s-2-4-4-4-4 2-4 4 2 4 4 4zm-60 10c2 0 4-2 4-4s-2-4-4-4-4 2-4 4 2 4 4 4zm30 0c2 0 4-2 4-4s-2-4-4-4-4 2-4 4 2 4 4 4zm30 0c2 0 4-2 4-4s-2-4-4-4-4 2-4 4 2 4 4 4z"/></svg>'); background-repeat: repeat-x; background-position: center; margin: 4px 0; opacity: 0.8; }
-    .couple-monogram { width: 60px; height: 60px; background-color: var(--gold-color); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); border: 2px solid var(--white-color); }
-    .monogram-image { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
-    .cover-title { font-family: var(--font-title); font-size: 2.5rem; color: var(--gold-color); text-shadow: 2px 2px 4px rgba(0,0,0,0.5); letter-spacing: 1px; font-weight: 700; margin: 2px 0; }
-    .cover-subtitle { font-size: 0.9rem; color: var(--white-color); font-weight: 300; letter-spacing: 1px; opacity: 0.9; margin-top: 8px; margin-bottom: 8px; }
-    .cover-face-back { background-color: #e9e9e9; border-radius: 2px 15px 15px 2px; transform: rotateY(180deg); border-left: 1px solid var(--gold-color); }
-    .first-page { position: absolute; width: 100%; height: 100%; background-color: var(--paper-color); background-image: url('https://www.transparenttextures.com/patterns/light-paper-fibers.png'); border-radius: 2px 5px 5px 2px; box-shadow: inset 5px 0 15px -5px rgba(0,0,0,0.1); z-index: 5; overflow: hidden; }
-    .preview-container { width: 100%; height: 100%; background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('IMG_7774.jpg'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; padding: 20px; }
-    .preview-container h1 { font-family: var(--font-title); font-size: 2rem; text-shadow: 1px 1px 4px #000; }
-    .preview-container p { font-size: 1rem; margin-top: 10px; text-shadow: 1px 1px 3px #000; }
-    #splash-screen.open .book { transform: translateX(50%); }
-    #splash-screen.open .cover-flipper { transform: rotateY(-170deg); }
-    #splash-screen.zooming { background: transparent; backdrop-filter: none; }
-    #splash-screen.zooming .book-container { transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s 0.5s; transform: scale(6); opacity: 0; }
-    #splash-screen.hidden { opacity: 0; visibility: hidden; }
-    #main-content { position: relative; height: 100vh; width: 100%; background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('IMG_7774.jpg'); background-size: cover; background-position: center; color: white; display: none; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 1.5s 0.5s ease-in-out; }
-    #main-content.visible { display: flex; opacity: 1; }
-    .main-layout { display: flex; justify-content: space-between; align-items: center; width: 80%; max-width: 1200px; }
-    .center-content { text-align: center; flex-shrink: 0; }
-    .center-content h1 { font-family: var(--font-title); font-size: 3rem; text-shadow: 2px 2px 8px #000; margin-bottom: 20px; }
-    #countdown { display: flex; justify-content: center; gap: 20px; margin: 30px 0; }
-    .timer-unit { text-align: center; }
-    .timer-unit span { display: block; font-family: var(--font-title); font-size: 3.5rem; color: var(--gold-color); text-shadow: 2px 2px 6px rgba(0,0,0,0.7); line-height: 1; }
-    .timer-unit label { display: block; font-family: var(--font-body); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(255, 255, 255, 0.8); margin-top: 5px; }
-    .wedding-date { font-size: 1.5rem; margin-top: 20px; letter-spacing: 1px; font-weight: 300; }
-    .nav-links { display: flex; flex-direction: column; gap: 25px; }
-    .nav-links a { color: var(--white-color); text-decoration: none; font-family: var(--font-body); font-size: 1.1rem; font-weight: 400; letter-spacing: 1px; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); transition: color 0.3s ease, transform 0.3s ease; }
-    .nav-links a:hover { color: var(--gold-color); transform: scale(1.1); }
-    .bottom-container { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 20px; z-index: 20; }
-    .invite-button { display: none; padding: 12px 28px; font-family: var(--font-body); font-size: 1rem; font-weight: 500; color: var(--cover-color); background-color: var(--gold-color); border: none; border-radius: 8px; cursor: pointer; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: background-color 0.3s ease, transform 0.3s ease; }
-    .invite-button:hover { background-color: #e6c567; transform: translateY(-2px); }
-    .scroll-down-arrow { width: 30px; height: 30px; animation: bounce 2s infinite; cursor: pointer; }
-    .scroll-down-arrow::before, .scroll-down-arrow::after { content: ''; position: absolute; top: 50%; left: 50%; border-right: 2px solid var(--white-color); border-bottom: 2px solid var(--white-color); width: 15px; height: 15px; }
-    .scroll-down-arrow::before { transform: translate(-50%, -75%) rotate(45deg); opacity: 0.5; }
-    .scroll-down-arrow::after { transform: translate(-50%, -25%) rotate(45deg); }
-    @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-15px); } 60% { transform: translateY(-8px); } }
-    .content-section { padding: 120px 10%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: var(--cover-color); }
-    .content-section:nth-of-type(odd) { background-color: var(--paper-color); }
-    .content-section:nth-of-type(even) { background-color: #e9e9e9; }
-    .content-section h2 { font-family: var(--font-title); font-size: 2.8rem; color: var(--gold-color); text-shadow: 1px 1px 2px rgba(0,0,0,0.1); margin-bottom: 40px; position: relative; }
-    .content-section h2::after { content: ''; display: block; width: 80px; height: 2px; background: var(--gold-color); margin: 15px auto 0; }
-    .content-section p, .content-section .placeholder-text { font-size: 1.1rem; line-height: 1.8; max-width: 700px; margin: 0 auto 40px auto; }
-    #noivos.content-section { padding: 0; }
-    .story-banner { width: 100%; height: 50vh; background-size: cover; background-position: center; background-attachment: fixed; display: flex; justify-content: center; align-items: center; color: var(--white-color); position: relative; }
-    .story-banner::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); }
-    .story-banner h1 { font-family: var(--font-title); font-size: 3.5rem; text-shadow: 2px 2px 8px rgba(0,0,0,0.8); z-index: 2; }
-    .noivos-intro-text { background-color: var(--paper-color); padding: 80px 15%; text-align: center; }
-    .noivos-intro-text h2 { font-family: var(--font-title); font-size: 2.5rem; color: var(--cover-color); }
-    .noivos-intro-text p { font-size: 1.2rem; color: #555; margin-top: 5px; }
-    .noivos-profiles { display: flex; justify-content: center; gap: 5rem; padding: 80px 15%; background-color: var(--paper-color); flex-wrap: wrap; }
-    .profile-card { text-align: center; max-width: 280px; }
-    .profile-photo { width: 180px; height: 180px; border-radius: 50%; object-fit: cover; border: 5px solid var(--gold-color); box-shadow: 0 5px 15px rgba(0,0,0,0.15); margin-bottom: 20px; }
-    .profile-name { font-family: var(--font-cursive); font-size: 2.8rem; color: var(--cover-color); font-weight: 700; margin-bottom: 10px; }
-    .profile-description { font-size: 1rem; line-height: 1.6; color: #666; }
-    .our-story-text { padding: 80px 15%; background-color: var(--paper-color); font-size: 1.1rem; line-height: 1.8; max-width: 800px; margin: 0 auto; color: var(--cover-color); text-align: justify; }
-    #music-toggle-btn { position: fixed; bottom: 25px; right: 25px; width: 50px; height: 50px; background-color: #000; border: none; border-radius: 50px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 999; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: transform 0.2s ease; display: none; }
-    #music-toggle-btn:hover { transform: scale(1.1); }
-    #music-toggle-btn svg { width: 20px; height: 20px; fill: white; }
-    .icon-pause, .icon-play { display: none; }
-    #music-toggle-btn.playing .icon-pause { display: block; }
-    #music-toggle-btn.paused .icon-play { display: block; }
-    .sub-section { width: 100%; margin-bottom: 80px; }
-    .sub-section-title { font-family: var(--font-title); font-size: 2.2rem; color: var(--cover-color); margin-bottom: 10px; font-weight: 700; }
-    .sub-section-description { font-size: 1.1rem; color: #555; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6; }
-    .people-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem 1.5rem; width: 100%; }
-    .person-card { text-align: center; flex-basis: 28%; max-width: 220px; display: flex; flex-direction: column; align-items: center; }
-    .person-photo { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); margin-bottom: 15px; transition: transform 0.3s ease, box-shadow 0.3s ease; }
-    .person-card:hover .person-photo { transform: scale(1.05); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); }
-    .person-name { font-family: var(--font-cursive); font-size: 2.2rem; color: var(--cover-color); font-weight: 700; line-height: 1.2; margin-bottom: 5px; }
-    .person-role { font-size: 0.9rem; color: #777; font-weight: 500; }
-    .tribute-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; }
-    .tribute-card { text-align: center; max-width: 280px; }
-    .tribute-photo { width: 250px; height: 250px; object-fit: cover; border-radius: 8px; border: 5px solid #fff; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); margin-bottom: 15px; }
-    .final-thanks { margin-top: 60px; font-family: var(--font-title); font-size: 1.5rem; color: var(--gold-color); text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
-    .gift-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; width: 100%; max-width: 1200px; margin-top: 40px; }
-    .gift-card { background-color: #fff; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.08); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; }
-    .gift-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0,0,0,0.12); }
-    .gift-image { width: 100%; height: 180px; object-fit: cover; background-color: #f0f0f0; }
-    .gift-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-    .gift-title { font-family: var(--font-body); font-size: 1rem; font-weight: 500; color: var(--cover-color); line-height: 1.4; min-height: 56px; }
-    .gift-price { font-family: var(--font-title); font-size: 1.5rem; color: var(--cover-color); margin: 15px 0; }
-    .gift-button { display: inline-block; width: 100%; padding: 12px 20px; background-color: var(--gold-color); color: var(--cover-color); border: none; border-radius: 8px; font-weight: 500; text-align: center; cursor: pointer; text-decoration: none; transition: background-color 0.3s ease; }
-    .gift-button:hover { background-color: #c5a030; }
-    .gift-button.symbolic { background-color: #b0b0b0; color: #fff; }
-    .custom-gift-box { width: 100%; max-width: 600px; margin-top: 80px; padding: 40px; background-color: #fff; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.08); text-align: center; }
-    .custom-gift-box h3 { font-family: var(--font-title); font-size: 1.8rem; color: var(--cover-color); margin-bottom: 15px; }
-    .custom-gift-box input[type="number"] { width: 100%; max-width: 200px; margin: 15px auto; display: block; padding: 10px; border-radius: 6px; border: 1px solid #ccc; text-align: center; font-size: 1.2rem; }
-    #mensagens { width: 100%; }
-    .message-form-container { width: 100%; max-width: 700px; background-color: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.08); margin-bottom: 60px; }
-    .message-form-container input, .message-form-container textarea { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ddd; font-family: var(--font-body); font-size: 1rem; }
-    .message-form-container textarea { min-height: 120px; resize: vertical; }
-    .message-form-container button { width: 100%; padding: 15px; font-size: 1.1rem; background-color: var(--gold-color); color: var(--cover-color); border: none; border-radius: 8px; cursor: pointer; font-weight: 500; transition: background-color 0.3s ease; }
-    .message-form-container button:hover { background-color: #c5a030; }
-    #message-board { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 20px; }
-    .message-card { background-color: #fff; padding: 25px; border-radius: 12px; text-align: left; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 5px solid var(--gold-color); }
-    .message-text { font-size: 1rem; line-height: 1.7; color: #333; margin-bottom: 15px; }
-    .message-author { font-weight: 500; font-style: italic; color: var(--cover-color); }
-    #pre-payment-dialog { padding: 30px; border-radius: 12px; border: none; box-shadow: 0 5px 25px rgba(0,0,0,0.2); text-align: center; max-width: 450px; margin: auto; }
-    #pre-payment-dialog h3 { color: var(--cover-color); font-family: var(--font-title); margin-top: 0; margin-bottom: 20px; }
-    #pre-payment-dialog p { font-size: 1rem; margin-bottom: 10px; }
-    #pre-payment-dialog input[type="text"], #pre-payment-dialog textarea { display: block; width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
-    #pre-payment-dialog button { width: 100%; padding: 15px; font-size: 1.1rem; background-color: var(--gold-color); color: var(--cover-color); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 10px; }
-    #pre-payment-dialog label { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; font-size: 0.9rem; cursor: pointer; }
-    #cancel-payment { background-color: #bdc3c7 !important; color: #2c3e50 !important; }
-    
-    @media (max-width: 1024px) { .person-card { flex-basis: 40%; } }
-    @media (max-width: 768px) { .main-layout { flex-direction: column; width: 95%; } .center-content { order: 1; margin: 40px 0; } .nav-links { order: 2; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 20px; } .nav-links.nav-left, .nav-links.nav-right { width: 100%; } .content-section, .noivos-intro-text, .noivos-profiles, .our-story-text { padding-left: 5%; padding-right: 5%; } .story-banner h1 { font-size: 2.5rem; } .noivos-profiles { gap: 3rem; } }
-    @media (max-width: 600px) { .person-card { flex-basis: 80%; max-width: none; } .person-photo { width: 180px; height: 180px; } .person-name { font-size: 2.5rem; } }
+    <style>
+        :root {
+            --cover-color: #192a56;
+            --gold-color: #D4AF37;
+            --white-color: #FFFFFF;
+            --paper-color: #f8f8f8;
+            --font-title: 'Playfair Display', serif;
+            --font-body: 'Montserrat', sans-serif;
+            --font-cursive: 'Dancing Script', cursive;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font-body); overflow-x: hidden; background-color: #2c3e50; }
+        /* Todos os seus estilos anteriores (splash, livro, seções, etc) */
+        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('bg_splash.png'); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 1000; transition: visibility 0s 1.5s, opacity 1.5s ease-in-out; }
+        .book-container { perspective: 2500px; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+        .open-instruction { margin-top: 25px; color: var(--cover-color); font-family: var(--font-body); font-size: 1rem; text-align: center; opacity: 0.8; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); font-weight: 300; }
+        .book { width: 380px; height: 550px; position: relative; transform-style: preserve-3d; transition: transform 1.5s ease-in-out; transform: rotateY(-25deg); }
+        .page-edge { position: absolute; top: 5px; right: 0; width: 100%; height: calc(100% - 10px); background: linear-gradient(to right, #e8e8e8, #ffffff); border-radius: 0 3px 3px 0; transform-origin: left center; }
+        .page-edge:nth-child(1) { transform: translate3d(0, 0, -5px); } .page-edge:nth-child(2) { transform: translate3d(0, 0, -10px); } .page-edge:nth-child(3) { transform: translate3d(0, 0, -15px); } .page-edge:nth-child(4) { transform: translate3d(0, 0, -20px); } .page-edge:nth-child(5) { transform: translate3d(0, 0, -25px); } .page-edge:nth-child(6) { transform: translate3d(0, 0, -30px); } .page-edge:nth-child(7) { transform: translate3d(0, 0, -35px); } .page-edge:nth-child(8) { transform: translate3d(0, 0, -40px); } .page-edge:nth-child(9) { transform: translate3d(0, 0, -45px); } .page-edge:nth-child(10) { transform: translate3d(0, 0, -50px); }
+        .spine { position: absolute; width: 55px; height: 100%; background: #101a35; left: -55px; top: 0; transform: rotateY(-90deg); transform-origin: right center; border-right: 2px solid var(--gold-color); }
+        .cover-flipper { width: 100%; height: 100%; position: absolute; transform-origin: left center; transform-style: preserve-3d; transition: transform 2.5s cubic-bezier(0.65, 0, 0.35, 1); z-index: 10; }
+        .cover-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; }
+        .cover-face-front { background: linear-gradient(145deg, rgba(25, 42, 86, 0.95), rgba(47, 54, 64, 0.9)), url('https://www.transparenttextures.com/patterns/satin-weave.png'); background-blend-mode: overlay; border-radius: 2px 8px 8px 2px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; border: 1px solid var(--gold-color); }
+        .cover-content { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; text-align: center; padding: 40px 20px; position: relative; overflow: hidden; }
+        .couple-photo { position: absolute; bottom: 0; left: 0; width: 100%; height: 160px; background: url('capa_ring.jpg') center center / cover no-repeat; border-top-right-radius: 110px; border-top: 4px solid var(--gold-color); border-right: 4px solid var(--gold-color); box-shadow: 5px -5px 20px rgba(0,0,0,0.4); }
+        .floral-divider { width: 60%; height: 20px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" fill="%23D4AF37"><path d="M10 5c2 0 4-2 4-4s-2-4-4-4-4 2-4 4 2 4 4 4zm30 0c2 0 4-2 4-4s-2-4-4-4-4 2-4 4 2 4 4 4zm30 0c2 0 4-2 4-4s-2-4-4-4-4 2-4 4 2 4 4 4zm-60 10c2 0 4-2 4-4s-2-4-4-4-4 2-4 4 2 4 4 4zm30 0c2 0 4-2 4-4s-2-4-4-4-4 2-4 4 2 4 4 4zm30 0c2 0 4-2 4-4s-2-4-4-4-4 2-4 4 2 4 4 4z"/></svg>'); background-repeat: repeat-x; background-position: center; margin: 4px 0; opacity: 0.8; }
+        .couple-monogram { width: 60px; height: 60px; background-color: var(--gold-color); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); border: 2px solid var(--white-color); }
+        .monogram-image { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+        .cover-title { font-family: var(--font-title); font-size: 2.5rem; color: var(--gold-color); text-shadow: 2px 2px 4px rgba(0,0,0,0.5); letter-spacing: 1px; font-weight: 700; margin: 2px 0; }
+        .cover-subtitle { font-size: 0.9rem; color: var(--white-color); font-weight: 300; letter-spacing: 1px; opacity: 0.9; margin-top: 8px; margin-bottom: 8px; }
+        .cover-face-back { background-color: #e9e9e9; border-radius: 2px 15px 15px 2px; transform: rotateY(180deg); border-left: 1px solid var(--gold-color); }
+        .first-page { position: absolute; width: 100%; height: 100%; background-color: var(--paper-color); background-image: url('https://www.transparenttextures.com/patterns/light-paper-fibers.png'); border-radius: 2px 5px 5px 2px; box-shadow: inset 5px 0 15px -5px rgba(0,0,0,0.1); z-index: 5; overflow: hidden; }
+        .preview-container { width: 100%; height: 100%; background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('IMG_7774.jpg'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; padding: 20px; }
+        .preview-container h1 { font-family: var(--font-title); font-size: 2rem; text-shadow: 1px 1px 4px #000; }
+        .preview-container p { font-size: 1rem; margin-top: 10px; text-shadow: 1px 1px 3px #000; }
+        #splash-screen.open .book { transform: translateX(50%); }
+        #splash-screen.open .cover-flipper { transform: rotateY(-170deg); }
+        #splash-screen.zooming { background: transparent; backdrop-filter: none; }
+        #splash-screen.zooming .book-container { transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s 0.5s; transform: scale(6); opacity: 0; }
+        #splash-screen.hidden { opacity: 0; visibility: hidden; }
+        #main-content { position: relative; height: 100vh; width: 100%; background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('IMG_7774.jpg'); background-size: cover; background-position: center; color: white; display: none; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 1.5s 0.5s ease-in-out; }
+        #main-content.visible { display: flex; opacity: 1; }
+        .main-layout { display: flex; justify-content: space-between; align-items: center; width: 80%; max-width: 1200px; }
+        .center-content { text-align: center; flex-shrink: 0; }
+        .center-content h1 { font-family: var(--font-title); font-size: 3rem; text-shadow: 2px 2px 8px #000; margin-bottom: 20px; }
+        #countdown { display: flex; justify-content: center; gap: 20px; margin: 30px 0; }
+        .timer-unit { text-align: center; }
+        .timer-unit span { display: block; font-family: var(--font-title); font-size: 3.5rem; color: var(--gold-color); text-shadow: 2px 2px 6px rgba(0,0,0,0.7); line-height: 1; }
+        .timer-unit label { display: block; font-family: var(--font-body); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(255, 255, 255, 0.8); margin-top: 5px; }
+        .wedding-date { font-size: 1.5rem; margin-top: 20px; letter-spacing: 1px; font-weight: 300; }
+        .nav-links { display: flex; flex-direction: column; gap: 25px; }
+        .nav-links a { color: var(--white-color); text-decoration: none; font-family: var(--font-body); font-size: 1.1rem; font-weight: 400; letter-spacing: 1px; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); transition: color 0.3s ease, transform 0.3s ease; }
+        .nav-links a:hover { color: var(--gold-color); transform: scale(1.1); }
+        .bottom-container { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 20px; z-index: 20; }
+        .invite-button { display: none; padding: 12px 28px; font-family: var(--font-body); font-size: 1rem; font-weight: 500; color: var(--cover-color); background-color: var(--gold-color); border: none; border-radius: 8px; cursor: pointer; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: background-color 0.3s ease, transform 0.3s ease; }
+        .invite-button:hover { background-color: #e6c567; transform: translateY(-2px); }
+        .scroll-down-arrow { width: 30px; height: 30px; animation: bounce 2s infinite; cursor: pointer; }
+        .scroll-down-arrow::before, .scroll-down-arrow::after { content: ''; position: absolute; top: 50%; left: 50%; border-right: 2px solid var(--white-color); border-bottom: 2px solid var(--white-color); width: 15px; height: 15px; }
+        .scroll-down-arrow::before { transform: translate(-50%, -75%) rotate(45deg); opacity: 0.5; }
+        .scroll-down-arrow::after { transform: translate(-50%, -25%) rotate(45deg); }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-15px); } 60% { transform: translateY(-8px); } }
+        .content-section { padding: 120px 10%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: var(--cover-color); }
+        .content-section:nth-of-type(odd) { background-color: var(--paper-color); }
+        .content-section:nth-of-type(even) { background-color: #e9e9e9; }
+        .content-section h2 { font-family: var(--font-title); font-size: 2.8rem; color: var(--gold-color); text-shadow: 1px 1px 2px rgba(0,0,0,0.1); margin-bottom: 40px; position: relative; }
+        .content-section h2::after { content: ''; display: block; width: 80px; height: 2px; background: var(--gold-color); margin: 15px auto 0; }
+        .content-section p, .content-section .placeholder-text { font-size: 1.1rem; line-height: 1.8; max-width: 700px; margin: 0 auto 40px auto; }
+        #noivos.content-section { padding: 0; }
+        .story-banner { width: 100%; height: 50vh; background-size: cover; background-position: center; background-attachment: fixed; display: flex; justify-content: center; align-items: center; color: var(--white-color); position: relative; }
+        .story-banner::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); }
+        .story-banner h1 { font-family: var(--font-title); font-size: 3.5rem; text-shadow: 2px 2px 8px rgba(0,0,0,0.8); z-index: 2; }
+        .noivos-intro-text { background-color: var(--paper-color); padding: 80px 15%; text-align: center; }
+        .noivos-intro-text h2 { font-family: var(--font-title); font-size: 2.5rem; color: var(--cover-color); }
+        .noivos-intro-text p { font-size: 1.2rem; color: #555; margin-top: 5px; }
+        .noivos-profiles { display: flex; justify-content: center; gap: 5rem; padding: 80px 15%; background-color: var(--paper-color); flex-wrap: wrap; }
+        .profile-card { text-align: center; max-width: 280px; }
+        .profile-photo { width: 180px; height: 180px; border-radius: 50%; object-fit: cover; border: 5px solid var(--gold-color); box-shadow: 0 5px 15px rgba(0,0,0,0.15); margin-bottom: 20px; }
+        .profile-name { font-family: var(--font-cursive); font-size: 2.8rem; color: var(--cover-color); font-weight: 700; margin-bottom: 10px; }
+        .profile-description { font-size: 1rem; line-height: 1.6; color: #666; }
+        .our-story-text { padding: 80px 15%; background-color: var(--paper-color); font-size: 1.1rem; line-height: 1.8; max-width: 800px; margin: 0 auto; color: var(--cover-color); text-align: justify; }
+        #music-toggle-btn { position: fixed; bottom: 25px; right: 25px; width: 50px; height: 50px; background-color: #000; border: none; border-radius: 50px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 999; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: transform 0.2s ease; display: none; }
+        #music-toggle-btn:hover { transform: scale(1.1); }
+        #music-toggle-btn svg { width: 20px; height: 20px; fill: white; }
+        .icon-pause, .icon-play { display: none; }
+        #music-toggle-btn.playing .icon-pause { display: block; }
+        #music-toggle-btn.paused .icon-play { display: block; }
+        .sub-section { width: 100%; margin-bottom: 80px; }
+        .sub-section-title { font-family: var(--font-title); font-size: 2.2rem; color: var(--cover-color); margin-bottom: 10px; font-weight: 700; }
+        .sub-section-description { font-size: 1.1rem; color: #555; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+        .people-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem 1.5rem; width: 100%; }
+        .person-card { text-align: center; flex-basis: 28%; max-width: 220px; display: flex; flex-direction: column; align-items: center; }
+        .person-photo { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); margin-bottom: 15px; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .person-card:hover .person-photo { transform: scale(1.05); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); }
+        .person-name { font-family: var(--font-cursive); font-size: 2.2rem; color: var(--cover-color); font-weight: 700; line-height: 1.2; margin-bottom: 5px; }
+        .person-role { font-size: 0.9rem; color: #777; font-weight: 500; }
+        .tribute-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; }
+        .tribute-card { text-align: center; max-width: 280px; }
+        .tribute-photo { width: 250px; height: 250px; object-fit: cover; border-radius: 8px; border: 5px solid #fff; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); margin-bottom: 15px; }
+        .final-thanks { margin-top: 60px; font-family: var(--font-title); font-size: 1.5rem; color: var(--gold-color); text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .gift-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; width: 100%; max-width: 1200px; margin-top: 40px; }
+        .gift-card { background-color: #fff; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.08); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .gift-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0,0,0,0.12); }
+        .gift-image { width: 100%; height: 180px; object-fit: cover; background-color: #f0f0f0; }
+        .gift-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .gift-title { font-family: var(--font-body); font-size: 1rem; font-weight: 500; color: var(--cover-color); line-height: 1.4; min-height: 56px; }
+        .gift-price { font-family: var(--font-title); font-size: 1.5rem; color: var(--cover-color); margin: 15px 0; }
+        .gift-button { display: inline-block; width: 100%; padding: 12px 20px; background-color: var(--gold-color); color: var(--cover-color); border: none; border-radius: 8px; font-weight: 500; text-align: center; cursor: pointer; text-decoration: none; transition: background-color 0.3s ease; }
+        .gift-button:hover { background-color: #c5a030; }
+        .gift-button.symbolic { background-color: #b0b0b0; color: #fff; }
+        .custom-gift-box { width: 100%; max-width: 600px; margin-top: 80px; padding: 40px; background-color: #fff; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.08); text-align: center; }
+        .custom-gift-box h3 { font-family: var(--font-title); font-size: 1.8rem; color: var(--cover-color); margin-bottom: 15px; }
+        .custom-gift-box input[type="number"] { width: 100%; max-width: 200px; margin: 15px auto; display: block; padding: 10px; border-radius: 6px; border: 1px solid #ccc; text-align: center; font-size: 1.2rem; }
+        .message-form-container { width: 100%; max-width: 700px; background-color: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.08); margin-bottom: 60px; }
+        .message-form-container input, .message-form-container textarea { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ddd; font-family: var(--font-body); font-size: 1rem; }
+        .message-form-container textarea { min-height: 120px; resize: vertical; }
+        .message-form-container button { width: 100%; padding: 15px; font-size: 1.1rem; background-color: var(--gold-color); color: var(--cover-color); border: none; border-radius: 8px; cursor: pointer; font-weight: 500; transition: background-color 0.3s ease; }
+        .message-form-container button:hover { background-color: #c5a030; }
+        
+        /* [NOVO] Estilos para o Mural de Carinho */
+        #mural { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 20px; margin-top: 40px;}
+        .mural-card { background-color: #fff; padding: 25px; border-radius: 12px; text-align: left; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 5px solid var(--gold-color); }
+        .mural-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .mural-icon { font-size: 1.8rem; }
+        .mural-title { font-weight: 600; color: var(--cover-color); }
+        .mural-author { font-style: italic; color: #555; }
+        .mural-message { font-size: 1rem; line-height: 1.7; color: #333; }
+
+        #pre-payment-dialog { padding: 30px; border-radius: 12px; border: none; box-shadow: 0 5px 25px rgba(0,0,0,0.2); text-align: center; max-width: 450px; margin: auto; }
+        #pre-payment-dialog h3 { color: var(--cover-color); font-family: var(--font-title); margin-top: 0; margin-bottom: 20px; }
+        #pre-payment-dialog p { font-size: 1rem; margin-bottom: 10px; }
+        #pre-payment-dialog input[type="text"], #pre-payment-dialog textarea { display: block; width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
+        #pre-payment-dialog button { width: 100%; padding: 15px; font-size: 1.1rem; background-color: var(--gold-color); color: var(--cover-color); border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 10px; }
+        #pre-payment-dialog label { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; font-size: 0.9rem; cursor: pointer; }
+        #cancel-payment { background-color: #bdc3c7 !important; color: #2c3e50 !important; }
+        
+        @media (max-width: 1024px) { .person-card { flex-basis: 40%; } }
+        @media (max-width: 768px) { .main-layout { flex-direction: column; width: 95%; } .center-content { order: 1; margin: 40px 0; } .nav-links { order: 2; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 20px; } .nav-links.nav-left, .nav-links.nav-right { width: 100%; } .content-section, .noivos-intro-text, .noivos-profiles, .our-story-text { padding-left: 5%; padding-right: 5%; } .story-banner h1 { font-size: 2.5rem; } .noivos-profiles { gap: 3rem; } }
+        @media (max-width: 600px) { .person-card { flex-basis: 80%; max-width: none; } .person-photo { width: 180px; height: 180px; } .person-name { font-size: 2.5rem; } }
 </style>
 </head>
 <body>
@@ -150,19 +155,34 @@
     <audio id="page-turn-sound"><source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_29388b7cfd.mp3?filename=page-turn-47209.mp3" type="audio/mpeg"></audio>
     <button id="music-toggle-btn" class="paused"> <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg> <svg class="icon-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg> </button>
     <div id="splash-screen"><div class="book-container"><div class="book"><div class="spine"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="page-edge"></div><div class="first-page"><div class="preview-container"><h1>Vamos nos casar!</h1><p>A contagem regressiva começa...</p></div></div><div class="cover-flipper"><div class="cover-face cover-face-front"><div class="cover-content"><div class="couple-monogram"><img src="icon.png" alt="Monograma E&K" class="monogram-image"></div><div class="floral-divider"></div><div class="cover-title">Elian<br>&<br>Keytiane</div><div class="cover-subtitle">O início do nosso para sempre</div><div class="floral-divider"></div><div class="couple-photo"></div></div></div><div class="cover-face cover-face-back"></div></div></div><p class="open-instruction">Toque no Livro para Abrir</p></div></div>
-    <div id="main-content"><div class="main-layout"><nav class="nav-links nav-left"><a href="#noivos">Os Noivos</a><a href="#padrinhos">Padrinhos e Homenagens</a></nav><div class="center-content"><h1>Elian & Keytiane</h1><div id="countdown"><div class="timer-unit"><span id="days">00</span><label>Dias</label></div><div class="timer-unit"><span id="hours">00</span><label>Horas</label></div><div class="timer-unit"><span id="minutes">00</span><label>Minutos</label></div><div class="timer-unit"><span id="seconds">00</span><label>Segundos</label></div></div><div class="wedding-date">16 de Agosto de 2025</div></div><nav class="nav-links nav-right"><a href="#presentes">Lista de Presentes</a><a href="#mensagens">Mensagens</a></nav></div><div class="bottom-container"><a href="convidado.html" id="inviteButton" class="invite-button">Ver Meu Convite</a><a href="#noivos" class="scroll-down-arrow"></a></div></div>
+    <div id="main-content"><div class="main-layout"><nav class="nav-links nav-left"><a href="#noivos">Os Noivos</a><a href="#padrinhos">Padrinhos e Homenagens</a></nav><div class="center-content"><h1>Elian & Keytiane</h1><div id="countdown"><div class="timer-unit"><span id="days">00</span><label>Dias</label></div><div class="timer-unit"><span id="hours">00</span><label>Horas</label></div><div class="timer-unit"><span id="minutes">00</span><label>Minutos</label></div><div class="timer-unit"><span id="seconds">00</span><label>Segundos</label></div></div><div class="wedding-date">16 de Agosto de 2025</div></div><nav class="nav-links nav-right"><a href="#presentes">Lista de Presentes</a><a href="#mensagens">Mural de Carinho</a></nav></div><div class="bottom-container"><a href="convidado.html" id="inviteButton" class="invite-button">Ver Meu Convite</a><a href="#noivos" class="scroll-down-arrow"></a></div></div>
     <section id="noivos" class="content-section"><div class="story-banner" style="background-image: url('kart.jpg');"><h1>Nossa História</h1></div><div class="noivos-intro-text"><h2>ERA UMA VEZ</h2><p>Os Noivos</p></div><div class="noivos-profiles"><div class="profile-card"><img src="noivo.jpg" alt="Foto do Noivo" class="profile-photo"><p class="profile-name">Elian</p><p class="profile-description">Aquele que encontrou seu grande amor onde menos esperava. O sonhador, o parceiro, pronto para construir uma vida inteira ao lado dela.</p></div><div class="profile-card"><img src="noiva2.jpg" alt="Foto da Noiva" class="profile-photo"><p class="profile-name">Keytiane</p><p class="profile-description">Aquela que viu nele o porto seguro e a promessa de um futuro feliz. A companheira, a inspiração, pronta para dizer "sim" para a eternidade.</p></div></div><div class="story-banner" style="background-image: url('home_bg.jpg');"><h1>Nossa Jornada</h1></div><div class="our-story-text"> <h2>Uma História Escrita com Fé e Amor</h2> <p> Duas pessoas se conheceram durante uma Mariápolis — um daqueles encontros que parecem simples à primeira vista, mas que o tempo mostra ter sido guiado por algo maior. Foi ali, em meio a momentos de partilha, reflexão e alegria, que nasceu uma amizade sincera, recheada de conversas sobre futebol, sorrisos espontâneos e a convivência no grupo de jovens JMV. <br><br> Com o passar dos meses, o que era amizade ganhou novos contornos. As afinidades se tornaram mais profundas, o carinho mais evidente, e o vínculo mais forte. Entre encontros, trocas de mensagens e partilhas de vida, foi florescendo um amor verdadeiro, daqueles que enfrentam distâncias, diferenças e desafios com coragem e perseverança. <br><br> Hoje, no ano de 2025, celebramos não apenas um casamento, mas a união de duas histórias que se entrelaçaram de maneira única. Selamos este compromisso com fé, com gratidão e com o coração cheio de esperança no futuro que estamos construindo juntos. Que este amor continue sendo luz, abrigo e inspiração, não só para nós, mas para todos que fazem parte da nossa caminhada. </p> </div> </section>
     <section id="padrinhos" class="content-section"><h2>Padrinhos e Homenagens</h2><p class="placeholder-text" style="max-width: 800px; margin-bottom: 80px;">Pessoas que amamos, que nos inspiram e que sempre estiveram ao nosso lado. É uma honra ter vocês participando tão de perto do nosso sonho. Conheçam os nomes que tornarão nosso grande dia ainda mais especial.</p><div class="sub-section"><h3 class="sub-section-title">Nossos Pais</h3><p class="sub-section-description">Nossa base, nosso exemplo, nosso porto seguro. A vocês, nossa eterna gratidão.</p><div class="people-grid"><div class="person-card"><img src="painoivo.jpg" alt="Pai do Noivo" class="person-photo"><p class="person-name">Eliseu Souza</p><p class="person-role">Pai do Noivo</p></div><div class="person-card"><img src="maenoivo.jpg" alt="Mãe do Noivo" class="person-photo"><p class="person-name">Maria das Dores</p><p class="person-role">Mãe do Noivo</p></div></div><div class="people-grid"><div class="person-card"><img src="painoiva.png" alt="Pai da Noiva" class="person-photo"><p class="person-name">Ennio Carlos</p><p class="person-role">Pai da Noiva</p></div><div class="person-card"><img src="maenoiva.jpg" alt="Mãe da Noiva" class="person-photo"><p class="person-name">Sílvia Cristina</p><p class="person-role">Mãe da Noiva</p></div></div></div><div class="sub-section"><h3 class="sub-section-title">Padrinhos e Madrinhas</h3><p class="sub-section-description">Escolhidos a dedo para testemunhar nossa união e nos guiar nesta nova jornada.</p><div class="people-grid"><div class="person-card"><img src="p3.jpg" alt="Padrinho" class="person-photo"><p class="person-name">Amilton Braga</p></div><div class="person-card"><img src="m2.jpg" alt="Madrinha" class="person-photo"><p class="person-name">Anna Clara</p></div><div class="person-card"><img src="https://placehold.co/180x180/2c3e50/FFFFFF?text=Padrinho" alt="Padrinho" class="person-photo"><p class="person-name">Emerson Michel</p></div><div class="person-card"><img src="m4.jpg" alt="Madrinha" class="person-photo"><p class="person-name">Bárbara Brenda</p></div><div class="person-card"><img src="p4.jpg" alt="Padrinho" class="person-photo"><p class="person-name">Joanildo Souza</p></div><div class="person-card"><img src="m5.png" alt="Madrinha" class="person-photo"><p class="person-name">Edilaine Rocha</p></div><div class="person-card"><img src="p2.jpg" alt="Padrinho" class="person-photo"><p class="person-name">Patrick Nascimento</p></div><div class="person-card"><img src="m3.jpg" alt="Madrinha" class="person-photo"><p class="person-name">Hilary Rodrigues</p></div><div class="person-card"><img src="https://placehold.co/180x180/2c3e50/FFFFFF?text=Padrinho" alt="Padrinho" class="person-photo"><p class="person-name">Rommel Cardoso</p></div><div class="person-card"><img src="m6.png" alt="Madrinha" class="person-photo"><p class="person-name">Jeana Samara</p></div><div class="person-card"><img src="p1.png" alt="Padrinho" class="person-photo"><p class="person-name">Tarcísio Alves</p></div><div class="person-card"><img src="m1.1.jpg" alt="Madrinha" class="person-photo"><p class="person-name">Maria Vitória</p></div></div></div><div class="sub-section"><h3 class="sub-section-title">Daminhas e Pajens</h3><p class="sub-section-description">A alegria e a doçura que encantarão nosso cortejo.</p><div class="people-grid"><div class="person-card"><img src="dp3.png" alt="Daminha" class="person-photo"><p class="person-name">Alice</p></div><div class="person-card"><img src="dp4.png" alt="Pajem" class="person-photo"><p class="person-name">Bernardo</p></div><div class="person-card"><img src="dp2.jpg" alt="Daminha" class="person-photo"><p class="person-name">Eloá</p></div><div class="person-card"><img src="dp1.png" alt="Pajem" class="person-photo"><p class="person-name">Luís Miguel</p></div><div class="person-card"><img src="dp6.png" alt="Daminha" class="person-photo"><p class="person-name">Lara</p></div><div class="person-card"><img src="https://placehold.co/180x180/778beb/FFFFFF?text=Pajem" alt="Pajem" class="person-photo"><p class="person-name">Miguel</p></div><div class="person-card"><img src="https://placehold.co/180x180/f7d794/FFFFFF?text=Daminha" alt="Daminha" class="person-photo"><p class="person-name">Lívia</p></div><div class="person-card"><img src="dp5.png" alt="Daminha" class="person-photo"><p class="person-name">Louíse</p></div></div></div><div class="sub-section"><h3 class="sub-section-title">Homenagens Especiais</h3><p class="sub-section-description">Há pessoas que, mesmo distantes, estarão para sempre em nossos corações e memórias. Sua luz e seu amor nos acompanham hoje e sempre.</p><div class="tribute-grid"><div class="tribute-card"><img src="h1.png" alt="Avós do Noivo" class="tribute-photo"><p class="person-name">Joaquim e Latife</p><p class="person-role">Avós do Noivo</p></div><div class="tribute-card"><img src="h2.jpg" alt="Avô do Noivo" class="tribute-photo"><p class="person-name">Miguel Souza</p><p class="person-role">Avô do Noivo</p></div><div class="tribute-card"><img src="h3.jpg" alt="Primo do Noivo" class="tribute-photo"><p class="person-name">Lucas Adril</p><p class="person-role">Primo do Noivo</p></div></div></div><p class="final-thanks">A cada um de vocês, nosso muito obrigado por fazerem parte da nossa história!</p></section>
     <section id="presentes" class="content-section"><h2>Lista de Presentes</h2><p class="placeholder-text" style="margin-bottom: 20px;"> Queridos amigos e familiares, a presença de vocês é o nosso maior presente! Mas, se também quiserem nos presentear, ficaremos muito felizes. Criamos esta lista com itens que nos ajudarão a montar nosso cantinho e também com algumas cotas divertidas para nos ajudar a realizar alguns sonhos. Sintam-se à vontade! </p><div id="gift-list-container" class="gift-grid"></div><div class="custom-gift-box"><h3>Quer nos presentear com outro valor?</h3><p>Fique à vontade para escolher um valor que faça sentido para você. Agradecemos imensamente seu carinho!</p><input type="number" id="custom-gift-value" placeholder="R$ 0,00" min="1"><button class="gift-button" id="custom-gift-btn">Presentear com este valor</button></div></section>
-    <section id="mensagens" class="content-section"><h2>Deixe sua Mensagem</h2><p class="placeholder-text" style="margin-bottom: 60px;"> Vamos amar ler o seu recado! Deixe aqui suas palavras de carinho, uma boa lembrança ou um conselho divertido para nossa nova vida juntos. </p><div class="message-form-container"><form id="message-form"><input type="text" id="form-guest-name" placeholder="Seu nome" required><textarea id="form-guest-message" placeholder="Escreva sua mensagem de carinho aqui..." required></textarea><button type="submit">Enviar Mensagem</button></form></div><div id="message-board"></div></section>
+    
+    <!-- [NOVO] Seção unificada para Mural de Carinho -->
+    <section id="mensagens" class="content-section">
+        <h2>Mural de Carinho</h2>
+        <p class="placeholder-text" style="margin-bottom: 60px;">
+            Agradecemos imensamente por cada mensagem e presente! Este espaço é para compartilhar todo o amor que estamos recebendo de vocês.
+        </p>
+        <div class="message-form-container">
+            <h3>Deixe sua mensagem para os noivos</h3>
+            <form id="message-form">
+                <input type="text" id="form-guest-name" placeholder="Seu nome" required>
+                <textarea id="form-guest-message" placeholder="Escreva sua mensagem de carinho aqui..." required></textarea>
+                <button type="submit">Enviar Mensagem</button>
+            </form>
+        </div>
+        <div id="mural">
+            <!-- Os cards do mural serão inseridos aqui via JS -->
+        </div>
+    </section>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-    // =================================================================
-    // COLE A CONFIGURAÇÃO DO SEU FIREBASE AQUI
-    // =================================================================
     const firebaseConfig = {
         apiKey: "AIzaSyAQ3txJQ09muNi5xaBhOPwFztT1fCR1qmE",
         authDomain: "formagest-a7591.firebaseapp.com",
@@ -175,18 +195,15 @@
     };
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Inicialização do Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const giftsRef = database.ref('presentes');
         const messagesRef = database.ref('mensagens');
         const guestsRef = database.ref('convidados');
-        
-        // URL do seu servidor na Render
         const backendUrl = 'https://casamento-elian-key-api.onrender.com';
 
-        // Lógica da UI (minimizada para clareza)
         window.scrollTo(0, 0);
+        // ... Lógica da UI (splash, countdown, etc.) ...
         const inviteButton=document.getElementById("inviteButton");const bookContainer=document.querySelector(".book-container"),splashScreen=document.getElementById("splash-screen"),mainContent=document.getElementById("main-content"),backgroundMusic=document.getElementById("background-music"),pageTurnSound=document.getElementById("page-turn-sound"),musicToggleButton=document.getElementById("music-toggle-btn");bookContainer.addEventListener("click",()=>{if(splashScreen.classList.contains("open"))return;pageTurnSound.play();backgroundMusic.volume=.3;backgroundMusic.play();splashScreen.classList.add("open");musicToggleButton.style.display="flex";musicToggleButton.classList.remove("paused");musicToggleButton.classList.add("playing");setTimeout(()=>{splashScreen.classList.add("zooming");mainContent.classList.add("visible");setTimeout(()=>{splashScreen.classList.add("hidden");document.body.style.overflowY="auto";startCountdown();checkInvite()},1500)},2500)}),musicToggleButton.addEventListener("click",()=>{backgroundMusic.paused?(backgroundMusic.play(),musicToggleButton.classList.remove("paused"),musicToggleButton.classList.add("playing")):(backgroundMusic.pause(),musicToggleButton.classList.remove("playing"),musicToggleButton.classList.add("paused"))});function startCountdown(){const e=document.getElementById("days"),t=document.getElementById("hours"),n=document.getElementById("minutes"),o=document.getElementById("seconds"),a=document.getElementById("countdown"),s=new Date("August 16, 2025 19:00:00").getTime(),d=e=>10>e?`0${e}`:e;const i=setInterval(()=>{const l=(new Date).getTime(),c=s-l;if(0>c)return clearInterval(i),void(a.innerHTML="<div class='wedding-date' style='font-size: 2rem;'>O grande dia chegou!</div>");e.textContent=d(Math.floor(c/864e5)),t.textContent=d(Math.floor(c%864e5/36e5)),n.textContent=d(Math.floor(c%36e5/6e4)),o.textContent=d(Math.floor(c%6e4/1e3))},1e3)}
 
         // VERIFICA SE EXISTE UM CONVITE VÁLIDO NA URL
@@ -198,18 +215,14 @@
                     if (snapshot.exists()) {
                         inviteButton.style.display = 'block';
                         inviteButton.href = `convidado.html?invite=${inviteId}`;
-                    } else {
-                        inviteButton.style.display = 'none';
                     }
                 });
-            } else {
-                inviteButton.style.display = 'none';
             }
         }
         
         // CARREGAR PRESENTES
         function loadGifts() {
-            const gifts = [{imagem:"https://presentesrodriguez.vtexassets.com/arquivos/ids/167217/PANELA-DE-PRESSAO-ELETRICA-6-LITROS-COM-15-RECEITAS-PRe-PROGRAMADAS-PCC20-PRETO-E-ACO-INOX-110V-ELECTROLUX-4.jpg?v=635996230900400000",titulo:"Panela de Pressão Elétrica",valor:400},{imagem:"https://www.vadin.com.br/img/galeria_paginas/6329b605b45cc.jpg",titulo:"Guitarra Nova para Coleção",valor:500},{imagem:"https://www.destakferramentas.com.br/cdn/shop/files/MaletaDeFerramentasProfissionalCompletaCom254Pcstitanium_600x600_crop_center.jpg?v=1691784172",titulo:"Caixa de Ferramentas",valor:230},{imagem:"https://cdn.borainvestir.b3.com.br/borainvestir/2022/08/19135055/bitcoin-_michael_wensch_-_dominio_publico.jpg.webp",titulo:"Investimento em Bitcoin",valor:600},{imagem:"https://t62533.vteximg.com.br/arquivos/ids/280620-1000-1000/cafeteira-mondial-pratic-cn01-20-xicaras-1.jpg?v=638277264847300000",titulo:"Cafeteira",valor:180},{imagem:"https://lumienergy.vtexassets.com/arquivos/ids/167152/churrasqueira-eletrica-fischer-grill-2.jpg?v=638091490798600000",titulo:"Churrasqueira Elétrica",valor:170},{imagem:"https://cdn.awsli.com.br/600x1000/53/53761/produto/128693568/b9e92275ff.jpg",titulo:"Volante para Jogos de Corrida",valor:500},{imagem:"https://www.agrotama.com.br//upload/novo_produtos/cadeirapresidentedeescritorioemtelameshbasegiratoria_102046890.jpg",titulo:"Cadeira de Escritório",valor:500},{imagem:"https://cdn.folhape.com.br/upload/dn_arquivo/2022/05/imagens-divulagacao-cref12pe-11_2.png",titulo:"Cota pra Academia",valor:200},{imagem:"https://a-static.mlcdn.com.br/1500x1500/mini-mesa-de-ping-pong-infantil-com-raquete-rede-e-bolinha-completa-de-brinquedo-dutetoys/elianaaparecidaleitealmeida/74641/633f15b434dc795cf8afffd0397721ca.jpeg",titulo:"Mini Mesa de Ping Pong",valor:410},{imagem:"https://img.band.uol.com.br/image/2025/01/24/miniaturas-hot-wheels-da-formula-1-125929_300x300.jpg",titulo:"Coleção F1 da Hot Wheels",valor:250},{imagem:"https://cdn.awsli.com.br/2500x2500/2549/2549769/produto/236100238/53-f2rl13s813.jpg",titulo:"JBL dos Sonhos da Noiva",valor:1800},{imagem:"https://a-static.mlcdn.com.br/1500x1500/bateria-eletronica-6-drums-5-metal-silicone-portatil-c-pedal-exbom/megatumii/kh-w562/f037cd4049dcc1dac2d1fbc4d08ad9f8.jpeg",titulo:"Bateria Eletrônica",valor:300},{imagem:"https://a-static.mlcdn.com.br/1500x1500/teclado-piano-musical-61-teclas-sensiveis-usb-p2-e-musicas-mxt/optisom2/54-6-3/dbc1befddf9db18107d907d4b3280055.jpeg",titulo:"Teclado Musical",valor:400},{imagem:"https://upload.wikimedia.org/wikipedia/commons/6/66/Pedalboard_%28995939579%29.jpg",titulo:"Novo Pedal de Guitarra",valor:150},{imagem:"https://images.tcdn.com.br/img/img_prod/1018177/cortina_fiolinho_suave_c_blackout_separado_8_00m_x_altura_649_1_27e938637b85af3fcc4587819f8698a3.jpg",titulo:"Cortina Nova",valor:220},{imagem:"https://movimentoeconomico.com.br/wp-content/uploads/2024/07/Jogo-on-line-tigrinho-1024x1024.jpg",titulo:"Saldo pra Noiva Gastar no Tigrinho",valor:200},{imagem:"https://i0.wp.com/ovicio.com.br/wp-content/uploads/2025/06/20250605-ovicio-xbox-game-pass.jpg?resize=730%2C365&ssl=1",titulo:"Assinatura de 1 ano no Xbox Game Pass",valor:420},{imagem:"https://m.media-amazon.com/images/I/71MXuXeNZvL._UF1000,1000_QL80_.jpg",titulo:"Disco de Vinil",valor:200},{imagem:"https://upload.wikimedia.org/wikipedia/commons/8/8d/Largada_Stock125_Foto_Claudio_Reis.jpg",titulo:"Bateria de Kart com os Amigos",valor:350},{imagem:"https://www.lelabrandao.co/cdn/shop/files/CapturadeTela2023-10-19as23.28.54.png?v=1697768949",titulo:"Lenço para a noiva não borrar a maquiagem",valor:170},{imagem:"https://muvin.com.br/cdn/shop/products/protetor-de-ouvido-em-silicone-para-natacao-uso.jpg?v=1642792523",titulo:"Tampão de ouvido para noiva enquanto noivo ronca",valor:150},{imagem:"https://www.amazonasemais.com.br/wp-content/uploads/2023/06/triciclo-parintins.jpg",titulo:"Ajudinha para o triciclo um pouquinho mais longe",valor:160},{imagem:"https://www.brides.com/thmb/c1DdMUGp-xnCDF0BFHFYG-mOW-8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/bold-1c1c6ebbb4fe4404b09d38af601cba8b.jpg",titulo:"Taxa pra noiva não jogar o buquê pra sua namorada",valor:250},{imagem:"https://m.media-amazon.com/images/I/713BjtJOPzL.jpg",titulo:"Um ano de creche para o bebê reborn",valor:1e3},{imagem:"https://www.previdencia.guaira.sp.gov.br/admin/globalarq/noticia/noticia/651_366/e3dab6e15d06bfc8cfcb22052a306251.jpeg",titulo:"Ajuda para a aposentadoria dos noivos",valor:500},{imagem:"https://media.istockphoto.com/id/845889702/pt/foto/man-showing-his-empty-pocket.jpg?s=612x612&w=0&k=20&c=hSU0bJcKgqlSccgmNyaUiyIq_iAYqPvMChPW6geX17A=",titulo:"Amo vocês, mas gastei toda a grana no look e salão",valor:150},{imagem:"https://fly.metroimg.com/upload/q_85,w_700/https://uploads.metroimg.com/wp-content/uploads/2021/12/13162749/Henrique-Fogaca-credito-Chris-Castanho.jpg",titulo:"Curso de culinária para o noivo",valor:250},{imagem:"https://www.einerd.com.br/wp-content/uploads/2019/06/Walter-White-morreu-Breaking-Bad-capa-890x606.jpg",titulo:"6 meses de Netflix",valor:350},{imagem:"https://www.estadao.com.br/resizer/v2/D2O7HVMIZRL53CNMEN4Y5IWPEY.jpg?quality=80&auth=45f55444a9a29c7c36a45b4485c01c9e2a3e36c8871fbd76cea88b3664a21865&width=1200&height=1200&focal=0,0",titulo:"Toma aqui aquele pix que to te devendo",valor:200},{imagem:"https://www.cinegoiania.com.br/wp-content/uploads/2018/11/todo_poderoso.jpg",titulo:"Se por uma intervenção divina você se sentir tocado",valor:5e3},{imagem:"https://media.istockphoto.com/id/1433285570/photo/smiling-businessman-showing-thumbs-up-in-his-office.jpg?s=612x612&w=0&k=20&c=IG7E_cku1gG68ifG7ux7-KtxA0AEvflb_uZLzeiwkac=",titulo:"Teste de Desenvolvimento",valor:1}];
+            const gifts=[{imagem:"https://presentesrodriguez.vtexassets.com/arquivos/ids/167217/PANELA-DE-PRESSAO-ELETRICA-6-LITROS-COM-15-RECEITAS-PRe-PROGRAMADAS-PCC20-PRETO-E-ACO-INOX-110V-ELECTROLUX-4.jpg?v=635996230900400000",titulo:"Panela de Pressão Elétrica",valor:400},{imagem:"https://www.vadin.com.br/img/galeria_paginas/6329b605b45cc.jpg",titulo:"Guitarra Nova para Coleção",valor:500},{imagem:"https://www.destakferramentas.com.br/cdn/shop/files/MaletaDeFerramentasProfissionalCompletaCom254Pcstitanium_600x600_crop_center.jpg?v=1691784172",titulo:"Caixa de Ferramentas",valor:230},{imagem:"https://cdn.borainvestir.b3.com.br/borainvestir/2022/08/19135055/bitcoin-_michael_wensch_-_dominio_publico.jpg.webp",titulo:"Investimento em Bitcoin",valor:600},{imagem:"https://t62533.vteximg.com.br/arquivos/ids/280620-1000-1000/cafeteira-mondial-pratic-cn01-20-xicaras-1.jpg?v=638277264847300000",titulo:"Cafeteira",valor:180},{imagem:"https://lumienergy.vtexassets.com/arquivos/ids/167152/churrasqueira-eletrica-fischer-grill-2.jpg?v=638091490798600000",titulo:"Churrasqueira Elétrica",valor:170},{imagem:"https://cdn.awsli.com.br/600x1000/53/53761/produto/128693568/b9e92275ff.jpg",titulo:"Volante para Jogos de Corrida",valor:500},{imagem:"https://www.agrotama.com.br//upload/novo_produtos/cadeirapresidentedeescritorioemtelameshbasegiratoria_102046890.jpg",titulo:"Cadeira de Escritório",valor:500},{imagem:"https://cdn.folhape.com.br/upload/dn_arquivo/2022/05/imagens-divulagacao-cref12pe-11_2.png",titulo:"Cota pra Academia",valor:200},{imagem:"https://a-static.mlcdn.com.br/1500x1500/mini-mesa-de-ping-pong-infantil-com-raquete-rede-e-bolinha-completa-de-brinquedo-dutetoys/elianaaparecidaleitealmeida/74641/633f15b434dc795cf8afffd0397721ca.jpeg",titulo:"Mini Mesa de Ping Pong",valor:410},{imagem:"https://img.band.uol.com.br/image/2025/01/24/miniaturas-hot-wheels-da-formula-1-125929_300x300.jpg",titulo:"Coleção F1 da Hot Wheels",valor:250},{imagem:"https://cdn.awsli.com.br/2500x2500/2549/2549769/produto/236100238/53-f2rl13s813.jpg",titulo:"JBL dos Sonhos da Noiva",valor:1800},{imagem:"https://a-static.mlcdn.com.br/1500x1500/bateria-eletronica-6-drums-5-metal-silicone-portatil-c-pedal-exbom/megatumii/kh-w562/f037cd4049dcc1dac2d1fbc4d08ad9f8.jpeg",titulo:"Bateria Eletrônica",valor:300},{imagem:"https://a-static.mlcdn.com.br/1500x1500/teclado-piano-musical-61-teclas-sensiveis-usb-p2-e-musicas-mxt/optisom2/54-6-3/dbc1befddf9db18107d907d4b3280055.jpeg",titulo:"Teclado Musical",valor:400},{imagem:"https://upload.wikimedia.org/wikipedia/commons/6/66/Pedalboard_%28995939579%29.jpg",titulo:"Novo Pedal de Guitarra",valor:150},{imagem:"https://images.tcdn.com.br/img/img_prod/1018177/cortina_fiolinho_suave_c_blackout_separado_8_00m_x_altura_649_1_27e938637b85af3fcc4587819f8698a3.jpg",titulo:"Cortina Nova",valor:220},{imagem:"https://movimentoeconomico.com.br/wp-content/uploads/2024/07/Jogo-on-line-tigrinho-1024x1024.jpg",titulo:"Saldo pra Noiva Gastar no Tigrinho",valor:200},{imagem:"https://i0.wp.com/ovicio.com.br/wp-content/uploads/2025/06/20250605-ovicio-xbox-game-pass.jpg?resize=730%2C365&ssl=1",titulo:"Assinatura de 1 ano no Xbox Game Pass",valor:420},{imagem:"https://m.media-amazon.com/images/I/71MXuXeNZvL._UF1000,1000_QL80_.jpg",titulo:"Disco de Vinil",valor:200},{imagem:"https://upload.wikimedia.org/wikipedia/commons/8/8d/Largada_Stock125_Foto_Claudio_Reis.jpg",titulo:"Bateria de Kart com os Amigos",valor:350},{imagem:"https://www.lelabrandao.co/cdn/shop/files/CapturadeTela2023-10-19as23.28.54.png?v=1697768949",titulo:"Lenço para a noiva não borrar a maquiagem",valor:170},{imagem:"https://muvin.com.br/cdn/shop/products/protetor-de-ouvido-em-silicone-para-natacao-uso.jpg?v=1642792523",titulo:"Tampão de ouvido para noiva enquanto noivo ronca",valor:150},{imagem:"https://www.amazonasemais.com.br/wp-content/uploads/2023/06/triciclo-parintins.jpg",titulo:"Ajudinha para o triciclo um pouquinho mais longe",valor:160},{imagem:"https://www.brides.com/thmb/c1DdMUGp-xnCDF0BFHFYG-mOW-8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/bold-1c1c6ebbb4fe4404b09d38af601cba8b.jpg",titulo:"Taxa pra noiva não jogar o buquê pra sua namorada",valor:250},{imagem:"https://m.media-amazon.com/images/I/713BjtJOPzL.jpg",titulo:"Um ano de creche para o bebê reborn",valor:1e3},{imagem:"https://www.previdencia.guaira.sp.gov.br/admin/globalarq/noticia/noticia/651_366/e3dab6e15d06bfc8cfcb22052a306251.jpeg",titulo:"Ajuda para a aposentadoria dos noivos",valor:500},{imagem:"https://media.istockphoto.com/id/845889702/pt/foto/man-showing-his-empty-pocket.jpg?s=612x612&w=0&k=20&c=hSU0bJcKgqlSccgmNyaUiyIq_iAYqPvMChPW6geX17A=",titulo:"Amo vocês, mas gastei toda a grana no look e salão",valor:150},{imagem:"https://fly.metroimg.com/upload/q_85,w_700/https://uploads.metroimg.com/wp-content/uploads/2021/12/13162749/Henrique-Fogaca-credito-Chris-Castanho.jpg",titulo:"Curso de culinária para o noivo",valor:250},{imagem:"https://www.einerd.com.br/wp-content/uploads/2019/06/Walter-White-morreu-Breaking-Bad-capa-890x606.jpg",titulo:"6 meses de Netflix",valor:350},{imagem:"https://www.estadao.com.br/resizer/v2/D2O7HVMIZRL53CNMEN4Y5IWPEY.jpg?quality=80&auth=45f55444a9a29c7c36a45b4485c01c9e2a3e36c8871fbd76cea88b3664a21865&width=1200&height=1200&focal=0,0",titulo:"Toma aqui aquele pix que to te devendo",valor:200},{imagem:"https://www.cinegoiania.com.br/wp-content/uploads/2018/11/todo_poderoso.jpg",titulo:"Se por uma intervenção divina você se sentir tocado",valor:5e3},{imagem:"https://media.istockphoto.com/id/1433285570/photo/smiling-businessman-showing-thumbs-up-in-his-office.jpg?s=612x612&w=0&k=20&c=IG7E_cku1gG68ifG7ux7-KtxA0AEvflb_uZLzeiwkac=",titulo:"Teste de Desenvolvimento",valor:1}];
             const container = document.getElementById('gift-list-container');
             container.innerHTML = ''; 
             gifts.forEach(gift => {
@@ -220,20 +233,72 @@
         }
         loadGifts();
 
-        // CARREGAR MENSAGENS APROVADAS
-        const messageBoard = document.getElementById('message-board');
-        messagesRef.orderByChild('aprovado').equalTo(true).on('value', (snapshot) => {
-            messageBoard.innerHTML = '';
-            const messages = snapshot.val() || {};
-            const messagesArray = Object.values(messages).reverse(); // Mais recentes primeiro
-            if (messagesArray.length === 0) {
-                messageBoard.innerHTML = '<p>Seja o primeiro a deixar uma mensagem para os noivos!</p>';
-            } else {
-                messagesArray.forEach(msg => {
-                    messageBoard.innerHTML += `<div class="message-card"><p class="message-text">"${msg.mensagem}"</p><p class="message-author">- ${msg.nome || 'Anônimo'}</p></div>`;
-                });
-            }
-        });
+        // CARREGAR MURAL DE CARINHO (MENSAGENS + PRESENTES)
+        function loadMural() {
+            const muralContainer = document.getElementById('mural');
+            const allItems = [];
+
+            // Pega as mensagens aprovadas
+            const messagesPromise = messagesRef.orderByChild('aprovado').equalTo(true).once('value');
+            // Pega todos os presentes
+            const giftsPromise = giftsRef.once('value');
+
+            Promise.all([messagesPromise, giftsPromise]).then(([messagesSnapshot, giftsSnapshot]) => {
+                const messages = messagesSnapshot.val() || {};
+                const gifts = giftsSnapshot.val() || {};
+
+                // Formata mensagens para o mural
+                for(const id in messages) {
+                    const msg = messages[id];
+                    allItems.push({
+                        type: 'message',
+                        author: msg.nome || 'Anônimo',
+                        content: msg.mensagem,
+                        timestamp: msg.timestamp,
+                        icon: '💬'
+                    });
+                }
+
+                // Formata presentes para o mural
+                for(const id in gifts) {
+                    const gift = gifts[id];
+                    let content = `Nos presenteou com <strong>${gift.item}</strong>.`;
+                    if (gift.mensagem) {
+                        content += `<br><br><i>"${gift.mensagem}"</i>`;
+                    }
+                    allItems.push({
+                        type: 'gift',
+                        author: gift.nome || 'Anônimo',
+                        content: content,
+                        timestamp: gift.timestamp,
+                        icon: '🎁'
+                    });
+                }
+                
+                // Ordena todos os itens pela data (mais recentes primeiro)
+                allItems.sort((a, b) => b.timestamp - a.timestamp);
+
+                // Renderiza o mural
+                muralContainer.innerHTML = '';
+                if (allItems.length === 0) {
+                    muralContainer.innerHTML = '<p>Seja o primeiro a deixar uma mensagem ou um presente para os noivos!</p>';
+                } else {
+                    allItems.forEach(item => {
+                        const card = `
+                            <div class="mural-card">
+                                <div class="mural-header">
+                                    <span class="mural-icon">${item.icon}</span>
+                                    <span class="mural-title">${item.author}</span>
+                                </div>
+                                <p class="mural-message">${item.content}</p>
+                            </div>
+                        `;
+                        muralContainer.innerHTML += card;
+                    });
+                }
+            });
+        }
+        loadMural();
 
         // ENVIAR MENSAGEM DO FORMULÁRIO PRINCIPAL
         document.getElementById('message-form').addEventListener('submit', (e) => {
@@ -242,7 +307,7 @@
             const mensagem = document.getElementById('form-guest-message').value;
             messagesRef.push({ nome, mensagem, aprovado: false, timestamp: Date.now() })
                 .then(() => {
-                    alert('Obrigado pela sua mensagem! Ela será apresentada aos noivos e exibida no mural de mensagens abaixo.');
+                    alert('Obrigado pela sua mensagem! Ela será exibida no mural após aprovação pelos noivos.');
                     e.target.reset();
                 });
         });
@@ -251,7 +316,7 @@
         function openPrePaymentDialog(title, price, buttonElement) {
             const oldDialog = document.getElementById('pre-payment-dialog');
             if (oldDialog) oldDialog.remove();
-
+            
             const dialogHTML = `
                 <dialog id="pre-payment-dialog">
                     <h3>Deixe uma mensagem com seu presente!</h3>
@@ -271,7 +336,6 @@
                 const nome = document.getElementById('gift-giver-name').value;
                 const mensagem = document.getElementById('gift-message').value;
                 const anonimo = document.getElementById('gift-anonymous').checked;
-                
                 dialog.close();
                 dialog.remove();
 
@@ -291,17 +355,11 @@
                     const response = await fetch(`${backendUrl}/create-preference`, {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ 
-                            title: title, 
-                            unit_price: price,
-                            metadata: giftData
-                        })
+                        body: JSON.stringify({ title, unit_price: price, metadata: giftData })
                     });
                     if (!response.ok) throw new Error('Falha ao criar preferência');
                     const preference = await response.json();
-                    
                     giftsRef.push(giftData);
-                    
                     window.location.href = preference.init_point;
                 } catch (error) {
                     alert('Erro ao iniciar pagamento. Tente novamente.');
@@ -320,17 +378,15 @@
         document.addEventListener('click', (event) => {
             if (event.target.matches('a.gift-button') && !event.target.matches('.symbolic')) {
                 event.preventDefault();
-                const title = event.target.dataset.title;
-                const price = parseFloat(event.target.dataset.price);
-                openPrePaymentDialog(title, price, event.target);
+                openPrePaymentDialog(event.target.dataset.title, parseFloat(event.target.dataset.price), event.target);
             }
         });
 
         document.getElementById('custom-gift-btn').addEventListener('click', (event) => {
             const valueInput = document.getElementById('custom-gift-value');
             const price = parseFloat(valueInput.value);
-            if (!price || price <= 0) {
-                alert('Por favor, insira um valor válido.');
+            if (!price || price < 1) {
+                alert('Por favor, insira um valor válido (mínimo R$ 1,00).');
                 return;
             }
             openPrePaymentDialog('Presente especial (valor aberto)', price, event.target);
