@@ -86,6 +86,43 @@
             .ticket-stub { border-left: none; border-top: 2px dashed #ccc; }
             .ticket-main { text-align: center; }
         }
+        .music-suggestion-form {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed #ccc;
+        }
+        .music-suggestion-form p {
+            font-weight: 500;
+            margin-bottom: 15px !important;
+        }
+        .music-suggestion-form input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+        .music-suggestion-form button {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            background-color: var(--gold-color);
+            color: var(--cover-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        .music-suggestion-form button:hover {
+            background-color: #c5a030;
+        }
+        .music-suggestion-form button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -215,6 +252,16 @@
                     <p>🔹 Traje dos convidados: Social</p>
                     <p>Agradecemos desde já pela compreensão e por fazerem parte desse dia tão especial para nós!</p>
                 </div></div>
+                <div class="accordion-item">
+                    <div class="accordion-header"><span class="icon">🎶</span>Playlist da Festa<span class="arrow">▼</span></div>
+                    <div class="accordion-content">
+                        <form id="music-form" class="music-suggestion-form">
+                            <p>Qual música não pode faltar na nossa festa? Ajude-nos a criar a playlist perfeita!</p>
+                            <input type="text" id="music-suggestion" placeholder="Nome da música - Artista" required>
+                            <button type="submit">Enviar Sugestão</button>
+                        </form>
+                    </div>
+                </div>
                 <div class="accordion-item"><div class="accordion-header"><span class="icon">✈️</span>Viagem e Hospedagem<span class="arrow">▼</span></div><div class="accordion-content"><p>${data.viagem || "Nenhuma informação de viagem personalizada foi cadastrada para você."}</p><p>${data.hospedagem || "Nenhuma informação de hospedagem personalizada foi cadastrada para você."}</p></div></div>
             `;
 
@@ -226,6 +273,39 @@
                     content.style.maxHeight = item.classList.contains('active') ? content.scrollHeight + 'px' : null;
                 });
             });
+
+            const musicForm = document.getElementById('music-form');
+            if (musicForm) {
+                musicForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const musicSuggestionInput = document.getElementById('music-suggestion');
+                    const suggestion = musicSuggestionInput.value.trim();
+                    const submitButton = musicForm.querySelector('button');
+
+                    if (suggestion) {
+                        submitButton.disabled = true;
+                        submitButton.textContent = 'Enviando...';
+
+                        // Salva no Firebase
+                        database.ref('sugestoesDeMusica').push({
+                            sugestao: suggestion,
+                            convidado: data.nome, // Salva o nome do convidado junto
+                            uuid_convidado: uuid,
+                            timestamp: Date.now()
+                        }).then(() => {
+                            alert('Obrigado pela sua sugestão! 🎉');
+                            musicSuggestionInput.value = ''; // Limpa o campo
+                            submitButton.disabled = false;
+                            submitButton.textContent = 'Enviar Sugestão';
+                        }).catch((error) => {
+                            console.error('Erro ao salvar sugestão:', error);
+                            alert('Ops! Algo deu errado. Tente novamente.');
+                            submitButton.disabled = false;
+                            submitButton.textContent = 'Enviar Sugestão';
+                        });
+                    }
+                });
+            }
 
             const printBtn = document.getElementById('print-pdf-btn');
             if (printBtn) {
