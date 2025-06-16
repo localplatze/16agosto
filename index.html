@@ -400,7 +400,7 @@
                 });
         });
 
-        function openPrePaymentDialog(title, price, buttonElement) {
+        function openPrePaymentDialog(title, price) { // Removido 'buttonElement' dos parâmetros
             const oldDialog = document.getElementById('pre-payment-dialog');
             if (oldDialog) oldDialog.remove();
             
@@ -441,35 +441,42 @@
                     mensagem: message || "", 
                     item: title, 
                     valor: price,
-                    pago: false, // <-- [NOVA ESTRATÉGIA] Inicia como não pago
+                    pago: false,
                     timestamp: Date.now()
                 };
                 
-                const originalText = buttonElement.textContent;
-                //buttonElement.textContent = 'Aguarde...';
-                //buttonElement.style.pointerEvents = 'none';
-
                 try {
-                    // [NOVA ESTRATÉGIA] Grava o presente pendente no banco
                     const newGiftRef = await giftsRef.push(giftData);
-                    const giftId = newGiftRef.key; // Pega o ID único do novo presente
+                    const giftId = newGiftRef.key;
 
-                    // Envia o ID para o backend, para que ele possa atualizar o status depois
                     const response = await fetch(`${backendUrl}/create-preference`, {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({ title, unit_price: price, gift_id: giftId })
                     });
-                    if (!response.ok) throw new Error('Falha ao criar preferência de pagamento');
+
+                    if (!response.ok) {
+                        // Se a resposta do servidor não for OK, lança um erro para ser pego pelo catch
+                        throw new Error('Falha ao criar preferência de pagamento no servidor.');
+                    }
                     
                     const preference = await response.json();
-                    window.location.href = preference.init_point;
+
+                    // Verificação crucial: garante que o 'init_point' existe antes de redirecionar
+                    if (preference && preference.init_point) {
+                        window.location.href = preference.init_point;
+                    } else {
+                        throw new Error("A resposta do servidor não continha um link de pagamento válido.");
+                    }
 
                 } catch (error) {
                     console.error("Erro no processo de pagamento:", error);
-                    alert('Erro ao iniciar pagamento. Tente novamente.');
-                    buttonElement.textContent = originalText;
-                    buttonElement.style.pointerEvents = 'auto';
+                    // Remove o dialog de "aguarde" em caso de erro
+                    if (waitingDialog) {
+                        waitingDialog.close();
+                        waitingDialog.remove();
+                    }
+                    alert('Ocorreu um erro ao iniciar o pagamento. Por favor, tente novamente mais tarde.');
                 }
             });
 
@@ -484,8 +491,7 @@
                 event.preventDefault();
                 openPrePaymentDialog(
                     event.target.dataset.title,
-                    parseFloat(event.target.dataset.price),
-                    //event.target
+                    parseFloat(event.target.dataset.price)
                 );
             }
         });
@@ -497,7 +503,7 @@
                 alert('Por favor, insira um valor válido (mínimo R$ 1,00).');
                 return;
             }
-            openPrePaymentDialog('Presente especial (valor aberto)', price, event.target);
+            openPrePaymentDialog('Presente especial (valor aberto)', price);
         });
     });
 </script>
