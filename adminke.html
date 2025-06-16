@@ -114,6 +114,23 @@
             <h2>Gerenciar Presentes</h2>
             <div class="table-wrapper"><table><thead><tr><th>Nome</th><th>Presente</th><th>Valor</th><th>Mensagem</th><th>Status</th><th>Ações</th></tr></thead><tbody id="gifts-list-body"></tbody></table></div>
         </section>
+
+        <section>
+            <h2>Sugestões de Músicas</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sugestão (Música - Artista)</th>
+                            <th>Sugerido por</th>
+                            <th>Data</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="music-suggestions-body"></tbody>
+                </table>
+            </div>
+        </section>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -129,6 +146,7 @@
             const guestsRef = database.ref('convidados');
             const messagesRef = database.ref('mensagens');
             const giftsRef = database.ref('presentes');
+            const musicSuggestionsRef = database.ref('sugestoesDeMusica');
             let allGuestsData = {};
 
             // --- ELEMENTOS DA UI ---
@@ -147,6 +165,7 @@
             window.toggleGiftStatus = (id, status) => giftsRef.child(id).update({ pago: status });
             window.deleteGift = (id) => { if (confirm("Tem certeza?")) giftsRef.child(id).remove(); };
             window.deleteGuest = (id) => { if (confirm('Tem certeza?')) guestsRef.child(id).remove().then(resetForm); };
+            window.deleteMusicSuggestion = (id) => { if (confirm('Tem certeza que deseja excluir esta sugestão?')) musicSuggestionsRef.child(id).remove(); };
 
             // --- LÓGICA DE LOGIN ---
             document.getElementById('login-btn').addEventListener('click', () => {
@@ -298,6 +317,37 @@
                     tr.innerHTML = `<td>${gift.nome || "Anônimo"}</td><td>${gift.item}</td><td>${gift.valor ? `R$ ${gift.valor.toFixed(2).replace(".",",")}`:"N/A"}</td><td>${gift.mensagem || "-"}</td><td>${gift.pago ? "✅ Pago":"🟡 Pendente"}</td><td class="actions-cell">${gift.pago ? `<button class="btn btn-secondary" onclick="toggleGiftStatus('${id}',false)">Marcar Pendente</button>`:`<button class="btn btn-success" onclick="toggleGiftStatus('${id}',true)">Marcar Pago</button>`}<button class="btn btn-danger" onclick="deleteGift('${id}')">Excluir</button></td>`;
                     giftsListBody.appendChild(tr);
                 }
+            });
+
+            musicSuggestionsRef.on('value', (snapshot) => {
+                const musicSuggestionsBody = document.getElementById('music-suggestions-body');
+                musicSuggestionsBody.innerHTML = "";
+                const suggestions = snapshot.val() || {};
+
+                // Transforma o objeto em array e ordena por data (mais recentes primeiro)
+                const sortedSuggestions = Object.keys(suggestions)
+                    .map(key => ({ id: key, ...suggestions[key] }))
+                    .sort((a, b) => b.timestamp - a.timestamp);
+
+                if (sortedSuggestions.length === 0) {
+                    musicSuggestionsBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Nenhuma sugestão de música recebida.</td></tr>';
+                    return;
+                }
+
+                sortedSuggestions.forEach(item => {
+                    const tr = document.createElement("tr");
+                    const date = new Date(item.timestamp).toLocaleDateString('pt-BR');
+                    
+                    tr.innerHTML = `
+                        <td>${item.sugestao}</td>
+                        <td>${item.convidado || "Anônimo"}</td>
+                        <td>${date}</td>
+                        <td class="actions-cell">
+                            <button class="btn btn-danger" onclick="deleteMusicSuggestion('${item.id}')">Excluir</button>
+                        </td>
+                    `;
+                    musicSuggestionsBody.appendChild(tr);
+                });
             });
             
             // --- LÓGICA DE CHECK-IN (QR CODE) ---
